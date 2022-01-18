@@ -1,7 +1,7 @@
 // components
 import SvgIconStyle from '../../../components/SvgIconStyle';
 // paths
-import { PATH_LEARNING } from '../../../routes/paths';
+import { PATH_LEARNING, PATH_WIBU } from '../../../routes/paths';
 // ----------------------------------------------------------------------
 
 const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
@@ -17,11 +17,16 @@ const sidebarConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
-    subheader: 'general v3.0.0',
+    subheader: 'Zennomi',
     items: [
-      { title: 'Câu hỏi', path: PATH_LEARNING.question.root, icon: ICONS.dashboard },
-      { title: 'Đề thi', path: PATH_LEARNING.test.root, icon: ICONS.ecommerce },
-      { title: 'Khoá học', path: PATH_LEARNING.course.root, icon: ICONS.analytics },
+      {
+        title: 'wibu',
+        path: PATH_WIBU.root,
+        icon: ICONS.dashboard,
+        children: [
+          { title: 'Thư viện', path: PATH_WIBU.title.root }
+        ]
+      },
     ],
   },
 

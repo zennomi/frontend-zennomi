@@ -9,7 +9,7 @@ import AuthGuard from '../guards/AuthGuard';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 // paths
-import { PATH_LEARNING } from './paths';
+import { PATH_WIBU } from './paths';
 // ----------------------------------------------------------------------
 
 const Loadable = (Component) => (props) => {
@@ -50,6 +50,16 @@ export default function Router() {
       path: '/',
       element: <DashboardLayout />,
       children: [
+        { element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
+        { path: PATH_WIBU.root, element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
+        { path: PATH_WIBU.title.root, element: <Titles /> },
+        { path: PATH_WIBU.title.id, element: <Title /> },
+      ]
+    },
+    {
+      path: '/',
+      element: <DashboardLayout />,
+      children: [
         { element: <Navigate to="/dashboard/one" replace />, index: true },
         { path: '/dashboard', element: <Navigate to="/dashboard/one" replace />, index: true },
         { path: '/dashboard/one', element: <PageOne /> },
@@ -82,6 +92,9 @@ export default function Router() {
 // Authentication
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));
+// Wibu
+const Titles = Loadable(lazy(() => import('../pages/wibu/Titles')));
+const Title = Loadable(lazy(() => import('../pages/wibu/Title')));
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));

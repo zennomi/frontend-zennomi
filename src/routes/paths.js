@@ -7,6 +7,7 @@ function path(root, sublink) {
   const ROOTS_AUTH = '/auth';
   const ROOTS_DASHBOARD = '/dashboard';
   const ROOTS_LEARNING = '/hoc-tap';
+  const ROOTS_WIBU = '/wibu';
   
   // ----------------------------------------------------------------------
   
@@ -19,6 +20,17 @@ function path(root, sublink) {
     resetPassword: path(ROOTS_AUTH, '/reset-password'),
     verify: path(ROOTS_AUTH, '/verify')
   };
+
+  export const PATH_WIBU = {
+    root: ROOTS_WIBU,
+    label: "Wibu",
+    title: {
+      label: "Thư viện",
+      root: path(ROOTS_WIBU,'/titles'),
+      one: path(ROOTS_WIBU,'/title'),
+      id: path(ROOTS_WIBU,'/title/:id'),
+    }
+  }
   
   export const PATH_LEARNING = {
     root: ROOTS_LEARNING,
