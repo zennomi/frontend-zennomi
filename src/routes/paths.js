@@ -28,7 +28,10 @@ function path(root, sublink) {
       label: "Thư viện",
       root: path(ROOTS_WIBU,'/titles'),
       one: path(ROOTS_WIBU,'/title'),
+      new: path(ROOTS_WIBU,'/title/new'),
       id: path(ROOTS_WIBU,'/title/:id'),
+      edit: path(ROOTS_WIBU,'/title/edit/:id'),
+      delete: path(ROOTS_WIBU,'/title/delete/:id'),
     }
   }
   

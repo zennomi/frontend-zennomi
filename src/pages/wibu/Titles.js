@@ -6,7 +6,6 @@ import { Container, Grid, Typography, Paper, Card, CardContent, IconButton, Link
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
-import useResponsive from '../../hooks/useResponsive';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
@@ -33,7 +32,6 @@ const CaptionStyle = styled(CardActionArea)(({ theme }) => ({
 }));
 
 const TitleItem = ({ title }) => {
-  const smUp = useResponsive('up', 'sm');
   return (
     <Grid item xs={3} key={title._id}>
       <Card>
@@ -63,16 +61,16 @@ export default function Titles() {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [page, setPage] = useState(searchParams.get("page") ? Number(searchParams.get("page")) : 1);
+  const [type, setType] = useState(searchParams.get("type"));
+  const [status, setStatus] = useState(searchParams.get("status"));
   const [total, setTotal] = useState(1);
 
   const getTitles = useCallback(async () => {
     try {
+      const params = { limit: 12, page, status, type };
+      console.log(params);
       const { data } = await axios.get('/v1/titles', {
-        params: {
-          page,
-          limit: 12,
-          sortBy: "_id"
-        }
+        params
       });
       if (isMountedRef.current) {
         setTitles(data.results);
@@ -81,15 +79,19 @@ export default function Titles() {
     } catch (err) {
       //
     }
-  }, [isMountedRef, page]);
+  }, [isMountedRef, page, type, status]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
   }
 
   useEffect(() => {
-    setSearchParams({ page });
+    const query = { page };
+    if (type) query.type = type;
+    if (status) query.status = status;
+    setSearchParams(query);
     getTitles();
+    return () => { setTitles([]); }
   }, [getTitles]);
 
   return (
@@ -107,7 +109,7 @@ export default function Titles() {
             titles.map(title => <TitleItem title={title} />)
           }
         </Grid>
-        <Box sx={{display: 'flex', justifyContent: 'right'}}>
+        <Box sx={{ display: 'flex', justifyContent: 'right' }}>
           <Pagination sx={{ my: 2 }} count={total} page={page} onChange={handlePageChange} />
         </Box>
       </Container>

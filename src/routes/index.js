@@ -53,6 +53,9 @@ export default function Router() {
         { element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
         { path: PATH_WIBU.root, element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
         { path: PATH_WIBU.title.root, element: <Titles /> },
+        { path: PATH_WIBU.title.new, element: <NewTitle /> },
+        { path: PATH_WIBU.title.edit, element: <EditTitle /> },
+        { path: PATH_WIBU.title.delete, element: <DeleteTitle /> },
         { path: PATH_WIBU.title.id, element: <Title /> },
       ]
     },
@@ -95,6 +98,9 @@ const Register = Loadable(lazy(() => import('../pages/auth/Register')));
 // Wibu
 const Titles = Loadable(lazy(() => import('../pages/wibu/Titles')));
 const Title = Loadable(lazy(() => import('../pages/wibu/Title')));
+const NewTitle = Loadable(lazy(() => import('../pages/wibu/NewTitle')));
+const EditTitle = Loadable(lazy(() => import('../pages/wibu/EditTitle')));
+const DeleteTitle = Loadable(lazy(() => import('../pages/wibu/DeleteTitle')));
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));

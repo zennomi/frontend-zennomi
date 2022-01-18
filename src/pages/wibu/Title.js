@@ -1,9 +1,11 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import ReactMarkdown from 'react-markdown';
+import { decode } from 'html-entities';
+import rehypeRaw from 'rehype-raw';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // @mui
-import { styled, useTheme } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 import {
     Container, Grid, Typography, Card,
     Link, Box, Skeleton, Stack, Divider, Rating,
@@ -18,7 +20,6 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Image from '../../components/Image';
 import Label from '../../components/Label';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
-import Scrollbar from '../../components/Scrollbar';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -51,7 +52,6 @@ export default function Title() {
         }),
     };
 
-
     const { id } = useParams();
 
     const [title, setTitle] = useState();
@@ -70,7 +70,6 @@ export default function Title() {
     useEffect(() => {
         getTitle();
     }, [getTitle]);
-
 
     const handlePrevious = () => {
         carouselRef.current.slickPrev();
@@ -135,11 +134,14 @@ export default function Title() {
                         {
                             title && [...title.author, ...title.artist].map(a => <Label sx={{ m: 0.5 }} variant='filled'>{a}</Label>)
                         }
-                        <Typography variant='body1'>
-                            <ReactMarkdown>
-                                {title?.description}
-                            </ReactMarkdown>
-                        </Typography>
+                        {
+                            title?.description &&
+                            <Typography variant='body1'>
+                                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
+                                    {decode(title.description)}
+                                </ReactMarkdown>
+                            </Typography>
+                        }
                         <Divider sx={{ my: 2 }} />
                         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
                             {title?.genres.map(genre => <Label color='primary' sx={{ m: 0.2 }}>{genre}</Label>)}
@@ -147,16 +149,25 @@ export default function Title() {
                         </Box>
                     </Grid>
                 </Grid>
-                <Card>
-                    <CardHeader title="Liên kết" />
-                    <CardContent>
-                        {
-                            title?.urls.filter(url => url.category === 'reading').map(url =>
-                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
-                            )
-                        }
-                    </CardContent>
-                </Card>
+                <Stack spacing={2}>
+                    <Card>
+                        <CardHeader title="Liên kết" />
+                        <CardContent>
+                            {
+                                title?.urls.filter(url => url.category === 'reading').map(url =>
+                                    <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                )
+                            }
+                        </CardContent>
+                    </Card>
+                    <Card>
+                        <CardHeader title="Admin" />
+                        <CardContent>
+                            <Button size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
+                            <Button color='error' size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
+                        </CardContent>
+                    </Card>
+                </Stack>
             </Container>
         </Page >
     );
@@ -180,7 +191,7 @@ function StatusLabel({ status = 'ongoing' }) {
 }
 
 function LinkIcon({ site }) {
-    if (site === 'blogtruyen') return <Avatar src='/icons/ic_blogtruyen.png' sx={{borderRadius: 1}}/>
-    else if (site === 'mangadex') return <Avatar src='/icons/ic_mangadex.svg' sx={{borderRadius: 1}}/>
-    else return <Avatar src='/icons/ic_raw_ja.svg' sx={{borderRadius: 1}}/>
+    if (site === 'blogtruyen') return <Avatar src='/icons/ic_blogtruyen.png' sx={{ borderRadius: 1 }} />
+    else if (site === 'mangadex') return <Avatar src='/icons/ic_mangadex.svg' sx={{ borderRadius: 1 }} />
+    else return <Avatar src='/icons/ic_raw_ja.svg' sx={{ borderRadius: 1 }} />
 }

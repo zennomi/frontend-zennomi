@@ -20,11 +20,12 @@ const sidebarConfig = [
     subheader: 'Zennomi',
     items: [
       {
-        title: 'wibu',
+        title: PATH_WIBU.label,
         path: PATH_WIBU.root,
         icon: ICONS.dashboard,
         children: [
-          { title: 'Thư viện', path: PATH_WIBU.title.root }
+          { title: PATH_WIBU.title.label, path: PATH_WIBU.title.root },
+          { title: 'Thêm hàng mới', path: PATH_WIBU.title.new }
         ]
       },
     ],
