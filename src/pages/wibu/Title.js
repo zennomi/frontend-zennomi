@@ -5,7 +5,7 @@ import { decode } from 'html-entities';
 import rehypeRaw from 'rehype-raw';
 import { Link as RouterLink, useParams } from 'react-router-dom';
 // @mui
-import { useTheme } from '@mui/material/styles';
+import { useTheme, styled } from '@mui/material/styles';
 import {
     Container, Grid, Typography, Card,
     Link, Box, Skeleton, Stack, Divider, Rating,
@@ -19,6 +19,7 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Image from '../../components/Image';
 import Label from '../../components/Label';
+import Iconify from '../../components/Iconify';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
 // utils
 import axios from '../../utils/axios';
@@ -92,7 +93,7 @@ export default function Title() {
                 />
                 <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={12} md={4}>
-                        <Card>
+                        <CardSlider sx={{ mx: 'auto' }}>
                             <Slider ref={carouselRef} {...settings}>
                                 {title?.coverArt.map((cover, index) => (
                                     <CarouselItem key={index} coverArt={cover} isActive={index === currentIndex} />
@@ -117,7 +118,7 @@ export default function Title() {
                                     },
                                 }}
                             />
-                        </Card>
+                        </CardSlider>
                     </Grid>
                     <Grid item xs={12} md={8}>
                         <Stack direction='row' spacing={0.5}>
@@ -190,8 +191,19 @@ function StatusLabel({ status = 'ongoing' }) {
     return (<Label color={color} variant='filled'>{status.toUpperCase()}</Label>)
 }
 
-function LinkIcon({ site }) {
+function LinkIcon({ site, language }) {
     if (site === 'blogtruyen') return <Avatar src='/icons/ic_blogtruyen.png' sx={{ borderRadius: 1 }} />
     else if (site === 'mangadex') return <Avatar src='/icons/ic_mangadex.svg' sx={{ borderRadius: 1 }} />
-    else return <Avatar src='/icons/ic_raw_ja.svg' sx={{ borderRadius: 1 }} />
+    else if (site === 'ln.hako.re') return <Avatar src='/icons/ic_hako.png' sx={{ borderRadius: 1 }} />
+    else if (site === 'facebook') return <Iconify icon='logos:facebook' />
+    else if (site === 'google') return <Iconify icon={'flat-color-icons:google'} />
+    else return <Iconify icon='fa-solid:link' />
 }
+
+const CardSlider = styled(Card)(({ theme }) => {
+    return {
+        [theme.breakpoints.down('md')]: {
+            width: '70%',
+        },
+    }
+})

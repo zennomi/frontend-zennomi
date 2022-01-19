@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
@@ -7,6 +8,8 @@ import cssStyles from '../../../utils/cssStyles';
 // components
 import Iconify from '../../../components/Iconify';
 import { IconButtonAnimate } from '../../../components/animate';
+// paths
+import { PATH_WIBU } from '../../../routes/paths'
 
 // ----------------------------------------------------------------------
 
@@ -34,7 +37,12 @@ const SearchbarStyle = styled('div')(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 export default function Searchbar() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const isTitlesPage = location.pathname.includes(PATH_WIBU.title.root);
   const [isOpen, setOpen] = useState(false);
+  const [query, setQuery] = useState("");
 
   const handleOpen = () => {
     setOpen((prev) => !prev);
@@ -43,6 +51,12 @@ export default function Searchbar() {
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleSearch = () => {
+    handleClose(); 
+    if (isTitlesPage) setSearchParams({query});
+    else navigate(`${PATH_WIBU.title.root}?query=${query}`);
+  }
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
@@ -69,8 +83,10 @@ export default function Searchbar() {
                 </InputAdornment>
               }
               sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
+              value={query}
+              onChange={(e) => { setQuery(e.target.value); }}
             />
-            <Button variant="contained" onClick={handleClose}>
+            <Button type="submit" variant="contained" onClick={handleSearch}>
               Search
             </Button>
           </SearchbarStyle>

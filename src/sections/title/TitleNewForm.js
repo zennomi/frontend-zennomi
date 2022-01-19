@@ -307,7 +307,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                 )}
               />
               <Controller
-                name="aritst"
+                name="artist"
                 control={control}
                 render={({ field }) => (
                   <Autocomplete

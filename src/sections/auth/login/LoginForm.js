@@ -101,7 +101,7 @@ export default function LoginForm() {
         </Link>
       </Stack>
       <Stack spacing={2}>
-        <LoadingButton fullWidth startIcon={<Iconify icon="clarity:login-solid"/>} size="large" type="submit" variant="contained" loading={isSubmitting}>
+        <LoadingButton fullWidth startIcon={<Iconify icon="eva:log-in-fill"/>} size="large" type="submit" variant="contained" loading={isSubmitting}>
           Login
         </LoadingButton>
         <Button fullWidth startIcon={<Iconify icon="akar-icons:facebook-fill"/>} size="large" variant="contained" onClick={onFbLogin}>Login With Facebook</Button>
