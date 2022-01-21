@@ -17,7 +17,7 @@ const Loadable = (Component) => (props) => {
   const { pathname } = useLocation();
 
   return (
-    <Suspense fallback={<LoadingScreen isDashboard={pathname.includes('/wibu')} />}>
+    <Suspense fallback={<LoadingScreen isDashboard={pathname.includes('/concu')} />}>
       <Component {...props} />
     </Suspense>
   );
@@ -45,6 +45,10 @@ export default function Router() {
           ),
         },
       ],
+    },
+    {
+      path: '/loading',
+      element: <LoadingScreen />
     },
     {
       path: '/',

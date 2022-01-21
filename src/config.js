@@ -14,6 +14,11 @@ export const FIREBASE_API = {
   measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
+export const IMGUR_API = {
+  clientId: process.env.REACT_APP_IMGUR_CLIENT_ID,
+  clientSecret: process.env.REACT_APP_IMGUR_CLIENT_SECRET,
+};
+
 // LAYOUT
 // ----------------------------------------------------------------------
 

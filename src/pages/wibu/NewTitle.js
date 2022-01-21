@@ -5,7 +5,7 @@ import useSettings from '../../hooks/useSettings';
 // components
 import Page from '../../components/Page';
 // sections
-import TitleNewFrom from '../../sections/title/TitleNewForm';
+import TitleNewForm from '../../sections/title/TitleNewForm';
 // utils
 import axios from '../../utils/axios';
 // ---------------------------------------------------------------------
@@ -24,7 +24,7 @@ export default function NewTitle() {
   return (
     <Page title="New Title">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <TitleNewFrom isEdit={false} currentTitle={null} titleSubmit={titleSubmit} />
+        <TitleNewForm isEdit={false} currentTitle={null} titleSubmit={titleSubmit} />
       </Container>
     </Page>
   );

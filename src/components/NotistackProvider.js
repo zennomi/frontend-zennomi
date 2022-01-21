@@ -74,7 +74,7 @@ export default function NotistackProvider({ children }) {
         preventDuplicate
         autoHideDuration={3000}
         variant="success" // Set default variant
-        anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
         iconVariant={{
           info: <SnackbarIcon icon={'eva:info-fill'} color="info" />,
           success: <SnackbarIcon icon={'eva:checkmark-circle-2-fill'} color="success" />,

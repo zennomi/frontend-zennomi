@@ -1,12 +1,13 @@
 import { useState } from 'react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
+import { styled, alpha } from '@mui/material/styles';
 
 import { Typography, Card, CardActionArea, IconButton, Chip, Menu, MenuItem, ListItemText, ListItemIcon, Divider } from '@mui/material';
 // components
 import Image from '../Image';
 import Iconify from '../Iconify';
+import TextMaxLine from '../TextMaxLine';
 // utils
 import cssStyles from '../../utils/cssStyles';
 // paths
@@ -25,62 +26,34 @@ export default function TitleCard({ title }) {
     return (
         <Card>
             <Image src={title.coverArt[0]} alt={title.title?.en} ratio='4/6' />
+            <OverlayStyle />
             <CaptionStyle component={RouterLink} to={`${PATH_WIBU.title.one}/${title._id}`}>
-                <div style={{ width: "80%" }}>
-                    <Typography width="100%" variant="subtitle1" noWrap>{title.title?.en}</Typography>
-                    <Typography width="100%" variant="body2" sx={{ opacity: 0.72 }} noWrap>
-                        {title.title?.ja}
-                    </Typography>
-                </div>
+                <TextMaxLine line={2}>
+                    <Typography width="100%" variant="subtitle1" component="span">{title.title?.en}</Typography>
+                    {
+                        title?.altTitle &&
+                        <Typography width="100%" variant="body2" sx={{ opacity: 0.72 }} component="span">
+                            {` - ${title?.altTitle}`}
+                        </Typography>
+                    }
+                </TextMaxLine>
             </CaptionStyle>
-            <IconButton
-                color="primary"
-                sx={{ position: 'absolute', top: 0, right: 0 }}
-                id="basic-button"
-                aria-controls={open ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={open ? 'true' : undefined}
-                onClick={handleClick}
-            >
-                <Iconify icon={'eva:more-vertical-fill'} />
-            </IconButton>
-            <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={handleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={() => { navigate(`${PATH_WIBU.title.one}/${title._id}`) }}>
-                    <ListItemIcon>
-                        <Iconify icon={'eva:eye-fill'} />
-                    </ListItemIcon>
-                    <ListItemText>Xem</ListItemText>
-                </MenuItem>
-                <MenuItem onClick={handleClose}>
-                    <ListItemIcon>
-                        <Iconify icon={'eva:heart-fill'} />
-                    </ListItemIcon>
-                    <ListItemText>Đánh dấu</ListItemText>
-                </MenuItem>
-                <Divider />
-                <MenuItem onClick={() => { navigate(`${PATH_WIBU.title.one}/edit/${title._id}`) }}>
-                    <ListItemText>Sửa</ListItemText>
-                </MenuItem>
-                <MenuItem onClick={() => { navigate(`${PATH_WIBU.title.one}/delete/${title._id}`) }}>
-                    <ListItemText>Xoá</ListItemText>
-                </MenuItem>
-            </Menu>
             <Chip label={title.type} color="primary" size="small" sx={theme => ({ position: 'absolute', top: theme.spacing(0.5), left: theme.spacing(0.5), opacity: 0.9 })} />
         </Card>
     )
 }
 
 
+const OverlayStyle = styled('div')(({ theme }) => ({
+    top: 0,
+    width: '100%',
+    height: '100%',
+    position: 'absolute',
+    backgroundImage: `linear-gradient(to top, ${theme.palette.grey[900]} 0%,${alpha(theme.palette.grey[900], 0)} 50%)`,
+}));
+
 const CaptionStyle = styled(CardActionArea)(({ theme }) => ({
-    ...cssStyles().bgBlur({ blur: 2, color: theme.palette.grey[900] }),
+    // ...cssStyles().bgBlur({ blur: 2, color: theme.palette.grey[900] }),
     bottom: 0,
     width: '100%',
     display: 'flex',

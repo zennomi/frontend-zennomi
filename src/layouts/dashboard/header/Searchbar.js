@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
+import { Input, Slide, Button, InputAdornment, ClickAwayListener, FormControl } from '@mui/material';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // components
@@ -53,45 +53,51 @@ export default function Searchbar() {
   };
 
   const handleSearch = () => {
-    handleClose(); 
-    if (isTitlesPage) setSearchParams({query});
+    handleClose();
+    if (isTitlesPage) setSearchParams({ query });
     else navigate(`${PATH_WIBU.title.root}?query=${query}`);
+  }
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    handleSearch();
   }
 
   return (
     <ClickAwayListener onClickAway={handleClose}>
-      <div>
-        {!isOpen && (
-          <IconButtonAnimate onClick={handleOpen}>
-            <Iconify icon={'eva:search-fill'} width={20} height={20} />
-          </IconButtonAnimate>
-        )}
+      <form onSubmit={(e) => { handleSubmit(e) }}>
+        <div>
+          {!isOpen && (
+            <IconButtonAnimate onClick={handleOpen}>
+              <Iconify icon={'eva:search-fill'} width={20} height={20} />
+            </IconButtonAnimate>
+          )}
 
-        <Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
-          <SearchbarStyle>
-            <Input
-              autoFocus
-              fullWidth
-              disableUnderline
-              placeholder="Search…"
-              startAdornment={
-                <InputAdornment position="start">
-                  <Iconify
-                    icon={'eva:search-fill'}
-                    sx={{ color: 'text.disabled', width: 20, height: 20 }}
-                  />
-                </InputAdornment>
-              }
-              sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
-              value={query}
-              onChange={(e) => { setQuery(e.target.value); }}
-            />
-            <Button type="submit" variant="contained" onClick={handleSearch}>
-              Search
-            </Button>
-          </SearchbarStyle>
-        </Slide>
-      </div>
+          <Slide direction="down" in={isOpen} mountOnEnter unmountOnExit>
+            <SearchbarStyle>
+              <Input
+                autoFocus
+                fullWidth
+                disableUnderline
+                placeholder="Search…"
+                startAdornment={
+                  <InputAdornment position="start">
+                    <Iconify
+                      icon={'eva:search-fill'}
+                      sx={{ color: 'text.disabled', width: 20, height: 20 }}
+                    />
+                  </InputAdornment>
+                }
+                sx={{ mr: 1, fontWeight: 'fontWeightBold' }}
+                value={query}
+                onChange={(e) => { setQuery(e.target.value); }}
+              />
+              <Button type="submit" variant="contained" onClick={handleSearch}>
+                Search
+              </Button>
+            </SearchbarStyle>
+          </Slide>
+        </div>
+      </form>
     </ClickAwayListener>
   );
 }

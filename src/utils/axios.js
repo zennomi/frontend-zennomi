@@ -13,4 +13,13 @@ axiosInstance.interceptors.response.use(
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
+const updateTitle = (title) => {
+  return axiosInstance({
+    method: 'post',
+    url: `/v1/titles/${title._id}`,
+    data: title,
+  })
+}
+
 export default axiosInstance;
+export { updateTitle };

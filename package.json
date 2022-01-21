@@ -50,6 +50,7 @@
     "highlight.js": "^11.4.0",
     "history": "^5.2.0",
     "html-entities": "^2.3.2",
+    "imgur": "^2.1.3",
     "notistack": "^2.0.3",
     "nprogress": "^0.2.0",
     "numeral": "^2.0.6",

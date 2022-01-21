@@ -3,12 +3,16 @@ import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
 import { Container, Grid, Typography, Button, Card, CardContent, IconButton, Link, CardActionArea, Chip, Pagination, Box } from '@mui/material';
 // hooks
+import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import TitleCard from '../../components/title/TitleCard';
+import Iconify from '../../components/Iconify';
+// sections
+import TitleDrawer from '../../sections/title/TitleDrawer';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -18,18 +22,12 @@ import { PATH_WIBU } from '../../routes/paths';
 
 const TYPE_OPTION = ['manga', 'novel', 'anime']
 
-const TitleItem = ({ title }) => {
-  return (
-    <Grid item xs={3} key={title._id}>
-      <TitleCard title={title} />
-    </Grid>
-  )
-}
-
 export default function Titles() {
   const { themeStretch } = useSettings();
   const isMountedRef = useIsMountedRef();
+  const { enqueueSnackbar } = useSnackbar();
 
+  const [title, setTitle] = useState();
   const [titles, setTitles] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
   const [total, setTotal] = useState(1);
@@ -44,7 +42,8 @@ export default function Titles() {
         setTotal(data.totalPages);
       }
     } catch (err) {
-      //
+      console.error(err);
+      enqueueSnackbar(err, { variant: 'error' });
     }
   }, [isMountedRef, searchParams]);
 
@@ -63,10 +62,15 @@ export default function Titles() {
     })
   }
 
+  const handleClose = () => {
+    setTitle(null);
+  }
+
   useEffect(() => {
+    if (title) return;
     getTitles();
-    return () => { setTitles([]); }
-  }, [getTitles]);
+    // return () => { setTitles([]); }
+  }, [getTitles, title]);
 
   const handleTypeClick = (_type) => {
     if (_type === searchParams.get("type")) setNewParams({ type: null, page: 1 });
@@ -86,7 +90,7 @@ export default function Titles() {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {
             TYPE_OPTION.map(_type => (
-              <Grid item xs={4}>
+              <Grid item xs={4} key={_type}>
                 <Button
                   fullWidth
                   color='primary'
@@ -101,12 +105,28 @@ export default function Titles() {
         </Grid>
         <Grid container spacing={2}>
           {
-            titles.map(title => <TitleItem title={title} />)
+            titles.map(
+              title =>
+                <Grid item xs={4} md={3} xl={2} key={title._id}>
+                  < div style={{ position: 'relative' }}>
+                    <TitleCard title={title} />
+                    <IconButton
+                      color="primary"
+                      sx={{ position: 'absolute', top: 0, right: 0 }}
+                      aria-haspopup="true"
+                      onClick={() => setTitle(title)}
+                    >
+                      <Iconify icon={'eva:more-vertical-fill'} />
+                    </IconButton>
+                  </div>
+                </Grid>
+            )
           }
         </Grid>
         <Box sx={{ display: 'flex', justifyContent: 'right' }}>
           <Pagination sx={{ my: 2 }} count={total} page={Number(searchParams.get("page"))} onChange={handlePageChange} />
         </Box>
+        <TitleDrawer title={title} onClose={handleClose} />
       </Container>
     </Page>
   );

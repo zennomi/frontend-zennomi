@@ -1,9 +1,8 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
 import ReactMarkdown from 'react-markdown';
-import { decode } from 'html-entities';
 import rehypeRaw from 'rehype-raw';
-import { Link as RouterLink, useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
 import {
@@ -12,6 +11,7 @@ import {
     Button, CardHeader, CardContent, Avatar
 } from '@mui/material';
 // hooks
+import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 // components
@@ -21,6 +21,7 @@ import Image from '../../components/Image';
 import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
+import ZennomiScore from '../../sections/title/ZennomiScore';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -32,6 +33,8 @@ export default function Title() {
     const theme = useTheme();
     const { themeStretch } = useSettings();
     const isMountedRef = useIsMountedRef();
+    const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
 
     const carouselRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -64,7 +67,8 @@ export default function Title() {
                 setTitle(data);
             }
         } catch (err) {
-            //
+            enqueueSnackbar(err, { variant: 'error' });
+            navigate(PATH_WIBU.root);
         }
     }, [isMountedRef]);
 
@@ -84,11 +88,11 @@ export default function Title() {
         <Page title={title?.title.en || ""}>
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <HeaderBreadcrumbs
-                    heading={title?.title.en || <Skeleton variant='h3' />}
+                    heading={title?.name || <Skeleton variant='h3' />}
                     links={[
                         { name: PATH_WIBU.label, href: PATH_WIBU.root },
                         { name: PATH_WIBU.title.label, href: PATH_WIBU.title.root },
-                        { name: title?.title.en || <Skeleton variant='text' />, href: `${PATH_WIBU.title.one}/${id}` },
+                        { name: title?.name || <Skeleton variant='text' />, href: `${PATH_WIBU.title.one}/${id}` },
                     ]}
                 />
                 <Grid container spacing={2} sx={{ mb: 3 }}>
@@ -132,6 +136,9 @@ export default function Title() {
                         <Typography variant='body2' sx={{ opacity: 0.72 }}>
                             {title?.title.ja?.toUpperCase()}
                         </Typography>
+                        <Typography variant='body2' sx={{ opacity: 0.72 }}>
+                            {title?.title.vi?.toUpperCase()}
+                        </Typography>
                         {
                             title && [...title.author, ...title.artist].map(a => <Label sx={{ m: 0.5 }} variant='filled'>{a}</Label>)
                         }
@@ -139,7 +146,7 @@ export default function Title() {
                             title?.description &&
                             <Typography variant='body1'>
                                 <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                                    {decode(title.description)}
+                                    {title.description}
                                 </ReactMarkdown>
                             </Typography>
                         }
@@ -149,26 +156,50 @@ export default function Title() {
                             {title?.tags.map(genre => <Label color='primary' variant='outlined' sx={{ m: 0.2 }}>{genre}</Label>)}
                         </Box>
                     </Grid>
+                    <Grid item xs={12} md={6}>
+                        <Card>
+                            <CardHeader title="Liên kết" />
+                            <CardContent>
+                                <Stack spacing={1}>
+                                    {
+                                        title?.links?.vi?.length > 0 &&
+                                        <div><Typography variant='h6'>Link tiếng Việt</Typography>
+                                            {title?.links?.vi.map(url =>
+                                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                            )}
+                                        </div>
+                                    }
+                                    {
+                                        title?.links?.en?.length > 0 &&
+                                        <div><Typography variant='h6'>Link tiếng Anh</Typography>
+                                            {title?.links?.en.map(url =>
+                                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                            )}
+                                        </div>
+                                    }
+                                    {
+                                        title?.links?.raw?.length > 0 &&
+                                        <div><Typography variant='h6'>Link raw</Typography>
+                                            {title?.links?.raw.map(url =>
+                                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                            )}
+                                        </div>
+                                    }
+                                </Stack>
+                            </CardContent>
+                        </Card>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                        <ZennomiScore score={title?.score} zennomi={title?.zennomi} />
+                    </Grid>
                 </Grid>
-                <Stack spacing={2}>
-                    <Card>
-                        <CardHeader title="Liên kết" />
-                        <CardContent>
-                            {
-                                title?.urls.filter(url => url.category === 'reading').map(url =>
-                                    <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
-                                )
-                            }
-                        </CardContent>
-                    </Card>
-                    <Card>
-                        <CardHeader title="Admin" />
-                        <CardContent>
-                            <Button size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
-                            <Button color='error' size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
-                        </CardContent>
-                    </Card>
-                </Stack>
+                <Card>
+                    <CardHeader title="Admin" />
+                    <CardContent>
+                        <Button size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
+                        <Button color='error' size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
+                    </CardContent>
+                </Card>
             </Container>
         </Page >
     );
@@ -192,10 +223,10 @@ function StatusLabel({ status = 'ongoing' }) {
 }
 
 function LinkIcon({ site, language }) {
-    if (site === 'blogtruyen') return <Avatar src='/icons/ic_blogtruyen.png' sx={{ borderRadius: 1 }} />
-    else if (site === 'mangadex') return <Avatar src='/icons/ic_mangadex.svg' sx={{ borderRadius: 1 }} />
-    else if (site === 'ln.hako.re') return <Avatar src='/icons/ic_hako.png' sx={{ borderRadius: 1 }} />
-    else if (site === 'facebook') return <Iconify icon='logos:facebook' />
+    if (site === 'blogtruyen.vn') return <Avatar src='/icons/ic_blogtruyen.png' sx={{ borderRadius: 1 }} />
+    else if (site === 'mangadex.org') return <Avatar src='/icons/ic_mangadex.svg' sx={{ borderRadius: 1 }} />
+    else if (site === 'hako.re') return <Avatar src='/icons/ic_hako.png' sx={{ borderRadius: 1 }} />
+    else if (site === 'facebook.com') return <Iconify icon='logos:facebook' />
     else if (site === 'google') return <Iconify icon={'flat-color-icons:google'} />
     else return <Iconify icon='fa-solid:link' />
 }

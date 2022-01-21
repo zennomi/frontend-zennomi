@@ -2,15 +2,17 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo } from 'react';
-import { decode } from 'html-entities';
+import { useEffect, useMemo, useCallback } from 'react';
+import isString from 'lodash/isString';
+import ReactMarkdown from 'react-markdown';
+
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete } from '@mui/material';
+import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, Box, InputAdornment } from '@mui/material';
 // routes
 import { PATH_WIBU } from '../../routes/paths';
 // components
@@ -19,52 +21,14 @@ import {
   RHFSelect,
   RHFEditor,
   RHFTextField,
+  RHFUploadMultiFile,
+  RHFSwitch
 } from '../../components/hook-form';
+// utils
+import imgur from '../../utils/imgur';
+import {TYPE_OPTION, STATUS_OPTION, GENRE_OPTION} from '../../constants';
 
 // ----------------------------------------------------------------------
-
-const TYPE_OPTION = ['novel', 'manga', 'anime'];
-
-const STATUS_OPTION = ['hiatus', 'ongoing', 'completed', 'cancelled'];
-
-const GENRES_OPTION = [
-  'action',
-  'adult',
-  'adventure',
-  'comedy',
-  'doujinshi',
-  'drama',
-  'ecchi',
-  'fantasy',
-  'gender bender',
-  'harem',
-  'hentai',
-  'historical',
-  'horror',
-  'josei',
-  'lolicon',
-  'martial arts',
-  'mature',
-  'mecha',
-  'mystery',
-  'psychological',
-  'romance',
-  'school life',
-  'sci-fi',
-  'seinen',
-  'shotacon',
-  'shoujo',
-  'shoujo ai',
-  'shounen',
-  'shounen ai',
-  'slice of Life',
-  'smut',
-  'sports',
-  'supernatural',
-  'tragedy',
-  'yaoi',
-  'yuri'
-]
 
 const LabelStyle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -85,11 +49,11 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
 
   const { enqueueSnackbar } = useSnackbar();
 
-  const NewProductSchema = Yup.object().shape({
+  const TitleSchema = Yup.object().shape({
     title: Yup.object().shape({
       en: Yup.string().required('Name is required'),
     }),
-    coverArt: Yup.array().of(Yup.string()).min(1, "Cần có bìa"),
+    coverArt: Yup.array().min(1, 'Images is required'),
   });
 
   const defaultValues = useMemo(
@@ -99,24 +63,30 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
         vi: currentTitle?.title.vi || '',
         ja: currentTitle?.title.ja || ''
       },
-      description: currentTitle?.description ? decode(currentTitle.description) : '',
+      description: currentTitle?.description || '',
       genres: currentTitle?.genres || ['romance', 'comedy'],
       coverArt: currentTitle?.coverArt || [],
       tags: currentTitle?.tags || [],
-      links: {
-        raw: currentTitle?.links.raw || [],
-        vi: currentTitle?.links.vi || [],
+      urls: {
+        raw: currentTitle?.urls.raw || [],
+        vi: currentTitle?.urls.vi || [],
+        en: currentTitle?.urls.en || [],
       },
       author: currentTitle?.author || [],
       artist: currentTitle?.artist || [],
       status: currentTitle?.status || 'ongoing',
-      type: currentTitle?.type || 'manga'
+      type: currentTitle?.type || 'manga',
+      zennomi: currentTitle?.zennomi || {
+        isMyProject: false,
+        review: ""
+      },
+      score: currentTitle?.score || 0
     }),
     [currentTitle]
   );
 
   const methods = useForm({
-    resolver: yupResolver(NewProductSchema),
+    resolver: yupResolver(TitleSchema),
     defaultValues,
   });
 
@@ -124,7 +94,9 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
     reset,
     watch,
     control,
+    setValue,
     handleSubmit,
+    getValues,
     formState: { isSubmitting },
   } = methods;
 
@@ -141,18 +113,43 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
 
   const onSubmit = async (title) => {
     try {
-      await new Promise((resolve) => setTimeout(resolve, 500));
+      const linkFiles = title.coverArt.filter(link => isString(link));
+      const base64Files = await Promise.all(title.coverArt.filter(link => !isString(link)).map(file => getBase64(file)));
+      const imgurLinks = await imgur.upload(base64Files.map(file => ({ image: file.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), type: 'base64' })));
       reset();
       console.log(title);
+      title.coverArt = [...imgurLinks.map(e => e.data.link), ...linkFiles];
       const { data } = await titleSubmit(title);
       const { data: newTitle } = data;
-      console.log({newTitle})
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       navigate(`${PATH_WIBU.title.one}/${newTitle._id}`);
     } catch (error) {
       console.error(error);
       enqueueSnackbar(error.message);
     }
+  };
+
+  const handleDrop = useCallback(
+    async (acceptedFiles) => {
+      setValue(
+        'coverArt',
+        acceptedFiles.map(file =>
+          isString(file) ? file : Object.assign(file, {
+            preview: URL.createObjectURL(file),
+          })
+        )
+      );
+    },
+    [setValue]
+  );
+
+  const handleRemoveAll = () => {
+    setValue('coverArt', []);
+  };
+
+  const handleRemove = (file) => {
+    const filteredItems = values.coverArt?.filter((_file) => _file !== file);
+    setValue('coverArt', filteredItems);
   };
 
   return (
@@ -168,10 +165,27 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                 <LabelStyle>Description</LabelStyle>
                 <RHFEditor simple name="description" />
               </div>
+              <div>
+                <LabelStyle>Zennomi review</LabelStyle>
+                <RHFEditor simple name="zennomi.review" />
+              </div>
+              <div>
+                <LabelStyle>Images</LabelStyle>
+                <RHFUploadMultiFile
+                  name="coverArt"
+                  showPreview
+                  accept="image/*"
+                  maxSize={3145728}
+                  onDrop={handleDrop}
+                  onRemove={handleRemove}
+                  onRemoveAll={handleRemoveAll}
+                />
+              </div>
+
               <Controller
-                name="coverArt"
+                name="urls.vi"
                 control={control}
-                render={({ field, fieldState: { error } }) => (
+                render={({ field }) => (
                   <Autocomplete
                     {...field}
                     multiple
@@ -183,13 +197,12 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                         <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                       ))
                     }
-
-                    renderInput={(params) => <TextField label="Bìa" error={!!error} helperText={error?.message} {...params} />}
+                    renderInput={(params) => <TextField label="Link việt" {...params} />}
                   />
                 )}
               />
               <Controller
-                name="links.raw"
+                name="urls.raw"
                 control={control}
                 render={({ field }) => (
                   <Autocomplete
@@ -208,7 +221,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                 )}
               />
               <Controller
-                name="links.vi"
+                name="urls.en"
                 control={control}
                 render={({ field }) => (
                   <Autocomplete
@@ -222,10 +235,11 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                         <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                       ))
                     }
-                    renderInput={(params) => <TextField label="Link việt" {...params} />}
+                    renderInput={(params) => <TextField label="Link eng" {...params} />}
                   />
                 )}
               />
+
             </Stack>
           </Card>
         </Grid>
@@ -234,11 +248,27 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
           <Stack spacing={3}>
             <Card sx={{ p: 3 }}>
               <Stack spacing={3} mt={2}>
+                <RHFSwitch name="zennomi.isMyProject" label="Dự án của Zennomi" />
+
+                <RHFTextField
+                  name="score"
+                  label="Điểm số"
+                  placeholder="0.00"
+                  value={getValues('score') === 0 ? '' : getValues('score')}
+                  onChange={(event) => setValue('score', Number(event.target.value))}
+                  InputLabelProps={{ shrink: true }}
+                  InputProps={{
+                    endAdornment: <InputAdornment position="end">/100</InputAdornment>,
+                    type: 'number',
+                  }}
+                />
+
                 <RHFSelect name="type" label="Type">
                   {TYPE_OPTION.map((status) => (
                     <option>{status}</option>
                   ))}
                 </RHFSelect>
+
 
                 <RHFSelect name="status" label="Status">
                   {STATUS_OPTION.map((status) => (
@@ -254,7 +284,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                       multiple
                       freeSolo
                       onChange={(event, newValue) => field.onChange(newValue)}
-                      options={GENRES_OPTION.map((option) => option)}
+                      options={GENRE_OPTION.map((option) => option)}
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => (
                           <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
@@ -336,3 +366,20 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
     </FormProvider>
   );
 }
+
+const getBase64 = file => {
+  return new Promise(resolve => {
+    let fileInfo;
+    let baseURL = "";
+    // Make new FileReader
+    let reader = new FileReader();
+    // Convert the file to base64 text
+    reader.readAsDataURL(file);
+    // on reader load somthing...
+    reader.onload = () => {
+      // Make a fileInfo Object
+      baseURL = reader.result;
+      resolve(baseURL);
+    };
+  });
+};

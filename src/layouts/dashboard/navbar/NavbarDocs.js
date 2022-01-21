@@ -12,15 +12,15 @@ export default function NavbarDocs() {
 
       <div>
         <Typography gutterBottom variant="subtitle1">
-          Hi, Rayan Moran
+          Yahallo~
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Need help?
-          <br /> Please check our docs
+          Loser chúa nào đây?
+          <br /> Chính là mình, nữ sinh cao trung cute <em>*nháy mắt*</em>
         </Typography>
       </div>
 
-      <Button variant="contained">Documentation</Button>
+      <Button variant="contained" href="https://www.facebook.com/Zennomi" target="_blank" component="a">Zennomi</Button>
     </Stack>
   );
 }
