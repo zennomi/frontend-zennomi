@@ -5,21 +5,22 @@ import { PATH_LEARNING, PATH_WIBU } from '../../../routes/paths';
 import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
-const getIcon = (name) => <SvgIconStyle src={`/icons/${name}.svg`} sx={{ width: 1, height: 1 }} />;
-
-const ICONS = {
-  user: getIcon('ic_user'),
-  ecommerce: getIcon('ic_ecommerce'),
-  analytics: getIcon('ic_analytics'),
-  dashboard: getIcon('ic_dashboard'),
-};
-
 const sidebarConfig = [
   // GENERAL
   // ----------------------------------------------------------------------
   {
     subheader: 'Zennomi',
     items: [
+      {
+        title: 'Trang chủ',
+        path: '/homepage',
+        icon: <Iconify icon='ant-design:home-twotone' />,
+      },
+      {
+        title: 'Profile',
+        path: '/profile',
+        icon: <Iconify icon='ant-design:profile-twotone' />,
+      },
       {
         title: PATH_WIBU.label,
         path: PATH_WIBU.root,
@@ -29,6 +30,7 @@ const sidebarConfig = [
           { title: 'Thêm hàng mới', path: PATH_WIBU.title.new }
         ]
       },
+      
     ],
   },
 

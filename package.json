@@ -74,6 +74,7 @@
     "rehype-raw": "^6.1.1",
     "simplebar": "^5.3.6",
     "simplebar-react": "^2.3.6",
+    "slick-carousel": "^1.8.1",
     "stylis": "^4.0.13",
     "stylis-plugin-rtl": "^2.1.1",
     "yup": "^0.32.11"

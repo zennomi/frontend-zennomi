@@ -46,6 +46,7 @@ export default function Router() {
         },
       ],
     },
+
     {
       path: '/loading',
       element: <LoadingScreen />
@@ -54,7 +55,15 @@ export default function Router() {
       path: '/',
       element: <DashboardLayout />,
       children: [
-        { element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
+        { element: <Navigate to='/homepage' replace />, index: true },
+        {
+          path: '/homepage',
+          element: <Homepage />
+        },
+        {
+          path: '/profile',
+          element: <Profile />
+        },
         { path: PATH_WIBU.root, element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
         { path: PATH_WIBU.title.root, element: <Titles /> },
         { path: PATH_WIBU.title.new, element: <NewTitle /> },
@@ -95,6 +104,9 @@ export default function Router() {
   ]);
 }
 
+// Root
+const Homepage = Loadable(lazy(() => import('../pages/Homepage')));
+const Profile = Loadable(lazy(() => import('../pages/Profile')));
 
 // Authentication
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
