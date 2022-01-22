@@ -19,7 +19,7 @@ import { FormProvider, RHFTextField, RHFCheckbox } from '../../../components/hoo
 // ----------------------------------------------------------------------
 
 export default function LoginForm() {
-  const { login, fbLogin } = useAuth();
+  const { login, fbLogin, ggLogin } = useAuth();
 
   const isMountedRef = useIsMountedRef();
 
@@ -71,6 +71,17 @@ export default function LoginForm() {
     }
   }
 
+  const onGgLogin = async () => {
+    try {
+      await ggLogin();
+    } catch (error) {
+      console.error(error);
+      if (isMountedRef.current) {
+        setError('afterSubmit', error);
+      }
+    }
+  }
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <Stack spacing={3}>
@@ -105,6 +116,7 @@ export default function LoginForm() {
           Login
         </LoadingButton>
         <Button fullWidth startIcon={<Iconify icon="akar-icons:facebook-fill"/>} size="large" variant="contained" onClick={onFbLogin}>Login With Facebook</Button>
+        <Button fullWidth startIcon={<Iconify icon="akar-icons:google-fill"/>} size="large" variant="contained" onClick={onGgLogin}>Login With Google</Button>
       </Stack>
 
     </FormProvider>

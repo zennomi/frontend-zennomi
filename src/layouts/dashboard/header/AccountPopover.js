@@ -5,7 +5,7 @@ import { Box, Divider, Typography, Stack, MenuItem, Avatar } from '@mui/material
 // components
 import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
-
+import MyAvatar from '../../../components/MyAvatar';
 // ----------------------------------------------------------------------
 
 const MENU_OPTIONS = [
@@ -25,7 +25,7 @@ const MENU_OPTIONS = [
 
 // ----------------------------------------------------------------------
 
-export default function AccountPopover({user, logout}) {
+export default function AccountPopover({ user, logout }) {
   const [open, setOpen] = useState(null);
 
   const handleOpen = (event) => {
@@ -55,7 +55,7 @@ export default function AccountPopover({user, logout}) {
           }),
         }}
       >
-        <Avatar src="https://minimal-assets-api.vercel.app/assets/images/avatars/avatar_5.jpg" alt="Rayan Moran" />
+        <MyAvatar />
       </IconButtonAnimate>
 
       <MenuPopover
@@ -77,9 +77,9 @@ export default function AccountPopover({user, logout}) {
             {user.displayName}
           </Typography>
 
-            <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-              {user.email}
-            </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+            {user.email}
+          </Typography>
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />

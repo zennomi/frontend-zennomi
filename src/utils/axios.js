@@ -13,6 +13,13 @@ axiosInstance.interceptors.response.use(
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
 );
 
+axiosInstance.interceptors.request.use(function (config) {
+  const token = localStorage.getItem('firebase-token');
+  config.headers.Authorization = token ? token : '';
+  return config;
+}
+);
+
 const updateTitle = (title) => {
   return axiosInstance({
     method: 'post',

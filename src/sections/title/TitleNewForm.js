@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useCallback } from 'react';
 import isString from 'lodash/isString';
 import ReactMarkdown from 'react-markdown';
-
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,6 +12,8 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, Box, InputAdornment } from '@mui/material';
+// hooks
+import useAuth from '../../hooks/useAuth';
 // routes
 import { PATH_WIBU } from '../../routes/paths';
 // components
@@ -26,7 +27,7 @@ import {
 } from '../../components/hook-form';
 // utils
 import imgur from '../../utils/imgur';
-import {TYPE_OPTION, STATUS_OPTION, GENRE_OPTION} from '../../constants';
+import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION } from '../../constants';
 
 // ----------------------------------------------------------------------
 
@@ -46,7 +47,7 @@ TitleNewForm.propTypes = {
 
 export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
   const navigate = useNavigate();
-
+  const { getToken } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
   const TitleSchema = Yup.object().shape({
@@ -116,10 +117,11 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
       const linkFiles = title.coverArt.filter(link => isString(link));
       const base64Files = await Promise.all(title.coverArt.filter(link => !isString(link)).map(file => getBase64(file)));
       const imgurLinks = await imgur.upload(base64Files.map(file => ({ image: file.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), type: 'base64' })));
-      reset();
-      console.log(title);
       title.coverArt = [...imgurLinks.map(e => e.data.link), ...linkFiles];
-      const { data } = await titleSubmit(title);
+      reset();
+      const idToken = await getToken();
+      console.log(title, idToken);
+      const { data } = await titleSubmit({ ...title, idToken });
       const { data: newTitle } = data;
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       navigate(`${PATH_WIBU.title.one}/${newTitle._id}`);

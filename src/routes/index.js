@@ -6,6 +6,7 @@ import LogoOnlyLayout from '../layouts/LogoOnlyLayout';
 // guards
 import GuestGuard from '../guards/GuestGuard';
 import AuthGuard from '../guards/AuthGuard';
+import RoleBasedGuard from '../guards/RoleBasedGuard';
 // components
 import LoadingScreen from '../components/LoadingScreen';
 // paths
@@ -66,8 +67,8 @@ export default function Router() {
         },
         { path: PATH_WIBU.root, element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
         { path: PATH_WIBU.title.root, element: <Titles /> },
-        { path: PATH_WIBU.title.new, element: <NewTitle /> },
-        { path: PATH_WIBU.title.edit, element: <EditTitle /> },
+        { path: PATH_WIBU.title.new, element: (<RoleBasedGuard accessibleRoles={['admin']}><NewTitle /></RoleBasedGuard>) },
+        { path: PATH_WIBU.title.edit, element: (<RoleBasedGuard accessibleRoles={['admin']}><EditTitle /></RoleBasedGuard> )},
         { path: PATH_WIBU.title.delete, element: <DeleteTitle /> },
         { path: PATH_WIBU.title.id, element: <Title /> },
       ]

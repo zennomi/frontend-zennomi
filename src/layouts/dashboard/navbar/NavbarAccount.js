@@ -4,6 +4,8 @@ import { styled } from '@mui/material/styles';
 import { Box, Link, Typography, Avatar, Button } from '@mui/material';
 // hooks
 import useAuth from "../../../hooks/useAuth";
+// components
+import MyAvatar from '../../../components/MyAvatar';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
@@ -38,8 +40,7 @@ export default function NavbarAccount({ isCollapse }) {
           }
           }
         >
-          <Avatar src="https://minimal-assets-api.vercel.app/assets/images/avatars/avatar_5.jpg" alt="Rayan Moran" />
-
+          <MyAvatar />
           <Box
             sx={{
               ml: 2,
