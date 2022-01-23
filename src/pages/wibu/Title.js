@@ -22,6 +22,7 @@ import Label from '../../components/Label';
 import Iconify from '../../components/Iconify';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
 import ZennomiScore from '../../sections/title/ZennomiScore';
+import TitleLinks from '../../sections/title/TitleLinks';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -85,7 +86,7 @@ export default function Title() {
     };
 
     return (
-        <Page title={title?.title.en || ""}>
+        <Page title={title?.name || ""}>
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <HeaderBreadcrumbs
                     heading={title?.name || <Skeleton variant='h3' />}
@@ -96,7 +97,7 @@ export default function Title() {
                     ]}
                 />
                 <Grid container spacing={2} sx={{ mb: 3 }}>
-                    <Grid item xs={12} md={4}>
+                    <Grid item xs={12} md={3}>
                         <CardSlider sx={{ mx: 'auto' }}>
                             <Slider ref={carouselRef} {...settings}>
                                 {title?.coverArt.map((cover, index) => (
@@ -124,7 +125,7 @@ export default function Title() {
                             />
                         </CardSlider>
                     </Grid>
-                    <Grid item xs={12} md={8}>
+                    <Grid item xs={12} md={9}>
                         <Stack direction='row' spacing={0.5}>
                             <Label color='error' variant='filled'>{title?.type.toUpperCase()}</Label>
                             <StatusLabel status={title?.status} />
@@ -157,7 +158,7 @@ export default function Title() {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <Card>
+                        {/* <Card>
                             <CardHeader title="Liên kết" />
                             <CardContent>
                                 <Stack spacing={1}>
@@ -165,7 +166,7 @@ export default function Title() {
                                         title?.links?.vi?.length > 0 &&
                                         <div><Typography variant='h6'>Link tiếng Việt</Typography>
                                             {title?.links?.vi.map(url =>
-                                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                                <Button startIcon={<LinkIcon site={url.site} />} size='small' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
                                             )}
                                         </div>
                                     }
@@ -173,7 +174,7 @@ export default function Title() {
                                         title?.links?.en?.length > 0 &&
                                         <div><Typography variant='h6'>Link tiếng Anh</Typography>
                                             {title?.links?.en.map(url =>
-                                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                                <Button startIcon={<LinkIcon site={url.site} />} size='small' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
                                             )}
                                         </div>
                                     }
@@ -181,13 +182,14 @@ export default function Title() {
                                         title?.links?.raw?.length > 0 &&
                                         <div><Typography variant='h6'>Link raw</Typography>
                                             {title?.links?.raw.map(url =>
-                                                <Button startIcon={<LinkIcon site={url.site} />} size='large' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
+                                                <Button startIcon={<LinkIcon site={url.site} />} size='small' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
                                             )}
                                         </div>
                                     }
                                 </Stack>
                             </CardContent>
-                        </Card>
+                        </Card> */}
+                        <TitleLinks links={title?.links} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ZennomiScore score={title?.score} zennomi={title?.zennomi} />
@@ -196,8 +198,8 @@ export default function Title() {
                 <Card>
                     <CardHeader title="Admin" />
                     <CardContent>
-                        <Button size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
-                        <Button color='error' size='large' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
+                        <Button size='small' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
+                        <Button color='error' size='small' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
                     </CardContent>
                 </Card>
             </Container>
@@ -220,15 +222,6 @@ function StatusLabel({ status = 'ongoing' }) {
     else if (status === 'hiatus') color = 'warning';
     else color = 'error';
     return (<Label color={color} variant='filled'>{status.toUpperCase()}</Label>)
-}
-
-function LinkIcon({ site, language }) {
-    if (site === 'blogtruyen.vn') return <Avatar src='/icons/ic_blogtruyen.png' sx={{ borderRadius: 1 }} />
-    else if (site === 'mangadex.org') return <Avatar src='/icons/ic_mangadex.svg' sx={{ borderRadius: 1 }} />
-    else if (site === 'hako.re') return <Avatar src='/icons/ic_hako.png' sx={{ borderRadius: 1 }} />
-    else if (site === 'facebook.com') return <Iconify icon='logos:facebook' />
-    else if (site === 'google') return <Iconify icon={'flat-color-icons:google'} />
-    else return <Iconify icon='fa-solid:link' />
 }
 
 const CardSlider = styled(Card)(({ theme }) => {

@@ -14,6 +14,7 @@ import {
 } from 'firebase/auth';
 import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import axios from 'axios';
+import jwt from 'jsonwebtoken';
 //
 import { FIREBASE_API, HOST_API } from '../config';
 
@@ -73,22 +74,25 @@ function AuthProvider({ children }) {
     () =>
       onAuthStateChanged(AUTH, async (user) => {
         if (user) {
-          // const userRef = doc(DB, 'users', user.uid);
-          // const docSnap = await getDoc(userRef);
-          // if (docSnap.exists()) {
-          //   setProfile(docSnap.data());
-          // }
-
-          const idToken = await user.getIdToken();
-          localStorage.setItem('firebase-token', idToken);
           const { data } = await axios({
             url: `${HOST_API}/v1/users/${user.uid}`,
             method: 'get'
           })
 
-          if (data) {
-            setProfile({ ...data, ...user });
+          const {data: token} = await axios({
+            url: `${HOST_API}/v1/users/token`,
+            method: 'post',
+            data: { user }
+          })
+          localStorage.setItem('zennomi-token', token);
+
+          const decodedUser = jwt.decode(token);
+
+          if (decodedUser) {
+            setProfile(decodedUser);
           }
+
+          console.log(user, decodedUser)
 
           dispatch({
             type: 'INITIALISE',
@@ -99,8 +103,7 @@ function AuthProvider({ children }) {
             type: 'INITIALISE',
             payload: { isAuthenticated: false, user: null },
           });
-
-          localStorage.setItem('firebase-token', null);
+          localStorage.setItem('zennomi-token', null);
         }
 
       }),
@@ -114,12 +117,6 @@ function AuthProvider({ children }) {
 
   const register = (email, password, firstName, lastName) =>
     createUserWithEmailAndPassword(AUTH, email, password).then(async (res) => {
-      // const userRef = doc(collection(DB, 'users'), res.user?.uid);
-      // await setDoc(userRef, {
-      //   uid: res.user?.uid,
-      //   email,
-      //   displayName: `${firstName} ${lastName}`,
-      // });
       await axios({
         url: `${HOST_API}/v1/users`,
         method: 'post',

@@ -8,16 +8,16 @@ const axiosInstance = axios.create({
   baseURL: HOST_API,
 });
 
+axiosInstance.interceptors.request.use(function (config) {
+  const token = localStorage.getItem('zennomi-token');
+  config.headers['x-access-token'] = token ? token : '';
+  return config;
+}
+);
+
 axiosInstance.interceptors.response.use(
   (response) => response,
   (error) => Promise.reject((error.response && error.response.data) || 'Something went wrong')
-);
-
-axiosInstance.interceptors.request.use(function (config) {
-  const token = localStorage.getItem('firebase-token');
-  config.headers.Authorization = token ? token : '';
-  return config;
-}
 );
 
 const updateTitle = (title) => {

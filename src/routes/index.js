@@ -69,7 +69,7 @@ export default function Router() {
         { path: PATH_WIBU.title.root, element: <Titles /> },
         { path: PATH_WIBU.title.new, element: (<RoleBasedGuard accessibleRoles={['admin']}><NewTitle /></RoleBasedGuard>) },
         { path: PATH_WIBU.title.edit, element: (<RoleBasedGuard accessibleRoles={['admin']}><EditTitle /></RoleBasedGuard> )},
-        { path: PATH_WIBU.title.delete, element: <DeleteTitle /> },
+        { path: PATH_WIBU.title.delete, element: (<RoleBasedGuard accessibleRoles={['admin']}><DeleteTitle /></RoleBasedGuard> ) },
         { path: PATH_WIBU.title.id, element: <Title /> },
       ]
     },

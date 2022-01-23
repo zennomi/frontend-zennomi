@@ -3,13 +3,9 @@ import { useState } from 'react';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container } from '@mui/material';
-// routes
-import { PATH_DASHBOARD } from '../routes/paths';
 // hooks
 import useAuth from '../hooks/useAuth';
 import useSettings from '../hooks/useSettings';
-// _mock_
-import { _userAbout, _userFeeds, _userFriends, _userGallery, _userFollowers } from '../_mock';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
@@ -67,7 +63,7 @@ export default function UserProfile() {
             position: 'relative',
           }}
         >
-          <ProfileCover myProfile={_userAbout} />
+          <ProfileCover />
 
           <TabsWrapperStyle>
             <Tabs
