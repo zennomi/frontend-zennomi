@@ -19,6 +19,8 @@ export default function EditTitle() {
     const [title, setTitle] = useState();
     const { id } = useParams();
 
+    console.log(title);
+
     const getTitle = useCallback(async () => {
         try {
             const { data } = await axios.get(`/v1/titles/${id}`);

@@ -1,7 +1,7 @@
 // API
 // ----------------------------------------------------------------------
 
-export const HOST_API = process.env.REACT_APP_HOST_API_KEY || '';
+export const HOST_API = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:3000" : process.env.REACT_APP_HOST_API_KEY;
 
 export const FIREBASE_API = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,

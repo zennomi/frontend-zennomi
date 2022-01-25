@@ -47,7 +47,7 @@ export default function AppFeatured() {
   const [currentIndex, setCurrentIndex] = useState(theme.direction === 'rtl' ? _appFeatured.length - 1 : 0);
 
   const settings = {
-    speed: 800,
+    speed: 2000,
     dots: true,
     arrows: false,
     autoplay: true,

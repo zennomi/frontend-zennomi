@@ -70,7 +70,7 @@ export default function Login() {
   return (
     <Page title="Login">
       <RootStyle>
-        <HeaderStyle>
+        {/* <HeaderStyle>
           <Logo />
           {smUp && (
             <Typography variant="body2" sx={{ mt: { md: -2 } }}>
@@ -80,7 +80,7 @@ export default function Login() {
               </Link>
             </Typography>
           )}
-        </HeaderStyle>
+        </HeaderStyle> */}
 
         {mdUp && (
           <SectionStyle>
@@ -116,7 +116,7 @@ export default function Login() {
             </Stack>
 
             <Alert severity="info" sx={{ mb: 3 }}>
-              Use email : <strong>demo@minimals.cc</strong> / password :<strong> demo1234</strong>
+              Đăng nhập để sử dụng các chức năng cá nhân như theo dõi, tạo thư viện.
             </Alert>
 
             <LoginForm />

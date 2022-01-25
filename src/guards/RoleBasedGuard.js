@@ -18,7 +18,7 @@ export default function RoleBasedGuard({ accessibleRoles, children }) {
     return <LoadingScreen />;
   }
 
-  if (isAuthenticated && !accessibleRoles.includes(user.role)) {
+  if (!isAuthenticated || (isAuthenticated && !accessibleRoles.includes(user.role))) {
     return (
       <Container>
         <Alert severity="error">

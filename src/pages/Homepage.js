@@ -25,16 +25,16 @@ export default function PageOne() {
           <Grid item xs={12} md={4}>
             <Features />
           </Grid>
-          <Grid item xs={6} xl={3}>
+          <Grid item xs={12} md={6} xl={3}>
             <LinkWidget title='Blog cá nhân' link='https://www.facebook.com/Zennomi' description='của Zennomi' icon='akar-icons:facebook-fill' />
           </Grid>
-          <Grid item xs={6} xl={3}>
+          <Grid item xs={12} md={6} xl={3}>
             <LinkWidget title='Github' link='https://github.com/zennomi' description='của Zennomi' icon='ant-design:github-filled' />
           </Grid>
-          <Grid item xs={6} xl={3}>
+          <Grid item xs={12} md={6} xl={3}>
             <LinkWidget title='Group Rom-Com' link='https://www.facebook.com/groups/romcom.dabezt' description='toàn dân hảo ngọt' icon='el:group' />
           </Grid>
-          <Grid item xs={6} xl={3}>
+          <Grid item xs={12} md={6} xl={3}>
             <LinkWidget title='Discord' link='https://discord.gg/KdpNM3HSuw' description='của động rom-com' icon='akar-icons:discord-fill' />
           </Grid>
         </Grid>

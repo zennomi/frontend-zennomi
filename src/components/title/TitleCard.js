@@ -3,26 +3,14 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 
-import { Typography, Card, CardActionArea, IconButton, Chip, Menu, MenuItem, ListItemText, ListItemIcon, Divider } from '@mui/material';
+import { Typography, Card, CardActionArea, Chip,  } from '@mui/material';
 // components
 import Image from '../Image';
-import Iconify from '../Iconify';
 import TextMaxLine from '../TextMaxLine';
-// utils
-import cssStyles from '../../utils/cssStyles';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
 
 export default function TitleCard({ title }) {
-    const navigate = useNavigate();
-    const [anchorEl, setAnchorEl] = useState(null);
-    const open = Boolean(anchorEl);
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
-    const handleClose = () => {
-        setAnchorEl(null);
-    };
     return (
         <Card>
             <Image src={title.coverArt[0]} alt={title.title?.en} ratio='4/6' />

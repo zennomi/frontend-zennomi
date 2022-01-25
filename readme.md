@@ -1,0 +1,11 @@
+# Todo list
+- Check lại các auth
+- Update nhanh cho contributor
+- Theo dõi
+- Tạo list
+- Thêm vào list
+- Giảm dung lượng ảnh
+- Sắp xếp list
+- Dọn các component import thừa
+- Thêm About (giải thích chức năng web, lưu ý)
+- Giải thích các tag

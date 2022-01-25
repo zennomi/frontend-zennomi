@@ -32,6 +32,7 @@ function path(root, sublink) {
       id: path(ROOTS_WIBU,'/title/:id'),
       edit: path(ROOTS_WIBU,'/title/edit/:id'),
       delete: path(ROOTS_WIBU,'/title/delete/:id'),
+      feed: path(ROOTS_WIBU,'/titles/feed'),
     }
   }
   

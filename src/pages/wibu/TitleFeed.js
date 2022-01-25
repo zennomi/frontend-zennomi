@@ -1,48 +1,43 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
-import { Container, Grid,  Button, IconButton, Pagination, Box } from '@mui/material';
+import { Container, Grid, Typography, Button, Card, Link, Pagination, Box, CardActionArea } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
-import useAuth from '../../hooks/useAuth';
-
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import TitleCard from '../../components/title/TitleCard';
-import TitleCardSkeleton from '../../components/title/TitleCardSkeleton';
 import Iconify from '../../components/Iconify';
-// sections
-import TitleDrawer from '../../sections/title/TitleDrawer';
 // utils
 import axios from '../../utils/axios';
+import { formatDistance } from 'date-fns';
+import { vi } from 'date-fns/locale'
 // paths
 import { PATH_WIBU } from '../../routes/paths';
+import Image from '../../components/Image';
 
 // ----------------------------------------------------------------------
 
 const TYPE_OPTION = ['manga', 'novel', 'anime']
 
-export default function Titles() {
+export default function TitleFeed() {
   const { themeStretch } = useSettings();
   const isMountedRef = useIsMountedRef();
   const { enqueueSnackbar } = useSnackbar();
-  const { user } = useAuth();
 
-  const [title, setTitle] = useState();
-  const [titles, setTitles] = useState([]);
+  const [feeds, setFeeds] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
   const [total, setTotal] = useState(1);
 
-  const getTitles = useCallback(async () => {
+  const getFeeds = useCallback(async () => {
     try {
-      const { data } = await axios.get('/v1/titles', {
-        params: { ...paramsToObject(searchParams), limit: 12, sortBy: 'score:desc' }
+      const { data } = await axios.get('/v1/titles/seed', {
+        params: { ...paramsToObject(searchParams), limit: 12, sortBy: 'timestamp:desc', populate: 'title' }
       });
       if (isMountedRef.current) {
-        setTitles(data.results);
+        setFeeds(data.results);
         setTotal(data.totalPages);
       }
     } catch (err) {
@@ -66,15 +61,10 @@ export default function Titles() {
     })
   }
 
-  const handleClose = () => {
-    setTitle(null);
-  }
-
   useEffect(() => {
-    if (title) return;
-    getTitles();
-    return () => { setTitles([]); }
-  }, [getTitles, title]);
+    getFeeds();
+    return () => { setFeeds([]); }
+  }, [getFeeds]);
 
   const handleTypeClick = (_type) => {
     if (_type === searchParams.get("type")) setNewParams({ type: null, page: 1 });
@@ -82,10 +72,10 @@ export default function Titles() {
   }
 
   return (
-    <Page title="Thư viện">
+    <Page title="Thuốc mới">
       <Container maxWidth={themeStretch ? false : 'xl'}>
         <HeaderBreadcrumbs
-          heading="Thư viện của Zennomi"
+          heading="Thuốc mới"
           links={[
             { name: PATH_WIBU.label, href: PATH_WIBU.root },
             { name: PATH_WIBU.title.label, href: PATH_WIBU.title.root },
@@ -109,39 +99,37 @@ export default function Titles() {
         </Grid>
         <Grid container spacing={2}>
           {
-            titles.length === 0 ?
-              Array(12).fill(
-                <Grid item xs={4} md={3} xl={2}>
-                  <TitleCardSkeleton />
+            feeds.map(
+              ({ title, timestamp, provider, link }) =>
+                <Grid item xs={12} md={6} key={title._id}>
+                  <Card sx={{ p: 1 }}>
+                    <Grid container spacing={2}>
+                      <Grid item xs={2}>
+                        <Card sx={{ borderRadius: 1 }}>
+                          <CardActionArea component={RouterLink} to={`${PATH_WIBU.title.one}/${title._id}`}>
+                            <Image src={title.coverArt[0]} ratio='3/4' />
+                          </CardActionArea>
+                        </Card>
+                      </Grid>
+                      <Grid item xs={10}>
+                        <Typography variant='h6' color="primary.main">{title.name}</Typography>
+                        <Typography variant='body1'>{title.altTitle}</Typography>
+                        <Typography variant='body2' sx={{ opacity: 0.72 }}>
+                          {`Cập nhật lần cuối vào ${formatDistance(new Date(timestamp), new Date(), { locale: vi, addSuffix: true })} tại `} 
+                          <Button component={Link} href={link} target="_blank">{provider}</Button>
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                  </Card>
                 </Grid>
-              ) :
-              titles.map(
-                title =>
-                  <Grid item xs={4} md={3} xl={2} key={title._id}>
-                    < div style={{ position: 'relative' }}>
-                      <TitleCard title={title} />
-                      {
-                        user.isStaff &&
-                        <IconButton
-                          color="primary"
-                          sx={{ position: 'absolute', top: 0, right: 0 }}
-                          aria-haspopup="true"
-                          onClick={() => setTitle(title)}
-                        >
-                          <Iconify icon={'eva:more-vertical-fill'} />
-                        </IconButton>
-                      }
-                    </div>
-                  </Grid>
-              )
+            )
           }
         </Grid>
         <Box sx={{ display: 'flex', justifyContent: 'right' }}>
           <Pagination sx={{ my: 2 }} count={total} page={Number(searchParams.get("page"))} onChange={handlePageChange} />
         </Box>
-        {user.isStaff && <TitleDrawer title={title} onClose={handleClose} />}
-      </Container>
-    </Page>
+      </Container >
+    </Page >
   );
 }
 

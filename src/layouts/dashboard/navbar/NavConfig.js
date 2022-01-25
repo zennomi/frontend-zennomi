@@ -27,6 +27,7 @@ const sidebarConfig = [
         icon: <Iconify icon='ant-design:trophy-twotone' />,
         children: [
           { title: PATH_WIBU.title.label, path: PATH_WIBU.title.root },
+          { title: 'Thuốc mới', path: PATH_WIBU.title.feed },
           { title: 'Thêm hàng mới', path: PATH_WIBU.title.new }
         ]
       },

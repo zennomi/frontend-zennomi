@@ -27,7 +27,7 @@ import {
 } from '../../components/hook-form';
 // utils
 import imgur from '../../utils/imgur';
-import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION } from '../../constants';
+import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../constants';
 
 // ----------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
       },
       description: currentTitle?.description || '',
       genres: currentTitle?.genres || ['romance', 'comedy'],
-      coverArt: currentTitle?.coverArt || [],
+      coverArt: currentTitle?.coverArt.filter(c => Boolean(c)) || [],
       tags: currentTitle?.tags || [],
       urls: {
         raw: currentTitle?.urls.raw || [],
@@ -306,6 +306,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                       freeSolo
                       options={[]}
                       onChange={(event, newValue) => field.onChange(newValue)}
+                      options={TAG_OPTION.map((option) => option)}
                       renderTags={(value, getTagProps) =>
                         value.map((option, index) => (
                           <Chip {...getTagProps({ index })} key={option} size="small" label={option} />

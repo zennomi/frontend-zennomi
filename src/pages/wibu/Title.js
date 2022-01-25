@@ -11,6 +11,7 @@ import {
     Button, CardHeader, CardContent, Avatar
 } from '@mui/material';
 // hooks
+import useAuth from '../../hooks/useAuth';
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
@@ -19,7 +20,6 @@ import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Image from '../../components/Image';
 import Label from '../../components/Label';
-import Iconify from '../../components/Iconify';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
 import ZennomiScore from '../../sections/title/ZennomiScore';
 import TitleLinks from '../../sections/title/TitleLinks';
@@ -36,6 +36,7 @@ export default function Title() {
     const isMountedRef = useIsMountedRef();
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const carouselRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -100,9 +101,11 @@ export default function Title() {
                     <Grid item xs={12} md={3}>
                         <CardSlider sx={{ mx: 'auto' }}>
                             <Slider ref={carouselRef} {...settings}>
-                                {title?.coverArt.map((cover, index) => (
-                                    <CarouselItem key={index} coverArt={cover} isActive={index === currentIndex} />
-                                ))
+                                {title?.coverArt ?
+                                    title.coverArt.map((cover, index) => (
+                                        <CarouselItem key={index} coverArt={cover} isActive={index === currentIndex} />
+                                    )) :
+                                    <CarouselItem coverArt={null} isActive={true} />
                                 }
                             </Slider>
                             <CarouselArrows
@@ -158,50 +161,23 @@ export default function Title() {
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        {/* <Card>
-                            <CardHeader title="Liên kết" />
-                            <CardContent>
-                                <Stack spacing={1}>
-                                    {
-                                        title?.links?.vi?.length > 0 &&
-                                        <div><Typography variant='h6'>Link tiếng Việt</Typography>
-                                            {title?.links?.vi.map(url =>
-                                                <Button startIcon={<LinkIcon site={url.site} />} size='small' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
-                                            )}
-                                        </div>
-                                    }
-                                    {
-                                        title?.links?.en?.length > 0 &&
-                                        <div><Typography variant='h6'>Link tiếng Anh</Typography>
-                                            {title?.links?.en.map(url =>
-                                                <Button startIcon={<LinkIcon site={url.site} />} size='small' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
-                                            )}
-                                        </div>
-                                    }
-                                    {
-                                        title?.links?.raw?.length > 0 &&
-                                        <div><Typography variant='h6'>Link raw</Typography>
-                                            {title?.links?.raw.map(url =>
-                                                <Button startIcon={<LinkIcon site={url.site} />} size='small' target="_blank" component='a' href={url.link}>{url.site.toUpperCase()}</Button>
-                                            )}
-                                        </div>
-                                    }
-                                </Stack>
-                            </CardContent>
-                        </Card> */}
                         <TitleLinks links={title?.links} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <ZennomiScore score={title?.score} zennomi={title?.zennomi} />
                     </Grid>
                 </Grid>
-                <Card>
-                    <CardHeader title="Admin" />
-                    <CardContent>
-                        <Button size='small' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
-                        <Button color='error' size='small' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
-                    </CardContent>
-                </Card>
+                {
+                    user.isStaff &&
+                    <Card>
+                        <CardHeader title="Admin" />
+                        <CardContent>
+                            <Button size='small' component={RouterLink} to={`${PATH_WIBU.title.one}/edit/${id}`}>Cập nhật</Button>
+                            <Button color='error' size='small' component={RouterLink} to={`${PATH_WIBU.title.one}/delete/${id}`}>Xoá</Button>
+                        </CardContent>
+                    </Card>
+                }
+
             </Container>
         </Page >
     );

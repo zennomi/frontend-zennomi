@@ -66,6 +66,7 @@ export default function Router() {
           element: <Profile />
         },
         { path: PATH_WIBU.root, element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
+        { path: PATH_WIBU.title.feed, element: <TitleFeed /> },
         { path: PATH_WIBU.title.root, element: <Titles /> },
         { path: PATH_WIBU.title.new, element: (<RoleBasedGuard accessibleRoles={['admin']}><NewTitle /></RoleBasedGuard>) },
         { path: PATH_WIBU.title.edit, element: (<RoleBasedGuard accessibleRoles={['admin']}><EditTitle /></RoleBasedGuard> )},
@@ -114,6 +115,7 @@ const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));
 // Wibu
 const Titles = Loadable(lazy(() => import('../pages/wibu/Titles')));
+const TitleFeed = Loadable(lazy(() => import('../pages/wibu/TitleFeed')));
 const Title = Loadable(lazy(() => import('../pages/wibu/Title')));
 const NewTitle = Loadable(lazy(() => import('../pages/wibu/NewTitle')));
 const EditTitle = Loadable(lazy(() => import('../pages/wibu/EditTitle')));

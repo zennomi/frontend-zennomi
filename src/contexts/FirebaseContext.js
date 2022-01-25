@@ -143,6 +143,7 @@ function AuthProvider({ children }) {
           photoURL: state?.user?.photoURL || profile?.photoURL,
           displayName: state?.user?.displayName || profile?.displayName,
           role: profile?.role || '',
+          isStaff: ['admin','mod'].includes(profile?.role) || false,
           phoneNumber: state?.user?.phoneNumber || profile?.phoneNumber || '',
           country: profile?.country || '',
           address: profile?.address || '',
