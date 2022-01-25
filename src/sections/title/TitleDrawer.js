@@ -1,10 +1,9 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
-
 // components
 import Iconify from '../../components/Iconify';
 import { IconButtonAnimate } from '../../components/animate';
 // @mui
 import {
+    Alert,
     Box,
     Stack,
     Drawer,
@@ -13,15 +12,11 @@ import {
     Typography,
     Container,
 } from '@mui/material';
-
 // hooks
 import useResponsive from '../../hooks/useResponsive';
-// routes
-import { PATH_WIBU } from '../../routes/paths';
-
 import TitleUpdateForm from './TitleUpdateForm';
 
-export default function TitleDrawer({ title, onClose }) {
+export default function TitleDrawer({ title, onClose, setTitle }) {
     const isDesktop = useResponsive('up', 'sm');
 
     return (
@@ -36,7 +31,8 @@ export default function TitleDrawer({ title, onClose }) {
                         </Tooltip>
                     </>
                 )}
-                <TitleUpdateForm title={title} onClose={onClose} />
+                <Alert color='error'>Thông tin ở đây có thể chưa được cập nhật sau lần cập nhật trước, reload lại nếu cần</Alert>
+                <TitleUpdateForm title={title} onClose={onClose} setTitle={setTitle}/>
             </Container>
         </Drawer>
     )

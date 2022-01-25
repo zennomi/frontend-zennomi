@@ -1,7 +1,9 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
-import { Container, Grid,  Button, IconButton, Pagination, Box } from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+import { Container, Grid, Button, IconButton, Pagination, Box } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -16,6 +18,7 @@ import TitleCardSkeleton from '../../components/title/TitleCardSkeleton';
 import Iconify from '../../components/Iconify';
 // sections
 import TitleDrawer from '../../sections/title/TitleDrawer';
+import FilterDrawer from '../../sections/title/FilterDrawer';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -33,8 +36,9 @@ export default function Titles() {
 
   const [title, setTitle] = useState();
   const [titles, setTitles] = useState([]);
-  const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
   const [total, setTotal] = useState(1);
+  const [isFilterOpen, setIsFilterOpen] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
 
   const getTitles = useCallback(async () => {
     try {
@@ -70,11 +74,15 @@ export default function Titles() {
     setTitle(null);
   }
 
+  const handleFilterClose = () => {
+    setIsFilterOpen(false);
+}
+
   useEffect(() => {
     if (title) return;
     getTitles();
     return () => { setTitles([]); }
-  }, [getTitles, title]);
+  }, [getTitles]);
 
   const handleTypeClick = (_type) => {
     if (_type === searchParams.get("type")) setNewParams({ type: null, page: 1 });
@@ -91,6 +99,14 @@ export default function Titles() {
             { name: PATH_WIBU.title.label, href: PATH_WIBU.title.root },
           ]}
         />
+        <Button
+          fullWidth
+          color='primary'
+          variant={"contained"}
+          onClick={() => { setIsFilterOpen(true) }}
+        >
+          Lọc
+        </Button>
         <Grid container spacing={2} sx={{ mb: 3 }}>
           {
             TYPE_OPTION.map(_type => (
@@ -139,7 +155,8 @@ export default function Titles() {
         <Box sx={{ display: 'flex', justifyContent: 'right' }}>
           <Pagination sx={{ my: 2 }} count={total} page={Number(searchParams.get("page"))} onChange={handlePageChange} />
         </Box>
-        {user.isStaff && <TitleDrawer title={title} onClose={handleClose} />}
+        {user.isStaff && <TitleDrawer title={title} onClose={handleClose} setTitle={setTitle} />}
+        <FilterDrawer isOpen={isFilterOpen} onClose={handleFilterClose}/>
       </Container>
     </Page>
   );

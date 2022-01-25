@@ -1,6 +1,7 @@
 # Todo list
-- Check lại các auth
-- Update nhanh cho contributor
+- Check lại các auth ✔
+- Update nhanh cho contributor ✔
+- Thêm bộ lọc
 - Theo dõi
 - Tạo list
 - Thêm vào list

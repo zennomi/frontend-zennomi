@@ -40,7 +40,7 @@ export default function Searchbar() {
   const navigate = useNavigate();
   const location = useLocation();
   const [searchParams, setSearchParams] = useSearchParams();
-  const isTitlesPage = location.pathname.includes(PATH_WIBU.title.root);
+  const isTitlesPage = location.pathname === (PATH_WIBU.title.root);
   const [isOpen, setOpen] = useState(false);
   const [query, setQuery] = useState("");
 

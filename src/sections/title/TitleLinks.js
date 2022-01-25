@@ -9,21 +9,13 @@ import {
     TableBody,
     TableCell,
     TableHead,
-    CardHeader,
     Typography,
     TableContainer,
     Link,
 } from '@mui/material';
-// utils
-import { fCurrency } from '../../utils/formatNumber';
-// _mock_
-import { _ecommerceBestSalesman } from '../../_mock';
 // components
 import Iconify from '../../components/Iconify';
-import Label from '../../components/Label';
-import Image from '../../components/Image';
 import Scrollbar from '../../components/Scrollbar';
-import TextMaxLine from '../../components/TextMaxLine';
 
 // ----------------------------------------------------------------------
 

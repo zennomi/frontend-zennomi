@@ -95,7 +95,7 @@ function SpinLogo() {
 // ----------------------------------------------------------------------
 
 LoadingScreen.propTypes = {
-  isDashboard: PropTypes.bool,
+  fullSreen: PropTypes.bool,
 };
 
 export default function LoadingScreen({ fullSreen, ...other }) {

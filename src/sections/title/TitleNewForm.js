@@ -4,7 +4,6 @@ import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useCallback } from 'react';
 import isString from 'lodash/isString';
-import ReactMarkdown from 'react-markdown';
 // form
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -73,6 +72,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
         vi: currentTitle?.urls.vi || [],
         en: currentTitle?.urls.en || [],
       },
+      isLisensed: currentTitle?.isLisensed || false,
       author: currentTitle?.author || [],
       artist: currentTitle?.artist || [],
       status: currentTitle?.status || 'ongoing',
@@ -251,6 +251,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
             <Card sx={{ p: 3 }}>
               <Stack spacing={3} mt={2}>
                 <RHFSwitch name="zennomi.isMyProject" label="Dự án của Zennomi" />
+                <RHFSwitch name="isLisensed" label="Có bản quyền" />
 
                 <RHFTextField
                   name="score"

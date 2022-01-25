@@ -12,7 +12,6 @@ import {
   GoogleAuthProvider,
   getIdToken,
 } from 'firebase/auth';
-import { getFirestore, collection, doc, getDoc, setDoc } from 'firebase/firestore';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 //
@@ -26,8 +25,6 @@ const fbProvider = new FacebookAuthProvider();
 const ggProvider = new GoogleAuthProvider();
 
 const AUTH = getAuth(firebaseApp);
-
-const DB = getFirestore(firebaseApp);
 
 const initialState = {
   isAuthenticated: false,
@@ -74,10 +71,6 @@ function AuthProvider({ children }) {
     () =>
       onAuthStateChanged(AUTH, async (user) => {
         if (user) {
-          const { data } = await axios({
-            url: `${HOST_API}/v1/users/${user.uid}`,
-            method: 'get'
-          })
 
           const {data: token} = await axios({
             url: `${HOST_API}/v1/users/token`,
