@@ -6,9 +6,8 @@ import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
 import {
-    Container, Grid, Typography, Card,
-    Link, Box, Skeleton, Stack, Divider, Rating,
-    Button, CardHeader, CardContent, Avatar, Checkbox
+    Container, Grid, Typography, Card, Box, Skeleton, Stack, Divider, Rating,
+    Button, CardHeader, CardContent, MenuList, Menu, MenuItem,
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -28,6 +27,7 @@ import ListSelect from '../../sections/title/ListSelect';
 import axios from '../../utils/axios';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
+import Iconify from '../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
@@ -37,12 +37,16 @@ export default function Title() {
     const isMountedRef = useIsMountedRef();
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
+    const { id } = useParams();
     const { user } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
     const carouselRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
+
+    const [title, setTitle] = useState();
+    const [userLists, setUserLists] = useState([]);
 
     const settings = {
         speed: 800,
@@ -61,10 +65,6 @@ export default function Title() {
         }),
     };
 
-    const { id } = useParams();
-
-    const [title, setTitle] = useState();
-
     const getTitle = useCallback(async () => {
         try {
             const { data } = await axios.get(`/v1/titles/${id}`);
@@ -77,9 +77,41 @@ export default function Title() {
         }
     }, [isMountedRef]);
 
+    const getLists = useCallback(async () => {
+        if (!user.id) return;
+        try {
+            const { data } = await axios.get(`/v1/lists?user=${user.id}`);
+            if (isMountedRef.current) {
+                setUserLists(data.results);
+            }
+        } catch (err) {
+            enqueueSnackbar(err, { variant: 'error' });
+        }
+    }, [isMountedRef, user]);
+
+    const handleListsSubmit = async (data) => {
+        console.log(data);
+        try {
+            await axios({
+                url: `/v1/lists/title/${id}`,
+                method: 'post',
+                data: data.lists.map(list => list.id)
+            });
+            await getLists();
+            enqueueSnackbar('Sửa bộ sưu tập thành công.');
+            handleClose();
+        } catch (err) {
+            enqueueSnackbar(err, { variant: 'error' });
+        }
+    }
+
     useEffect(() => {
         getTitle();
     }, [getTitle]);
+
+    useEffect(() => {
+        getLists();
+    }, [getLists]);
 
     const handlePrevious = () => {
         carouselRef.current.slickPrev();
@@ -107,7 +139,7 @@ export default function Title() {
                         { name: title?.name || <Skeleton variant='text' />, href: `${PATH_WIBU.title.one}/${id}` },
                     ]}
                 />
-                <Grid container spacing={2} sx={{ mb: 3 }}>
+                <Grid container spacing={2} sx={{ mb: 1 }}>
                     <Grid item xs={12} md={3}>
                         <CardSlider sx={{ mx: 'auto', mb: 2 }}>
                             <Slider ref={carouselRef} {...settings}>
@@ -138,13 +170,36 @@ export default function Title() {
                             />
                         </CardSlider>
                         <Button
+                            id="basic-button"
+                            aria-controls={open ? 'basic-menu' : undefined}
+                            aria-haspopup="true"
+                            aria-expanded={open ? 'true' : undefined}
                             size='large'
-                            color='info'
+                            fullWidth
+                            color='warning'
                             variant='contained'
+                            startIcon={<Iconify icon='ant-design:profile-twotone' />}
                             onClick={handleClick}
                         >Thêm vào bộ sưu tập
                         </Button>
-                        <ListSelect open={open} onClose={handleClose} anchorEl={anchorEl} />
+                        <Menu
+                            id="basic-menu"
+                            anchorEl={anchorEl}
+                            open={open}
+                            onClose={handleClose}
+                            MenuListProps={{
+                                'aria-labelledby': 'basic-button',
+                            }}
+                        >
+                            <MenuList>
+                                <ListSelect
+                                    userLists={userLists}
+                                    titleId={id}
+                                    handleClose={handleClose}
+                                    onSubmit={handleListsSubmit}
+                                />
+                            </MenuList>
+                        </Menu>
                     </Grid>
                     <Grid item xs={12} md={9}>
                         <Stack direction='row' spacing={0.5}>

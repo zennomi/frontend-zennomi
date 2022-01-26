@@ -17,21 +17,30 @@ const sidebarConfig = [
         icon: <Iconify icon='ant-design:home-twotone' />,
       },
       {
-        title: 'Profile',
+        title: 'About',
         path: '/profile',
-        icon: <Iconify icon='ant-design:profile-twotone' />,
+        icon: <Iconify icon='ant-design:question-circle-twotone' />,
       },
       {
-        title: PATH_WIBU.label,
-        path: PATH_WIBU.root,
-        icon: <Iconify icon='ant-design:trophy-twotone' />,
+        title: PATH_WIBU.title.label,
+        path: PATH_WIBU.title.root,
+        icon: <Iconify icon='ant-design:book-twotone' />,
         children: [
-          { title: PATH_WIBU.title.label, path: PATH_WIBU.title.root },
+          { title: 'Top romcom', path: PATH_WIBU.title.root },
           { title: 'Thuốc mới', path: PATH_WIBU.title.feed },
-          { title: 'Thêm hàng mới', path: PATH_WIBU.title.new }
+          { title: 'Thêm hàng mới', path: PATH_WIBU.title.new, icon: <Iconify icon='ant-design:plus-circle-twotone' /> }
         ]
       },
-      
+      {
+        title: PATH_WIBU.list.label,
+        path: PATH_WIBU.list.root,
+        icon: <Iconify icon='ant-design:profile-twotone' />,
+        // children: [
+        //   { title: 'Top romcom', path: PATH_WIBU.title.root },
+        //   { title: 'Thuốc mới', path: PATH_WIBU.title.feed },
+        //   { title: 'Thêm hàng mới', path: PATH_WIBU.title.new }
+        // ]
+      },
     ],
   },
 
@@ -44,11 +53,6 @@ const sidebarConfig = [
         title: 'user',
         path: '/dashboard/user',
         icon: <Iconify icon='carbon:user-avatar-filled-alt' />,
-        children: [
-          { title: 'Four', path: '/dashboard/user/four' },
-          { title: 'Five', path: '/dashboard/user/five' },
-          { title: 'Six', path: '/dashboard/user/six' },
-        ],
       },
     ],
   },

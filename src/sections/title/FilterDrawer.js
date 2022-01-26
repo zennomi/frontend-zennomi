@@ -1,5 +1,5 @@
 import { useMemo, useEffect } from 'react';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 // form
@@ -17,7 +17,6 @@ import {
     TextField,
     Drawer,
     Tooltip,
-    Divider,
     Typography,
     Container,
 } from '@mui/material';
@@ -28,10 +27,7 @@ import useResponsive from '../../hooks/useResponsive';
 import {
     FormProvider,
     RHFSelect,
-    RHFEditor,
     RHFTextField,
-    RHFUploadMultiFile,
-    RHFSwitch
 } from '../../components/hook-form';
 // utils
 import paramsToObject from '../../utils/urlParamsHelper';
@@ -52,7 +48,6 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
     if (currentFilter.genres) currentFilter.genres = currentFilter.genres.split(",");
     if (currentFilter.tags) currentFilter.tags = currentFilter.tags.split(",");
 
-    console.log(currentFilter);
     const defaultValues = useMemo(
         () => ({
             query: currentFilter?.query || '',
@@ -78,15 +73,10 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
 
     const {
         reset,
-        watch,
         control,
-        setValue,
         handleSubmit,
-        getValues,
         formState: { isSubmitting },
     } = methods;
-
-    const values = watch();
 
     useEffect(() => {
         reset(defaultValues);

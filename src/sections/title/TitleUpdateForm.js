@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
 
 // components
 import { Link as RouterLink } from 'react-router-dom'
@@ -70,8 +70,6 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
         getValues,
         formState: { isSubmitting },
     } = methods;
-
-    const values = watch();
 
     useEffect(() => {
         reset(defaultValues);

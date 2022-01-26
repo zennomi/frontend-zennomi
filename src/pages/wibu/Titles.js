@@ -60,6 +60,7 @@ export default function Titles() {
   }
 
   const setNewParams = (params) => {
+    if (!params.page) params.page = 1;
     const newParams = paramsToObject(searchParams);
     Object.keys(params).forEach(key => {
       if (params[key] === null || params[key] === 'all' || params[key] === '') delete newParams[key];
@@ -101,7 +102,7 @@ export default function Titles() {
         />
         <Button
           startIcon={<Iconify icon='bi:filter' />}
-          endIcon={<Chip label={Object.keys(paramsToObject(searchParams)).length} size='small' color='info' />}
+          endIcon={<Chip label={Object.keys(paramsToObject(searchParams)).length - 1} size='small' color='info' />}
           color='info'
           variant="outlined"
           onClick={() => { setIsFilterOpen(true) }}

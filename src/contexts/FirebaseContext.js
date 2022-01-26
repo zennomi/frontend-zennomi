@@ -76,7 +76,8 @@ function AuthProvider({ children }) {
             url: `${HOST_API}/v1/users/token`,
             method: 'post',
             data: { user }
-          })
+          });
+
           localStorage.setItem('zennomi-token', token);
 
           const decodedUser = jwt.decode(token);
