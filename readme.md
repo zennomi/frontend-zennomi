@@ -1,12 +1,14 @@
 # Todo list
 - Check lại các auth ✔
 - Update nhanh cho contributor ✔
-- Thêm bộ lọc
+- Thêm bộ lọc ✔
 - Theo dõi
 - Tạo list
 - Thêm vào list
-- Giảm dung lượng ảnh
 - Sắp xếp list
+- Giảm dung lượng ảnh
+- Update data (score, tags)
 - Dọn các component import thừa
 - Thêm About (giải thích chức năng web, lưu ý)
 - Giải thích các tag
+- Sửa thêm nhiều bìa

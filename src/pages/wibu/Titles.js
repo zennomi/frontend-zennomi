@@ -3,7 +3,7 @@ import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 
-import { Container, Grid, Button, IconButton, Pagination, Box } from '@mui/material';
+import { Container, Grid, Button, IconButton, Pagination, Box, Badge, Chip } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -62,7 +62,7 @@ export default function Titles() {
   const setNewParams = (params) => {
     const newParams = paramsToObject(searchParams);
     Object.keys(params).forEach(key => {
-      if (params[key] === null) delete newParams[key];
+      if (params[key] === null || params[key] === 'all' || params[key] === '') delete newParams[key];
       else newParams[key] = params[key];
     });
     setSearchParams({
@@ -76,7 +76,7 @@ export default function Titles() {
 
   const handleFilterClose = () => {
     setIsFilterOpen(false);
-}
+  }
 
   useEffect(() => {
     if (title) return;
@@ -100,10 +100,12 @@ export default function Titles() {
           ]}
         />
         <Button
-          fullWidth
-          color='primary'
-          variant={"contained"}
+          startIcon={<Iconify icon='bi:filter' />}
+          endIcon={<Chip label={Object.keys(paramsToObject(searchParams)).length} size='small' color='info' />}
+          color='info'
+          variant="outlined"
           onClick={() => { setIsFilterOpen(true) }}
+          sx={{ mb: 2 }}
         >
           Lọc
         </Button>
@@ -156,7 +158,7 @@ export default function Titles() {
           <Pagination sx={{ my: 2 }} count={total} page={Number(searchParams.get("page"))} onChange={handlePageChange} />
         </Box>
         {user.isStaff && <TitleDrawer title={title} onClose={handleClose} setTitle={setTitle} />}
-        <FilterDrawer isOpen={isFilterOpen} onClose={handleFilterClose}/>
+        <FilterDrawer isOpen={isFilterOpen} onClose={handleFilterClose} setNewParams={setNewParams} />
       </Container>
     </Page>
   );

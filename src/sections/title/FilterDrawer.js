@@ -43,11 +43,11 @@ const LabelStyle = styled(Typography)(({ theme }) => ({
     marginBottom: theme.spacing(1),
 }));
 
-export default function FilterDrawer({ isOpen, onClose }) {
+export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
     const isDesktop = useResponsive('up', 'sm');
     const { enqueueSnackbar } = useSnackbar();
     const [searchParams, setSearchParams] = useSearchParams();
-    
+
     const currentFilter = paramsToObject(searchParams);
     if (currentFilter.genres) currentFilter.genres = currentFilter.genres.split(",");
     if (currentFilter.tags) currentFilter.tags = currentFilter.tags.split(",");
@@ -61,8 +61,8 @@ export default function FilterDrawer({ isOpen, onClose }) {
             isLisensed: currentFilter?.isLisensed || false,
             author: currentFilter?.author || [],
             artist: currentFilter?.artist || [],
-            status: currentFilter?.status || 'ongoing',
-            type: currentFilter?.type || 'manga',
+            status: currentFilter?.status || 'all',
+            type: currentFilter?.type || 'all',
         }),
         [currentFilter]
     );
@@ -93,16 +93,12 @@ export default function FilterDrawer({ isOpen, onClose }) {
     }, [searchParams]);
 
     const onSubmit = async (filter) => {
-        console.log(filter);
         if (filter.genres.length > 0) filter.genres = filter.genres.join(",");
         if (filter.tags.length > 0) filter.tags = filter.tags.join(",");
-        setSearchParams(filter);
-        try {
-            enqueueSnackbar('Update filter success!');
-        } catch (error) {
-            console.error(error);
-            enqueueSnackbar(error.message);
-        }
+        if (!filter.isLisensed) delete filter.isLisensed;
+        setNewParams(filter);
+        enqueueSnackbar('Áp dụng bộ lọc!');
+        onClose();
     };
 
     return (
@@ -111,7 +107,7 @@ export default function FilterDrawer({ isOpen, onClose }) {
                 {!isDesktop && (
                     <>
                         <Tooltip title="Back">
-                            <IconButtonAnimate sx={{ mr: 1 }}>
+                            <IconButtonAnimate onClick={onClose}  sx={{ mr: 1 }}>
                                 <Iconify icon={'eva:arrow-ios-back-fill'} width={20} height={20} />
                             </IconButtonAnimate>
                         </Tooltip>
@@ -122,12 +118,12 @@ export default function FilterDrawer({ isOpen, onClose }) {
                         <RHFTextField name="query" label="Tên" />
 
                         <RHFSelect name="type" label="Type">
-                            {TYPE_OPTION.map((status) => (
+                            {[...TYPE_OPTION, 'all'].map((status) => (
                                 <option>{status}</option>
                             ))}
                         </RHFSelect>
                         <RHFSelect name="status" label="Status">
-                            {STATUS_OPTION.map((status) => (
+                            {[...STATUS_OPTION, 'all'].map((status) => (
                                 <option>{status}</option>
                             ))}
                         </RHFSelect>

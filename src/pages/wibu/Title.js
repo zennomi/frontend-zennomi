@@ -8,7 +8,7 @@ import { useTheme, styled } from '@mui/material/styles';
 import {
     Container, Grid, Typography, Card,
     Link, Box, Skeleton, Stack, Divider, Rating,
-    Button, CardHeader, CardContent, Avatar
+    Button, CardHeader, CardContent, Avatar, Checkbox
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -23,6 +23,7 @@ import Label from '../../components/Label';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
 import ZennomiScore from '../../sections/title/ZennomiScore';
 import TitleLinks from '../../sections/title/TitleLinks';
+import ListSelect from '../../sections/title/ListSelect';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -37,6 +38,8 @@ export default function Title() {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
     const { user } = useAuth();
+    const [anchorEl, setAnchorEl] = useState(null);
+    const open = Boolean(anchorEl);
 
     const carouselRef = useRef(null);
     const [currentIndex, setCurrentIndex] = useState(0);
@@ -86,6 +89,13 @@ export default function Title() {
         carouselRef.current.slickNext();
     };
 
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+    const handleClose = () => {
+        setAnchorEl(null);
+    };
+
     return (
         <Page title={title?.name || ""}>
             <Container maxWidth={themeStretch ? false : 'xl'}>
@@ -99,7 +109,7 @@ export default function Title() {
                 />
                 <Grid container spacing={2} sx={{ mb: 3 }}>
                     <Grid item xs={12} md={3}>
-                        <CardSlider sx={{ mx: 'auto' }}>
+                        <CardSlider sx={{ mx: 'auto', mb: 2 }}>
                             <Slider ref={carouselRef} {...settings}>
                                 {title?.coverArt ?
                                     title.coverArt.map((cover, index) => (
@@ -127,6 +137,14 @@ export default function Title() {
                                 }}
                             />
                         </CardSlider>
+                        <Button
+                            size='large'
+                            color='info'
+                            variant='contained'
+                            onClick={handleClick}
+                        >Thêm vào bộ sưu tập
+                        </Button>
+                        <ListSelect open={open} onClose={handleClose} anchorEl={anchorEl} />
                     </Grid>
                     <Grid item xs={12} md={9}>
                         <Stack direction='row' spacing={0.5}>
