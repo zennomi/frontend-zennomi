@@ -1,6 +1,8 @@
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
+import { formatDistance } from 'date-fns';
+import { vi } from 'date-fns/locale';
 // @mui
 import {
   Box,
@@ -15,9 +17,14 @@ import {
   ListSubheader,
   ListItemAvatar,
   ListItemButton,
+  Card,
 } from '@mui/material';
+// hooks
+import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // utils
 import { fToNow } from '../../../utils/formatTime';
+import axios from '../../../utils/axios';
+
 // _mock_
 import { _notifications } from '../../../_mock';
 // components
@@ -25,15 +32,37 @@ import Iconify from '../../../components/Iconify';
 import Scrollbar from '../../../components/Scrollbar';
 import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
+import Image from '../../../components/Image';
+import TextMaxLine from '../../../components/TextMaxLine';
 
 // ----------------------------------------------------------------------
 
 export default function NotificationsPopover() {
+  const isMountedRef = useIsMountedRef();
   const [notifications, setNotifications] = useState(_notifications);
 
   const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
   const [open, setOpen] = useState(null);
+  const [feeds, setFeeds] = useState([]);
+
+  const getFeeds = useCallback(async () => {
+    try {
+      const { data } = await axios.get('/v1/titles/seed', {
+        params: { limit: 5, sortBy: 'timestamp:desc', populate: 'title' }
+      });
+      if (isMountedRef.current) {
+        setFeeds(data.results);
+      }
+    } catch (err) {
+      console.error(err);
+    }
+  }, [isMountedRef]);
+
+  useEffect(() => {
+    getFeeds();
+    return () => { setFeeds([]); }
+  }, [getFeeds]);
 
   const handleOpen = (event) => {
     setOpen(event.currentTarget);
@@ -68,9 +97,9 @@ export default function NotificationsPopover() {
       >
         <Box sx={{ display: 'flex', alignItems: 'center', py: 2, px: 2.5 }}>
           <Box sx={{ flexGrow: 1 }}>
-            <Typography variant="subtitle1">Notifications</Typography>
+            <Typography variant="subtitle1">Thông báo</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              You have {totalUnRead} unread messages
+              Có {totalUnRead} thông báo
             </Typography>
           </Box>
 
@@ -90,16 +119,16 @@ export default function NotificationsPopover() {
             disablePadding
             subheader={
               <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
-                New
+                Mới
               </ListSubheader>
             }
           >
-            {notifications.slice(0, 2).map((notification) => (
-              <NotificationItem key={notification.id} notification={notification} />
+            {feeds.map((feed) => (
+              <NotificationItem key={feed._id} feed={feed} />
             ))}
           </List>
 
-          <List
+          {/* <List
             disablePadding
             subheader={
               <ListSubheader disableSticky sx={{ py: 1, px: 2.5, typography: 'overline' }}>
@@ -110,14 +139,14 @@ export default function NotificationsPopover() {
             {notifications.slice(2, 5).map((notification) => (
               <NotificationItem key={notification.id} notification={notification} />
             ))}
-          </List>
+          </List> */}
         </Scrollbar>
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
           <Button fullWidth disableRipple>
-            View All
+            Xem tất cả
           </Button>
         </Box>
       </MenuPopover>
@@ -139,25 +168,29 @@ NotificationItem.propTypes = {
   }),
 };
 
-function NotificationItem({ notification }) {
-  const { avatar, title } = renderContent(notification);
-
+function NotificationItem({ feed }) {
+  const { provider, link, title, timestamp, isUnRead } = feed;
   return (
     <ListItemButton
       sx={{
         py: 1.5,
         px: 2.5,
         mt: '1px',
-        ...(notification.isUnRead && {
+        ...(isUnRead && {
           bgcolor: 'action.selected',
         }),
       }}
+      component="a"
+      href={link}
+      target="_blank"
     >
       <ListItemAvatar>
-        <Avatar sx={{ bgcolor: 'background.neutral' }}>{avatar}</Avatar>
+        <Card sx={{ borderRadius: 0.5 }}>
+          <Image alt={title.name} src={title.coverArt[0]} sx={{ width: 50 }} />
+        </Card>
       </ListItemAvatar>
       <ListItemText
-        primary={title}
+        primary={<TextMaxLine>{title.name}</TextMaxLine>}
         secondary={
           <Typography
             variant="caption"
@@ -169,7 +202,8 @@ function NotificationItem({ notification }) {
             }}
           >
             <Iconify icon="eva:clock-outline" sx={{ mr: 0.5, width: 16, height: 16 }} />
-            {fToNow(notification.createdAt)}
+            {formatDistance(new Date(timestamp), new Date(), { locale: vi, addSuffix: true })}
+            {` trên ${provider}`}
           </Typography>
         }
       />

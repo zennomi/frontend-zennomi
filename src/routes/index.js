@@ -69,9 +69,14 @@ export default function Router() {
         { path: PATH_WIBU.title.feed, element: <TitleFeed /> },
         { path: PATH_WIBU.title.root, element: <Titles /> },
         { path: PATH_WIBU.title.new, element: (<RoleBasedGuard accessibleRoles={['admin']}><NewTitle /></RoleBasedGuard>) },
-        { path: PATH_WIBU.title.edit, element: (<RoleBasedGuard accessibleRoles={['admin']}><EditTitle /></RoleBasedGuard> )},
-        { path: PATH_WIBU.title.delete, element: (<RoleBasedGuard accessibleRoles={['admin']}><DeleteTitle /></RoleBasedGuard> ) },
+        { path: PATH_WIBU.title.edit, element: (<RoleBasedGuard accessibleRoles={['admin']}><EditTitle /></RoleBasedGuard>) },
+        { path: PATH_WIBU.title.delete, element: (<RoleBasedGuard accessibleRoles={['admin']}><DeleteTitle /></RoleBasedGuard>) },
         { path: PATH_WIBU.title.id, element: <Title /> },
+        { path: PATH_WIBU.list.root, element: <Lists /> },
+        { path: PATH_WIBU.list.id, element: <List /> },
+        { path: PATH_WIBU.list.new, element: (<AuthGuard><NewList /></AuthGuard>) },
+        { path: PATH_WIBU.list.edit, element: (<AuthGuard><EditList /></AuthGuard>) },
+        { path: PATH_WIBU.list.delete, element: (<AuthGuard ><DeleteList /></AuthGuard>) },
       ]
     },
     {
@@ -114,12 +119,19 @@ const Profile = Loadable(lazy(() => import('../pages/Profile')));
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));
 const Register = Loadable(lazy(() => import('../pages/auth/Register')));
 // Wibu
-const Titles = Loadable(lazy(() => import('../pages/wibu/Titles')));
-const TitleFeed = Loadable(lazy(() => import('../pages/wibu/TitleFeed')));
-const Title = Loadable(lazy(() => import('../pages/wibu/Title')));
-const NewTitle = Loadable(lazy(() => import('../pages/wibu/NewTitle')));
-const EditTitle = Loadable(lazy(() => import('../pages/wibu/EditTitle')));
-const DeleteTitle = Loadable(lazy(() => import('../pages/wibu/DeleteTitle')));
+// Title
+const Titles = Loadable(lazy(() => import('../pages/title/Titles')));
+const TitleFeed = Loadable(lazy(() => import('../pages/title/TitleFeed')));
+const Title = Loadable(lazy(() => import('../pages/title/Title')));
+const NewTitle = Loadable(lazy(() => import('../pages/title/NewTitle')));
+const EditTitle = Loadable(lazy(() => import('../pages/title/EditTitle')));
+const DeleteTitle = Loadable(lazy(() => import('../pages/title/DeleteTitle')));
+// List
+const Lists = Loadable(lazy(() => import('../pages/list/Lists')));
+const List = Loadable(lazy(() => import('../pages/list/List')));
+const NewList = Loadable(lazy(() => import('../pages/list/NewList')));
+const EditList = Loadable(lazy(() => import('../pages/list/EditList')));
+const DeleteList = Loadable(lazy(() => import('../pages/list/DeleteList')));
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));

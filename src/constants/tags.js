@@ -378,4 +378,6 @@ module.exports = [
     "marriage proposal",
     "human experiment",
     "adapted to game",
+    "adapted to manga",
+    "first-time intercourse"
 ]

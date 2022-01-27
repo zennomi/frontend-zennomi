@@ -11,8 +11,6 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
 import { Card, Chip, Grid, Stack, TextField, Typography, Autocomplete, Box, InputAdornment } from '@mui/material';
-// hooks
-import useAuth from '../../hooks/useAuth';
 // routes
 import { PATH_WIBU } from '../../routes/paths';
 // components
@@ -46,7 +44,6 @@ TitleNewForm.propTypes = {
 
 export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
   const navigate = useNavigate();
-  const { getToken } = useAuth();
   const { enqueueSnackbar } = useSnackbar();
 
   const TitleSchema = Yup.object().shape({
@@ -118,10 +115,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
       const base64Files = await Promise.all(title.coverArt.filter(link => !isString(link)).map(file => getBase64(file)));
       const imgurLinks = await imgur.upload(base64Files.map(file => ({ image: file.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), type: 'base64' })));
       title.coverArt = [...imgurLinks.map(e => e.data.link), ...linkFiles];
-      reset();
-      const idToken = await getToken();
-      console.log(title, idToken);
-      const { data } = await titleSubmit({ ...title, idToken });
+      const { data } = await titleSubmit({ ...title });
       const { data: newTitle } = data;
       enqueueSnackbar(!isEdit ? 'Create success!' : 'Update success!');
       navigate(`${PATH_WIBU.title.one}/${newTitle._id}`);

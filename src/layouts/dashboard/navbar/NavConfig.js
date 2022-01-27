@@ -35,11 +35,10 @@ const sidebarConfig = [
         title: PATH_WIBU.list.label,
         path: PATH_WIBU.list.root,
         icon: <Iconify icon='ant-design:profile-twotone' />,
-        // children: [
-        //   { title: 'Top romcom', path: PATH_WIBU.title.root },
-        //   { title: 'Thuốc mới', path: PATH_WIBU.title.feed },
-        //   { title: 'Thêm hàng mới', path: PATH_WIBU.title.new }
-        // ]
+        children: [
+          { title: 'Danh sách', path: PATH_WIBU.list.root },
+          { title: 'Tạo bộ sưu tập', path: PATH_WIBU.list.new },
+        ]
       },
     ],
   },

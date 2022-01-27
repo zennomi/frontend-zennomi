@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import Slider from 'react-slick';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
+import parse from 'html-react-parser';
 import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 // @mui
 import { useTheme, styled } from '@mui/material/styles';
@@ -222,15 +221,13 @@ export default function Title() {
                         {
                             title?.description &&
                             <Typography variant='body1'>
-                                <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-                                    {title.description}
-                                </ReactMarkdown>
+                                {parse(title.description)}
                             </Typography>
                         }
                         <Divider sx={{ my: 2 }} />
                         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                            {title?.genres.map(genre => <Label color='primary' sx={{ m: 0.2 }}>{genre}</Label>)}
-                            {title?.tags.map(genre => <Label color='primary' variant='outlined' sx={{ m: 0.2 }}>{genre}</Label>)}
+                            {title?.genres.map(genre => <Label key={genre} color='primary' sx={{ m: 0.2 }}>{genre}</Label>)}
+                            {title?.tags.map(tag => <Label key={tag} color='primary' variant='outlined' sx={{ m: 0.2 }}>{tag}</Label>)}
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>

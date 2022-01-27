@@ -24,7 +24,7 @@ export default function NewTitle() {
   return (
     <Page title="New Title">
       <Container maxWidth={themeStretch ? false : 'xl'}>
-        <TitleNewForm isEdit={false} currentTitle={null} titleSubmit={titleSubmit} />
+        <TitleNewForm currentTitle={null} titleSubmit={titleSubmit} />
       </Container>
     </Page>
   );

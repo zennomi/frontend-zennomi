@@ -3,11 +3,12 @@
 - Update nhanh cho contributor ✔
 - Thêm bộ lọc ✔
 - Theo dõi
-- Tạo list
-- Thêm vào list
-- Sắp xếp list
+- Tạo list ✔
+- Thêm vào list ✔
+- Sắp xếp list ✔
 - Giảm dung lượng ảnh
 - Update data (score, tags)
+- ShortId
 - Dọn các component import thừa
 - Thêm About (giải thích chức năng web, lưu ý)
 - Giải thích các tag

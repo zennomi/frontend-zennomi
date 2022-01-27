@@ -1,5 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Link as RouterLink,useParams } from 'react-router-dom';
+import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
+import { useSnackbar } from 'notistack';
 // @mui
 import { Button, Card, CardActions, CardContent, Container, Typography } from '@mui/material';
 // hooks
@@ -10,15 +11,17 @@ import Page from '../../components/Page';
 // utils
 import axios from '../../utils/axios';
 // sections
-import TitleNewFrom from '../../sections/title/TitleNewForm';
 import { PATH_WIBU } from '../../routes/paths';
 // ---------------------------------------------------------------------
 
 export default function EditTitle() {
     const { themeStretch } = useSettings();
     const isMountedRef = useIsMountedRef();
+    const navigate = useNavigate();
+    const { enqueueSnackbar } = useSnackbar();
     const [title, setTitle] = useState();
     const { id } = useParams();
+
 
     const getTitle = useCallback(async () => {
         try {
@@ -36,8 +39,9 @@ export default function EditTitle() {
             const { data } = await axios.delete(`/v1/titles/${id}`);
             console.log(data);
         } catch (err) {
-            //
+            enqueueSnackbar(err, { variant: 'error' });
         }
+        navigate(`${PATH_WIBU.title.root}`);
     }, [isMountedRef, id]);
 
     useEffect(() => {
@@ -45,7 +49,7 @@ export default function EditTitle() {
     }, [getTitle]);
 
     return (
-        <Page title="Edit Title">
+        <Page title="Delete Title">
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Card>
                     <CardContent>

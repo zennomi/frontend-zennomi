@@ -1,8 +1,7 @@
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 import { Card, Stack, Typography, Button, OutlinedInput, Paper } from '@mui/material';
-import ReactMarkdown from 'react-markdown';
-import rehypeRaw from 'rehype-raw';
+import parse from 'html-react-parser';
 // components
 import Image from '../../components/Image';
 
@@ -24,7 +23,7 @@ const ContentStyle = styled(Card)(({ theme }) => ({
 
 export default function ZennomiScore({ score = 0, zennomi }) {
   return (
-    <Paper sx={{height:"100%"}}>
+    <Paper sx={{ height: "100%" }}>
       {/* <Image
         visibleByDefault
         disabledEffect
@@ -46,9 +45,7 @@ export default function ZennomiScore({ score = 0, zennomi }) {
         </Stack>
 
         <Typography variant="body2" sx={{ mt: 2, mb: 3 }}>
-          <ReactMarkdown rehypePlugins={[rehypeRaw]}>
-            {zennomi?.review || 'No comment'}
-          </ReactMarkdown>
+            {parse(zennomi?.review || 'No comment')}
         </Typography>
       </ContentStyle>
     </Paper>

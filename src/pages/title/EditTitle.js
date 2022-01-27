@@ -19,8 +19,6 @@ export default function EditTitle() {
     const [title, setTitle] = useState();
     const { id } = useParams();
 
-    console.log(title);
-
     const getTitle = useCallback(async () => {
         try {
             const { data } = await axios.get(`/v1/titles/${id}`);
@@ -47,7 +45,7 @@ export default function EditTitle() {
     return (
         <Page title="Edit Title">
             <Container maxWidth={themeStretch ? false : 'xl'}>
-                <TitleNewFrom isEdit={true} currentTitle={title} titleSubmit={titleSubmit} />
+                <TitleNewFrom currentTitle={title} titleSubmit={titleSubmit} />
             </Container>
         </Page>
     );
