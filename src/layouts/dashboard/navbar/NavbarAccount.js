@@ -58,7 +58,7 @@ export default function NavbarAccount({ isCollapse }) {
               {user.displayName}
             </Typography>
             <Typography variant="body2" noWrap sx={{ color: 'text.secondary' }}>
-              {user.email}
+              {user.role}
             </Typography>
           </Box>
         </RootStyle >

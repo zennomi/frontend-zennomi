@@ -46,6 +46,7 @@
     "axios": "^0.24.0",
     "change-case": "^4.1.2",
     "date-fns": "^2.24.0",
+    "emoji-mart": "^3.0.1",
     "firebase": "^9.6.1",
     "framer-motion": "^4.1.17",
     "highlight.js": "^11.4.0",

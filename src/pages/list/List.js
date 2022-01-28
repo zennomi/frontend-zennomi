@@ -85,7 +85,7 @@ export default function List() {
                     }
                 </Grid>
                 {
-                    user?.id === list?.user._id &&
+                    user?.id === list?.user.id &&
                     <Card>
                         <CardHeader title="User" />
                         <CardContent>

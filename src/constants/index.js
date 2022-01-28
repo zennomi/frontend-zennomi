@@ -40,5 +40,6 @@ export const GENRE_OPTION = [
   'supernatural',
   'tragedy',
   'yaoi',
-  'yuri'
+  'yuri',
+  'oneshot'
 ]

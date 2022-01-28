@@ -1,5 +1,4 @@
 // @mui
-import { useTheme } from '@mui/material/styles';
 import {
     Box,
     Card,
@@ -20,8 +19,6 @@ import Scrollbar from '../../components/Scrollbar';
 // ----------------------------------------------------------------------
 
 export default function TitleLinks({ links = { vi: [], en: [], raw: [] } }) {
-    const theme = useTheme();
-
     return (
         <Card>
             <Scrollbar sx={{ maxHeight: 200, my: 1 }}>
@@ -60,7 +57,7 @@ function LinkIcon({ site }) {
     else if (site === 'MANGADEX.ORG') return <img src='/icons/ic_mangadex.svg' />
     else if (site === 'HAKO.RE' || site === 'DOCLN.NET' ) return <img src='/icons/ic_hako.png' />
     else if (site === 'FACEBOOK.COM') return <Iconify icon='logos:facebook' />
-    else if (site === 'Google-sensei') return <Iconify icon={'flat-color-icons:google'} />
+    else if (site === 'GOOGLE-SENSEI') return <Iconify icon={'flat-color-icons:google'} />
     else if (site === 'TWITTER.COM') return <Iconify icon={'logos:twitter'} />
     else return <Iconify icon='fa-solid:link' />
 }

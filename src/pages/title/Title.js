@@ -17,16 +17,29 @@ import useIsMountedRef from '../../hooks/useIsMountedRef';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Image from '../../components/Image';
+import CustomStyle from '../../components/CustomStyle';
 import Label from '../../components/Label';
 import { CarouselDots, CarouselArrows } from '../../components/carousel';
-import ZennomiScore from '../../sections/title/ZennomiScore';
 import TitleLinks from '../../sections/title/TitleLinks';
+import TitleLists from '../../sections/title/TitleLists';
+import TitleComment from '../../sections/title/TitleComment';
 import ListSelect from '../../sections/title/ListSelect';
 // utils
 import axios from '../../utils/axios';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
 import Iconify from '../../components/Iconify';
+
+const comments = [
+    {
+        message: 'Ngoonnnnn',
+        user: {
+            displayName: 'Chim to toi ron',
+            photoURL: 'https://res.cloudinary.com/minimal-ui/image/upload/v1614655910/upload_minimal/avatar/minimal_avatar.jpg'
+        },
+        createdAt: new Date()
+    }
+]
 
 // ----------------------------------------------------------------------
 
@@ -37,7 +50,7 @@ export default function Title() {
     const { enqueueSnackbar } = useSnackbar();
     const navigate = useNavigate();
     const { id } = useParams();
-    const { user } = useAuth();
+    const { user, isAuthenticated } = useAuth();
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
 
@@ -45,7 +58,9 @@ export default function Title() {
     const [currentIndex, setCurrentIndex] = useState(0);
 
     const [title, setTitle] = useState();
+    const [titleLists, setTitleLists] = useState([]);
     const [userLists, setUserLists] = useState([]);
+    const [comments, setComments] = useState([]);
 
     const settings = {
         speed: 800,
@@ -76,8 +91,8 @@ export default function Title() {
         }
     }, [isMountedRef]);
 
-    const getLists = useCallback(async () => {
-        if (!user.id) return;
+    const getUserLists = useCallback(async () => {
+        if (!isAuthenticated) return;
         try {
             const { data } = await axios.get(`/v1/lists?user=${user.id}`);
             if (isMountedRef.current) {
@@ -86,17 +101,40 @@ export default function Title() {
         } catch (err) {
             enqueueSnackbar(err, { variant: 'error' });
         }
-    }, [isMountedRef, user]);
+    }, [isMountedRef, isAuthenticated]);
+
+    const getTitleLists = useCallback(async () => {
+
+        try {
+            const { data } = await axios.get(`/v1/lists?titles=${id}&populate=user`);
+            if (isMountedRef.current) {
+                setTitleLists(data.results);
+            }
+        } catch (err) {
+            enqueueSnackbar(err, { variant: 'error' });
+        }
+    }, [isMountedRef]);
+
+    const getComments = useCallback(async () => {
+        try {
+            const { data } = await axios.get(`/v1/comments?title=${id}&populate=user&sortBy=createdAt`);
+            if (isMountedRef.current) {
+                setComments(data.results);
+            }
+        } catch (err) {
+            enqueueSnackbar(err, { variant: 'error' });
+        }
+    }, [isMountedRef]);
 
     const handleListsSubmit = async (data) => {
-        console.log(data);
         try {
             await axios({
                 url: `/v1/lists/title/${id}`,
                 method: 'post',
                 data: data.lists.map(list => list.id)
             });
-            await getLists();
+            await getUserLists();
+            await getTitleLists();
             enqueueSnackbar('Sửa bộ sưu tập thành công.');
             handleClose();
         } catch (err) {
@@ -109,8 +147,16 @@ export default function Title() {
     }, [getTitle]);
 
     useEffect(() => {
-        getLists();
-    }, [getLists]);
+        getUserLists();
+    }, [getUserLists]);
+
+    useEffect(() => {
+        getTitleLists();
+    }, [getTitleLists]);
+
+    useEffect(() => {
+        getComments();
+    }, [getComments]);
 
     const handlePrevious = () => {
         carouselRef.current.slickPrev();
@@ -126,6 +172,38 @@ export default function Title() {
     const handleClose = () => {
         setAnchorEl(null);
     };
+
+    const handleCommentSubmit = async (message) => {
+        try {
+            await axios({
+                url: `/v1/comments`,
+                method: 'post',
+                data: {
+                    message,
+                    title: id
+                }
+            });
+            await getComments();
+        } catch (error) {
+            console.log(error);
+            enqueueSnackbar(error, { variant: 'error' });
+        }
+    }
+
+    const handleCommentDelete = async (commendId) => {
+        if (!window.confirm("Xác nhận xoá comment?")) return;
+        try {
+            await axios({
+                url: `/v1/comments/${commendId}`,
+                method: 'delete',
+            });
+            await getComments();
+            enqueueSnackbar('Xoá comment thành công', { variant: 'info' });
+        } catch (error) {
+            console.log(error);
+            enqueueSnackbar(error, { variant: 'error' });
+        }
+    }
 
     return (
         <Page title={title?.name || ""}>
@@ -168,19 +246,23 @@ export default function Title() {
                                 }}
                             />
                         </CardSlider>
-                        <Button
-                            id="basic-button"
-                            aria-controls={open ? 'basic-menu' : undefined}
-                            aria-haspopup="true"
-                            aria-expanded={open ? 'true' : undefined}
-                            size='large'
-                            fullWidth
-                            color='warning'
-                            variant='contained'
-                            startIcon={<Iconify icon='ant-design:profile-twotone' />}
-                            onClick={handleClick}
-                        >Thêm vào bộ sưu tập
-                        </Button>
+                        {
+                            isAuthenticated &&
+                            <Button
+                                id="basic-button"
+                                aria-controls={open ? 'basic-menu' : undefined}
+                                aria-haspopup="true"
+                                aria-expanded={open ? 'true' : undefined}
+                                size='large'
+                                fullWidth
+                                color='warning'
+                                variant='contained'
+                                startIcon={<Iconify icon='ant-design:profile-twotone' />}
+                                onClick={handleClick}
+                            >
+                                Thêm vào bộ sưu tập
+                            </Button>
+                        }
                         <Menu
                             id="basic-menu"
                             anchorEl={anchorEl}
@@ -220,9 +302,11 @@ export default function Title() {
                         }
                         {
                             title?.description &&
-                            <Typography variant='body1'>
-                                {parse(title.description)}
-                            </Typography>
+                            <CustomStyle>
+                                <Typography variant='body1'>
+                                    {parse(title.description)}
+                                </Typography>
+                            </CustomStyle>
                         }
                         <Divider sx={{ my: 2 }} />
                         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
@@ -234,11 +318,16 @@ export default function Title() {
                         <TitleLinks links={title?.links} />
                     </Grid>
                     <Grid item xs={12} md={6}>
-                        <ZennomiScore score={title?.score} zennomi={title?.zennomi} />
+                        <TitleLists lists={titleLists} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <CustomStyle>
+                            <TitleComment comments={comments} handleCommentSubmit={handleCommentSubmit} handleCommentDelete={handleCommentDelete} />
+                        </CustomStyle>
                     </Grid>
                 </Grid>
                 {
-                    user.isStaff &&
+                    user?.role === 'admin' &&
                     <Card>
                         <CardHeader title="Admin" />
                         <CardContent>
@@ -247,7 +336,6 @@ export default function Title() {
                         </CardContent>
                     </Card>
                 }
-
             </Container>
         </Page >
     );

@@ -4,7 +4,6 @@ import { useSnackbar } from 'notistack';
 // @mui
 import { Button, Card, CardActions, CardContent, Container, Typography } from '@mui/material';
 // hooks
-import useAuth from '../../hooks/useAuth';
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';
 // components
@@ -22,14 +21,12 @@ export default function DeleteList() {
     const { enqueueSnackbar } = useSnackbar();
     const [list, setList] = useState();
     const { id } = useParams();
-    const { user } = useAuth();
 
     const getList = useCallback(async () => {
         try {
             const { data } = await axios.get(`/v1/lists/${id}`);
             if (isMountedRef.current) {
                 setList(data);
-                if (user?.id != data.user) navigate(`${PATH_WIBU.list.one}/${id}`)
             }
         } catch (err) {
             //

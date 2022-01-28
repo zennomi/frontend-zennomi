@@ -1,7 +1,6 @@
 import { useMemo, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
-import { useSnackbar } from 'notistack';
 // @mui
 import { Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
@@ -32,14 +31,20 @@ export default function ListSelectForm({ userLists, titleId, onSubmit }) {
     }, []);
 
     return (
+
         <Box sx={{ p: 1 }}>
-            <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-                <RHFMultiCheckbox
-                name='lists'
-                options={userLists}
-                />
-            <LoadingButton type="submit" fullWidth loading={isSubmitting}>Lưu</LoadingButton>
-            </FormProvider>
+            {
+                userLists.length === 0 ?
+                    "Bạn chưa có bộ sưu tập nào"
+                    :
+                    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+                        <RHFMultiCheckbox
+                            name='lists'
+                            options={userLists}
+                        />
+                        <LoadingButton type="submit" fullWidth loading={isSubmitting}>Lưu</LoadingButton>
+                    </FormProvider>
+            }
         </Box>
     )
 }
