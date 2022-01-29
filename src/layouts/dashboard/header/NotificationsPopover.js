@@ -48,6 +48,7 @@ export default function NotificationsPopover() {
 
   const getFeeds = useCallback(async () => {
     try {
+      if (!open) return ;
       const { data } = await axios.get('/v1/titles/seed', {
         params: { limit: 5, sortBy: 'timestamp:desc', populate: 'title' }
       });
@@ -57,7 +58,7 @@ export default function NotificationsPopover() {
     } catch (err) {
       console.error(err);
     }
-  }, [isMountedRef]);
+  }, [isMountedRef, open]);
 
   useEffect(() => {
     getFeeds();
@@ -84,7 +85,7 @@ export default function NotificationsPopover() {
   return (
     <>
       <IconButtonAnimate color={open ? 'primary' : 'default'} onClick={handleOpen} sx={{ width: 40, height: 40 }}>
-        <Badge badgeContent={totalUnRead} color="error">
+        <Badge badgeContent={0} color="error">
           <Iconify icon="eva:bell-fill" width={20} height={20} />
         </Badge>
       </IconButtonAnimate>
@@ -103,13 +104,13 @@ export default function NotificationsPopover() {
             </Typography>
           </Box>
 
-          {totalUnRead > 0 && (
+          {/* {totalUnRead > 0 && (
             <Tooltip title=" Mark all as read">
               <IconButtonAnimate color="primary" onClick={handleMarkAllAsRead}>
                 <Iconify icon="eva:done-all-fill" width={20} height={20} />
               </IconButtonAnimate>
             </Tooltip>
-          )}
+          )} */}
         </Box>
 
         <Divider sx={{ borderStyle: 'dashed' }} />

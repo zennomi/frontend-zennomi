@@ -3,7 +3,7 @@ import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 
-import { Container, Grid, Button, IconButton, Pagination, Box, Chip, Stack, Paper, Typography, Link } from '@mui/material';
+import { Container, Pagination, Box, Chip, Stack, Paper, Typography, Link, ToggleButton, ToggleButtonGroup } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -25,16 +25,19 @@ export default function Lists() {
     const { themeStretch } = useSettings();
     const isMountedRef = useIsMountedRef();
     const { enqueueSnackbar } = useSnackbar();
-    const { user } = useAuth();
+    const { user, isAuthenticated } = useAuth();
 
     const [lists, setLists] = useState([]);
+    const [page, setPage] = useState(1);
     const [total, setTotal] = useState(1);
-    const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+    const [isMyLists, setIsMyLists] = useState(false);
 
     const getLists = useCallback(async () => {
         try {
+            const params = { populate: 'user', page };
+            if (isMyLists) params.user = user.id;
             const { data } = await axios.get('/v1/lists', {
-                params: { ...paramsToObject(searchParams), limit: 12, populate: 'user' }
+                params
             });
             if (isMountedRef.current) {
                 setLists(data.results);
@@ -44,22 +47,10 @@ export default function Lists() {
             console.error(err);
             enqueueSnackbar(err, { variant: 'error' });
         }
-    }, [isMountedRef, searchParams]);
+    }, [isMountedRef, page, isMyLists]);
 
     const handlePageChange = (event, page) => {
-        setNewParams({ page });
-    }
-
-    const setNewParams = (params) => {
-        if (!params.page) params.page = 1;
-        const newParams = paramsToObject(searchParams);
-        Object.keys(params).forEach(key => {
-            if (params[key] === null || params[key] === 'all' || params[key] === '') delete newParams[key];
-            else newParams[key] = params[key];
-        });
-        setSearchParams({
-            ...newParams
-        })
+        setPage(page);
     }
 
     useEffect(() => {
@@ -67,9 +58,9 @@ export default function Lists() {
         return () => { setLists([]); }
     }, [getLists]);
 
-    const handleTypeClick = (_type) => {
-        if (_type === searchParams.get("type")) setNewParams({ type: null, page: 1 });
-        else setNewParams({ type: _type, page: 1 });
+    const handleChange = (event, value) => {
+        if (!value) return setIsMyLists(false);
+        return setIsMyLists(true);
     }
 
     return (
@@ -83,33 +74,36 @@ export default function Lists() {
                     ]}
                 />
                 <Stack spacing={2}>
+                    {isAuthenticated &&
+                        <ToggleButtonGroup
+                            color="primary"
+                            value={isMyLists}
+                            exclusive
+                            onChange={handleChange}
+                            fullWidth
+                        >
+                            <ToggleButton value={false}>Tất cả</ToggleButton>
+                            <ToggleButton value={true}>Bộ sưu tập của tôi</ToggleButton>
+                        </ToggleButtonGroup>
+                    }
                     {
                         lists.map(
                             list =>
                                 <Paper key={list._id} sx={{ p: 2 }}>
                                     <Link component={RouterLink} variant='h6' to={`${PATH_WIBU.list.one}/${list._id}`} >
-                                        {list.name}
+                                        {`${list.name} - ${list.titles.length} bộ`}
                                     </Link>
                                     <Typography variant='body2'>
-                                        {list.user.displayName}
+                                        {`Bởi ${list.user.displayName}`}
                                     </Typography>
                                 </Paper>
                         )
                     }
                 </Stack>
                 <Box sx={{ display: 'flex', justifyContent: 'right' }}>
-                    <Pagination sx={{ my: 2 }} count={total} page={Number(searchParams.get("page"))} onChange={handlePageChange} />
+                    <Pagination sx={{ my: 2 }} count={total} page={page} onChange={handlePageChange} />
                 </Box>
             </Container>
         </Page>
     );
-}
-
-function paramsToObject(urlParams) {
-    const entries = urlParams.entries();
-    const result = {}
-    for (const [key, value] of entries) { // each 'entry' is a [key, value] tupple
-        result[key] = value;
-    }
-    return result;
 }

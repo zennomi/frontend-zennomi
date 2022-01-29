@@ -117,7 +117,7 @@ export default function Title() {
 
     const getComments = useCallback(async () => {
         try {
-            const { data } = await axios.get(`/v1/comments?title=${id}&populate=user&sortBy=createdAt`);
+            const { data } = await axios.get(`/v1/comments?title=${id}&populate=user&sortBy=createdAt:desc`);
             if (isMountedRef.current) {
                 setComments(data.results);
             }

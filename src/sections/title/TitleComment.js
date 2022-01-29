@@ -26,12 +26,19 @@ import MyAvatar from '../../components/MyAvatar';
 import EmojiPicker from '../../components/EmojiPicker';
 
 export default function TitleComment({ comments, handleCommentSubmit, handleCommentDelete }) {
+    console.log('render');
     const { user, isAuthenticated } = useAuth();
 
     const [message, setMessage] = useState('');
     const handleChangeMessage = (value) => {
         setMessage(value);
     };
+    const handleFormSubmit = (event) => {
+        event.preventDefault();
+        if (!message) return;
+        handleCommentSubmit(message);
+        setMessage('');
+    }
 
     return (
         <Card sx={{ overflow: 'visible' }}>
@@ -67,34 +74,38 @@ export default function TitleComment({ comments, handleCommentSubmit, handleComm
                 </Stack>
                 {
                     isAuthenticated &&
-                    <Stack direction="row" alignItems="center">
-                        <MyAvatar />
-                        <TextField
-                            fullWidth
-                            size="small"
-                            value={message}
-                            placeholder="Bình luận gì đó…"
-                            onChange={(event) => handleChangeMessage(event.target.value)}
-                            InputProps={{
-                                endAdornment: (
-                                    <InputAdornment position="end">
-                                        <EmojiPicker alignRight value={message} setValue={setMessage} />
-                                    </InputAdornment>
-                                ),
-                            }}
-                            sx={{
-                                ml: 2,
-                                mr: 1,
-                                '& fieldset': {
-                                    borderWidth: `1px !important`,
-                                    borderColor: (theme) => `${theme.palette.grey[500_32]} !important`,
-                                },
-                            }}
-                        />
-                        <IconButton onClick={() => { handleCommentSubmit(message); setMessage('') }} >
-                            <Iconify icon={'ic:round-send'} width={24} height={24} />
-                        </IconButton>
-                    </Stack>
+                    <form onSubmit={handleFormSubmit}>
+                        <Stack direction="row" alignItems="center">
+                            <MyAvatar />
+                            <TextField
+                                fullWidth
+                                autoComplete="off"
+                                size="small"
+                                value={message}
+                                placeholder="Bình luận gì đó…"
+                                onChange={(event) => handleChangeMessage(event.target.value)}
+                                InputProps={{
+                                    endAdornment: (
+                                        <InputAdornment position="end">
+                                            <EmojiPicker alignRight value={message} setValue={setMessage} />
+                                        </InputAdornment>
+                                    ),
+                                }}
+                                sx={{
+                                    ml: 2,
+                                    mr: 1,
+                                    '& fieldset': {
+                                        borderWidth: `1px !important`,
+                                        borderColor: (theme) => `${theme.palette.grey[500_32]} !important`,
+                                    },
+                                }}
+                            />
+
+                            <IconButton type="submit" >
+                                <Iconify icon={'ic:round-send'} width={24} height={24} />
+                            </IconButton>
+                        </Stack>
+                    </form>
                 }
             </Stack>
         </Card>

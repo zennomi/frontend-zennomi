@@ -3,7 +3,7 @@ import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 
-import { Container, Grid, Button, IconButton, Pagination, Box, Badge, Chip } from '@mui/material';
+import { Container, Grid, Button, IconButton, Pagination, Box, Chip, ToggleButton, ToggleButtonGroup, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -38,12 +38,12 @@ export default function Titles() {
   const [titles, setTitles] = useState([]);
   const [total, setTotal] = useState(1);
   const [isFilterOpen, setIsFilterOpen] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams({ page: 1 });
+  const [searchParams, setSearchParams] = useSearchParams({ page: 1, sortBy: 'score:desc' });
 
   const getTitles = useCallback(async () => {
     try {
       const { data } = await axios.get('/v1/titles', {
-        params: { ...paramsToObject(searchParams), limit: 12, sortBy: 'score:desc' }
+        params: { ...paramsToObject(searchParams), limit: 12 }
       });
       if (isMountedRef.current) {
         setTitles(data.results);
@@ -85,8 +85,8 @@ export default function Titles() {
     return () => { setTitles([]); }
   }, [getTitles]);
 
-  const handleTypeClick = (_type) => {
-    if (_type === searchParams.get("type")) setNewParams({ type: null, page: 1 });
+  const handleTypeClick = (event, _type) => {
+    if (!_type) setNewParams({ type: null, page: 1 });
     else setNewParams({ type: _type, page: 1 });
   }
 
@@ -100,32 +100,52 @@ export default function Titles() {
             { name: PATH_WIBU.title.label, href: PATH_WIBU.title.root },
           ]}
         />
-        <Button
-          startIcon={<Iconify icon='bi:filter' />}
-          endIcon={<Chip label={Object.keys(paramsToObject(searchParams)).length - 1} size='small' color='info' />}
-          color='info'
-          variant="outlined"
-          onClick={() => { setIsFilterOpen(true) }}
-          sx={{ mb: 2 }}
+        <ToggleButtonGroup
+          color="primary"
+          value={searchParams.get("type")}
+          exclusive
+          onChange={handleTypeClick}
+          fullWidth
+          sx={{ mb: 3 }}
         >
-          Lọc
-        </Button>
-        <Grid container spacing={2} sx={{ mb: 3 }}>
           {
             TYPE_OPTION.map(_type => (
-              <Grid item xs={4} key={_type}>
-                <Button
-                  fullWidth
-                  color='primary'
-                  variant={_type === searchParams.get("type") ? "contained" : "outlined"}
-                  onClick={() => { handleTypeClick(_type) }}
-                >
-                  {_type}
-                </Button>
-              </Grid>
+              <ToggleButton
+                value={_type}
+              >
+                {_type.toUpperCase()}
+              </ToggleButton>
             ))
           }
-        </Grid>
+        </ToggleButtonGroup>
+        <Box sx={{ display: 'flex', justifyContent: 'right' }}>
+          <Button
+            startIcon={<Iconify icon='bi:filter' />}
+            endIcon={<Chip label={Object.keys(paramsToObject(searchParams)).length - 2} size='small' color='info' />}
+            color='info'
+            variant="outlined"
+            size="large"
+            onClick={() => { setIsFilterOpen(true) }}
+            sx={{ mb: 2, mr: 2 }}
+          >
+            Lọc
+          </Button>
+          <FormControl>
+            <InputLabel id="demo-simple-select-label">Xếp theo</InputLabel>
+            <Select
+              autoWidth
+              labelId="demo-simple-select-label"
+              id="demo-simple-select"
+              value={searchParams.get("sortBy")}
+              label="Xếp theo"
+              onChange={(event) => { setNewParams({ page: 1, sortBy: event.target.value }) }}
+            >
+              <MenuItem value={"score:desc"}>Điểm xếp hạng</MenuItem>
+              <MenuItem value={"createdAt:desc"}>Ngày thêm</MenuItem>
+              <MenuItem value={"title.en:desc"}>Bảng chữ cái</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Grid container spacing={2}>
           {
             titles.length === 0 ?

@@ -166,7 +166,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
                         />
                     )}
                 />
-                <Button component={"a"} href={title?.links?.vi.find(l => l.site === "Google-sensei")?.link} target="_blank" variant="contained" size="large">
+                <Button component={"a"} href={title?.links?.vi.find(l => l.site === "GOOGLE-SENSEI")?.link} target="_blank" variant="contained" size="large">
                     Tra Google
                 </Button>
                 <Controller
