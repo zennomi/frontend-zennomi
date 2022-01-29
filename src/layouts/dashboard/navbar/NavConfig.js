@@ -17,9 +17,9 @@ const sidebarConfig = [
         icon: <Iconify icon='ant-design:home-twotone' />,
       },
       {
-        title: 'About',
-        path: '/profile',
-        icon: <Iconify icon='ant-design:question-circle-twotone' />,
+        title: 'Thống kê',
+        path: '/statistics',
+        icon: <Iconify icon='ant-design:pie-chart-twotone' />,
       },
       {
         title: PATH_WIBU.title.label,
@@ -39,6 +39,11 @@ const sidebarConfig = [
           { title: 'Danh sách', path: PATH_WIBU.list.root },
           { title: 'Tạo bộ sưu tập', path: PATH_WIBU.list.new },
         ]
+      },
+      {
+        title: 'About',
+        path: '/profile',
+        icon: <Iconify icon='ant-design:question-circle-twotone' />,
       },
     ],
   },

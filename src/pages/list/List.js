@@ -1,12 +1,10 @@
-import { useState, useCallback, useEffect, useRef } from 'react';
-import Slider from 'react-slick';
+import { useState, useCallback, useEffect } from 'react';
 import parse from 'html-react-parser';
 import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 // @mui
-import { useTheme, styled } from '@mui/material/styles';
 import {
-    Container, Grid, Typography, Card, Box, Skeleton, Stack, Divider, Rating,
-    Button, CardHeader, CardContent, MenuList, Menu, MenuItem, Paper, Avatar,
+    Container, Grid, Typography, Card, Box, Skeleton, 
+    Button, CardHeader, CardContent, Avatar,
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -17,18 +15,14 @@ import useIsMountedRef from '../../hooks/useIsMountedRef';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import TitleCard from '../../components/title/TitleCard';
-import Image from '../../components/Image';
-import { CarouselDots, CarouselArrows } from '../../components/carousel';
 // utils
 import axios from '../../utils/axios';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
-import Iconify from '../../components/Iconify';
 
 // ----------------------------------------------------------------------
 
 export default function List() {
-    const theme = useTheme();
     const { themeStretch } = useSettings();
     const isMountedRef = useIsMountedRef();
     const { enqueueSnackbar } = useSnackbar();

@@ -65,6 +65,10 @@ export default function Router() {
           path: '/profile',
           element: <Profile />
         },
+        {
+          path: '/statistics',
+          element: <Statistics />
+        },
         { path: PATH_WIBU.root, element: <Navigate to={PATH_WIBU.title.root} replace />, index: true },
         { path: PATH_WIBU.title.feed, element: <TitleFeed /> },
         { path: PATH_WIBU.title.root, element: <Titles /> },
@@ -114,6 +118,7 @@ export default function Router() {
 // Root
 const Homepage = Loadable(lazy(() => import('../pages/Homepage')));
 const Profile = Loadable(lazy(() => import('../pages/Profile')));
+const Statistics = Loadable(lazy(() => import('../pages/Statistics')));
 
 // Authentication
 const Login = Loadable(lazy(() => import('../pages/auth/Login')));

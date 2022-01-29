@@ -112,6 +112,7 @@ export default function Titles() {
             TYPE_OPTION.map(_type => (
               <ToggleButton
                 value={_type}
+                key={_type}
               >
                 {_type.toUpperCase()}
               </ToggleButton>
@@ -124,27 +125,11 @@ export default function Titles() {
             endIcon={<Chip label={Object.keys(paramsToObject(searchParams)).length - 2} size='small' color='info' />}
             color='info'
             variant="outlined"
-            size="large"
             onClick={() => { setIsFilterOpen(true) }}
             sx={{ mb: 2, mr: 2 }}
           >
             Lọc
           </Button>
-          <FormControl>
-            <InputLabel id="demo-simple-select-label">Xếp theo</InputLabel>
-            <Select
-              autoWidth
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={searchParams.get("sortBy")}
-              label="Xếp theo"
-              onChange={(event) => { setNewParams({ page: 1, sortBy: event.target.value }) }}
-            >
-              <MenuItem value={"score:desc"}>Điểm xếp hạng</MenuItem>
-              <MenuItem value={"createdAt:desc"}>Ngày thêm</MenuItem>
-              <MenuItem value={"title.en:desc"}>Bảng chữ cái</MenuItem>
-            </Select>
-          </FormControl>
         </Box>
         <Grid container spacing={2}>
           {

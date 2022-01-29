@@ -17,7 +17,7 @@ export default function TitleCardSkeleton() {
                     <Skeleton variant='text' />
                 </Typography>
             </CaptionStyle>
-            <Chip label='_____' color="primary" size="small" sx={theme => ({ position: 'absolute', top: theme.spacing(0.5), left: theme.spacing(0.5), opacity: 0.9 })} />
+            <Chip label={`    `} color="primary" size="small" sx={theme => ({ position: 'absolute', top: theme.spacing(0.5), left: theme.spacing(0.5), opacity: 0.9 })} />
         </Card>
     )
 }

@@ -49,7 +49,7 @@ export default function NotificationsPopover() {
   const getFeeds = useCallback(async () => {
     try {
       if (!open) return ;
-      const { data } = await axios.get('/v1/titles/seed', {
+      const { data } = await axios.get('/v1/titles/feed', {
         params: { limit: 5, sortBy: 'timestamp:desc', populate: 'title' }
       });
       if (isMountedRef.current) {

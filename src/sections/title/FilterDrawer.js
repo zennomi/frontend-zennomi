@@ -33,11 +33,11 @@ import {
 import paramsToObject from '../../utils/urlParamsHelper';
 import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../constants';
 
-const LabelStyle = styled(Typography)(({ theme }) => ({
-    ...theme.typography.subtitle2,
-    color: theme.palette.text.secondary,
-    marginBottom: theme.spacing(1),
-}));
+const SORT_OPTION = [
+    {name: 'Điểm xếp hạng', value: 'score:desc'},
+    {name: 'Ngày thêm', value: 'createdAt:desc'},
+    {name: 'Tựa đề', value: 'title.en:asc'},
+]
 
 export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
     const isDesktop = useResponsive('up', 'sm');
@@ -58,6 +58,7 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
             artist: currentFilter?.artist || [],
             status: currentFilter?.status || 'all',
             type: currentFilter?.type || 'all',
+            sortBy: currentFilter?.sortBy || 'score:desc',
         }),
         [currentFilter]
     );
@@ -97,7 +98,7 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                 {!isDesktop && (
                     <>
                         <Tooltip title="Back">
-                            <IconButtonAnimate onClick={onClose}  sx={{ mr: 1 }}>
+                            <IconButtonAnimate onClick={onClose} sx={{ mr: 1 }}>
                                 <Iconify icon={'eva:arrow-ios-back-fill'} width={20} height={20} />
                             </IconButtonAnimate>
                         </Tooltip>
@@ -107,12 +108,12 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                     <Stack spacing={1}>
                         <RHFTextField name="query" label="Tên" />
 
-                        <RHFSelect name="type" label="Type">
+                        <RHFSelect name="type" label="Hình thức">
                             {[...TYPE_OPTION, 'all'].map((status) => (
                                 <option>{status}</option>
                             ))}
                         </RHFSelect>
-                        <RHFSelect name="status" label="Status">
+                        <RHFSelect name="status" label="Trạng thái">
                             {[...STATUS_OPTION, 'all'].map((status) => (
                                 <option>{status}</option>
                             ))}
@@ -132,7 +133,7 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                             <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                                         ))
                                     }
-                                    renderInput={(params) => <TextField label="Genres" {...params} />}
+                                    renderInput={(params) => <TextField label="Thể loại" {...params} />}
                                 />
                             )}
                         />
@@ -152,12 +153,17 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                             <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
                                         ))
                                     }
-                                    renderInput={(params) => <TextField label="Tags" {...params} />}
+                                    renderInput={(params) => <TextField label="Danh mục" {...params} />}
                                 />
                             )}
                         />
+                        <RHFSelect name="sortBy" label="Xếp theo">
+                            {SORT_OPTION.map(({name, value}) => (
+                                <option value={value}>{name}</option>
+                            ))}
+                        </RHFSelect>
                         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
-                            Lọc
+                            {"Lọc & Sắp xếp"}
                         </LoadingButton>
                     </Stack>
                 </FormProvider>

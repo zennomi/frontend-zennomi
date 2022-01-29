@@ -33,7 +33,7 @@ export default function TitleFeed() {
 
   const getFeeds = useCallback(async () => {
     try {
-      const { data } = await axios.get('/v1/titles/seed', {
+      const { data } = await axios.get('/v1/titles/feed', {
         params: { ...paramsToObject(searchParams), limit: 12, sortBy: 'timestamp:desc', populate: 'title' }
       });
       if (isMountedRef.current) {
