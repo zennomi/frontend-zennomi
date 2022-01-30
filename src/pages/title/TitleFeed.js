@@ -100,7 +100,7 @@ export default function TitleFeed() {
         <Grid container spacing={2}>
           {
             feeds.map(
-              ({ title, timestamp, provider, link }) =>
+              ({ title, timestamp, provider, link, description }) =>
                 <Grid item xs={12} md={6} key={title._id}>
                   <Card sx={{ p: 1 }}>
                     <Grid container spacing={2}>
@@ -112,7 +112,7 @@ export default function TitleFeed() {
                         </Card>
                       </Grid>
                       <Grid item xs={10}>
-                        <Typography variant='h6' color="primary.main">{title.name}</Typography>
+                        <Typography variant='h6' color="primary.main">{description || title.name}</Typography>
                         <Typography variant='body1'>{title.altTitle}</Typography>
                         <Typography variant='body2' sx={{ opacity: 0.72 }}>
                           {`Cập nhật lần cuối vào ${formatDistance(new Date(timestamp), new Date(), { locale: vi, addSuffix: true })} tại `} 

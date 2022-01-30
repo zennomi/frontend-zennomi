@@ -376,5 +376,7 @@ module.exports = [
     "kuudere",
     "second change",
     "depression",
-    "limited lifespan"
+    "limited lifespan",
+    "zennomi",
+    "licensed"
 ]
