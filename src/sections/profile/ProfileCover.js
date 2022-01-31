@@ -4,8 +4,6 @@ import { styled } from '@mui/material/styles';
 import { Box, Typography } from '@mui/material';
 // utils
 import cssStyles from '../../utils/cssStyles';
-// hooks
-import useAuth from '../../hooks/useAuth';
 // components
 import Avatar from '../../components/Avatar';
 import Image from '../../components/Image';

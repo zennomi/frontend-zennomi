@@ -4,15 +4,15 @@ import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Tab, Box, Card, Tabs, Container } from '@mui/material';
 // hooks
-import useAuth from '../hooks/useAuth';
 import useSettings from '../hooks/useSettings';
 // components
 import Page from '../components/Page';
 import Iconify from '../components/Iconify';
-import HeaderBreadcrumbs from '../components/HeaderBreadcrumbs';
 // sections
 import Profile from '../sections/profile/Profile';
 import ProfileCover from '../sections/profile/ProfileCover';
+import ProfileFetish from '../sections/profile/ProfileFetish';
+import ProfileUpdate from '../sections/profile/ProfileUpdate';
 
 // ----------------------------------------------------------------------
 
@@ -36,10 +36,8 @@ const TabsWrapperStyle = styled('div')(({ theme }) => ({
 
 export default function UserProfile() {
   const { themeStretch } = useSettings();
-  const { user } = useAuth();
 
-  const [currentTab, setCurrentTab] = useState('profile');
-  const [findFriends, setFindFriends] = useState('');
+  const [currentTab, setCurrentTab] = useState('fetish');
 
   const handleChangeTab = (newValue) => {
     setCurrentTab(newValue);
@@ -47,10 +45,20 @@ export default function UserProfile() {
 
   const PROFILE_TABS = [
     {
+      value: 'fetish',
+      icon: <Iconify icon={'bi:bookmark-heart-fill'} width={20} height={20} />,
+      component: <ProfileFetish />,
+    },
+    {
+      value: 'update',
+      icon: <Iconify icon={'fluent:clipboard-bullet-list-ltr-16-filled'} width={20} height={20} />,
+      component: <ProfileUpdate />,
+    },
+    {
       value: 'profile',
       icon: <Iconify icon={'ic:round-account-box'} width={20} height={20} />,
       component: <Profile />,
-    }
+    },
   ];
 
   return (

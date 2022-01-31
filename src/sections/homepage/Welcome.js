@@ -48,7 +48,7 @@ export default function Welcome({ displayName }) {
                 </Typography>
 
                 <Button variant="contained" to={`${PATH_WIBU.title.root}`} component={RouterLink}>
-                    Tìm hiểu ngay
+                    Check hàng ngay
                 </Button>
             </CardContent>
 

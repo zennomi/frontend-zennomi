@@ -3,8 +3,8 @@ import parse from 'html-react-parser';
 import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 // @mui
 import {
-    Container, Grid, Typography, Card, Box, Skeleton, 
-    Button, CardHeader, CardContent, Avatar,
+    Container, Grid, Typography, Card, Box, Skeleton,
+    Button, CardHeader, CardContent, Avatar, Alert, Stack
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -59,35 +59,47 @@ export default function List() {
                         { name: list?.name || <Skeleton variant='text' />, href: `${PATH_WIBU.list.one}/${id}` },
                     ]}
                 />
-                <Card sx={{ mb: 2 }}>
-                    <CardContent>
-                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                            <Avatar alt={list?.user.displayName} src={list?.user.photoURL} sx={{ mr: 2 }} />
-                            <Typography variant='subtitle2'>{parse(list?.user.displayName || '')}</Typography>
-                        </Box>
-                        <Typography variant='body1'>{parse(list?.description || '')}</Typography>
-
-                    </CardContent>
-                </Card>
-                <Grid container spacing={2} sx={{ mb: 2 }}>
+                <Stack spacing={1}>
                     {
-                        list?.titles.map(title => (
-                            <Grid item xs={4} md={3} xl={2}>
-                                <TitleCard title={title} />
-                            </Grid>
-                        ))
+                        user?.id === list?.user.id &&
+                        <>
+                            <Card>
+                                <CardHeader title="User" />
+                                <CardContent>
+                                    <Button size='small' component={RouterLink} to={`${PATH_WIBU.list.one}/edit/${id}`}>Cập nhật</Button>
+                                    <Button color='error' size='small' component={RouterLink} to={`${PATH_WIBU.list.one}/delete/${id}`}>Xoá</Button>
+                                </CardContent>
+                            </Card>
+                            {
+                                list?.titles?.length > 100 &&
+                                <Alert severity="error">Cho ít bộ thôi kẻo lag sml.</Alert>
+                            }
+                        </>
                     }
-                </Grid>
-                {
-                    user?.id === list?.user.id &&
-                    <Card>
-                        <CardHeader title="User" />
+                    <Card sx={{ mb: 2 }}>
                         <CardContent>
-                            <Button size='small' component={RouterLink} to={`${PATH_WIBU.list.one}/edit/${id}`}>Cập nhật</Button>
-                            <Button color='error' size='small' component={RouterLink} to={`${PATH_WIBU.list.one}/delete/${id}`}>Xoá</Button>
+                            <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
+                                <Avatar alt={list?.user.displayName} src={list?.user.photoURL} sx={{ mr: 2 }} />
+                                <Typography variant='subtitle2'>{parse(list?.user.displayName || '')}</Typography>
+                            </Box>
+                            <Typography variant='body1'>{parse(list?.description || '')}</Typography>
+
                         </CardContent>
                     </Card>
-                }
+                    <Grid container spacing={2} sx={{ mb: 2 }}>
+                        {
+                            list?.titles.length > 0 ?
+                                list?.titles.map(title => (
+                                    <Grid item xs={4} md={3} xl={2}>
+                                        <TitleCard title={title} />
+                                    </Grid>
+                                )) :
+                                <Grid item>
+                                    <Alert severity="info">Chưa có thêm bộ nào à? Thêm thủ công ở phần cập nhật hoặc thêm ở trang riêng của từng bộ nhé.</Alert>
+                                </Grid>
+                        }
+                    </Grid>
+                </Stack>
             </Container>
         </Page >
     );

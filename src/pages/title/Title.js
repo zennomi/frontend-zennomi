@@ -6,7 +6,7 @@ import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import { useTheme, styled } from '@mui/material/styles';
 import {
     Container, Grid, Typography, Card, Box, Skeleton, Stack, Divider, Rating,
-    Button, CardHeader, CardContent, MenuList, Menu, MenuItem,
+    Button, CardHeader, CardContent, MenuList, Menu, Alert,
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -319,6 +319,10 @@ export default function Title() {
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <TitleLists lists={titleLists} />
+                    </Grid>
+                    <Grid item xs={12}>
+                    <Alert severity="info">Data crawl bằng bot nên khả năng bị sai nhiều, phiền bạn đăng nhập và bình luận vào chính bộ có thông tin sai nhé, bổ sung 
+                    thông tin chuẩn nữa thì càng tốt! Cảm ơn nhiềuuu ♥</Alert>
                     </Grid>
                     <Grid item xs={12}>
                         <CustomStyle>

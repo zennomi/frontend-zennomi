@@ -17,10 +17,15 @@ const sidebarConfig = [
         icon: <Iconify icon='ant-design:home-twotone' />,
       },
       {
-        title: 'Thống kê',
-        path: '/statistics',
-        icon: <Iconify icon='ant-design:pie-chart-twotone' />,
+        title: 'Điều nên biết',
+        path: '/profile',
+        icon: <Iconify icon='ant-design:question-circle-twotone' />,
       },
+    ],
+  },
+  {
+    subheader: 'Wibu',
+    items: [
       {
         title: PATH_WIBU.title.label,
         path: PATH_WIBU.title.root,
@@ -41,25 +46,25 @@ const sidebarConfig = [
         ]
       },
       {
-        title: 'About',
-        path: '/profile',
-        icon: <Iconify icon='ant-design:question-circle-twotone' />,
+        title: 'Thống kê',
+        path: '/statistics',
+        icon: <Iconify icon='ant-design:pie-chart-twotone' />,
       },
     ],
   },
 
   // MANAGEMENT
   // ----------------------------------------------------------------------
-  {
-    subheader: 'management',
-    items: [
-      {
-        title: 'user',
-        path: '/dashboard/user',
-        icon: <Iconify icon='carbon:user-avatar-filled-alt' />,
-      },
-    ],
-  },
+  // {
+  //   subheader: 'management',
+  //   items: [
+  //     {
+  //       title: 'user',
+  //       path: '/dashboard/user',
+  //       icon: <Iconify icon='carbon:user-avatar-filled-alt' />,
+  //     },
+  //   ],
+  // },
 ];
 
 export default sidebarConfig;

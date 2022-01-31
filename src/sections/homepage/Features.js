@@ -28,7 +28,7 @@ const _appFeatured = [
     {
         image: 'https://uploads.mangadex.org/covers/aa6c76f7-5f5f-46b6-a800-911145f81b9b/5972847b-e0a4-4346-8dd6-8f06839ee1a7.jpg', 
         title: 'Thư viện Rom-Com', 
-        description: 'Đủ các thể loại từ A-Z. Đọc từ từ kẻo lại ỉa ra đường'
+        description: 'Tất cả các bộ Rom-Com mà tôi đã/đang đọc/xem'
     },
     {
         image: 'https://uploads.mangadex.org/covers/aa6c76f7-5f5f-46b6-a800-911145f81b9b/46c57a93-32d0-4fd0-9cc8-39f0a29ff18b.jpg', 
@@ -37,8 +37,8 @@ const _appFeatured = [
     },
     {
         image: 'https://uploads.mangadex.org/covers/aa6c76f7-5f5f-46b6-a800-911145f81b9b/e9e0082e-26a9-4526-941a-6f0f02e6d2ed.jpg', 
-        title: 'Update bộ romcom mới', 
-        description: 'Một bắn, seri, phim Hàn cũng chơi'
+        title: 'Tạo bộ sưu tập', 
+        description: 'Xếp hạng & chia sẻ'
     },
 ]
 export default function AppFeatured() {

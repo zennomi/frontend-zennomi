@@ -2,16 +2,15 @@ import PropTypes from 'prop-types';
 import * as Yup from 'yup';
 import { useSnackbar } from 'notistack';
 import { useNavigate } from 'react-router-dom';
-import { useEffect, useMemo, useCallback } from 'react';
+import { useEffect, useMemo } from 'react';
 import { uniqBy } from 'lodash';
 // form
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 // @mui
 import { styled } from '@mui/material/styles';
 import { LoadingButton } from '@mui/lab';
-import { Card, Chip, Grid, Stack, Typography, CardHeader, CardContent } from '@mui/material';
-import CircularProgress from '@mui/material/CircularProgress';
+import { Card, Grid, Stack, Typography, CardHeader, CardContent, Alert } from '@mui/material';
 // routes
 import { PATH_WIBU } from '../../routes/paths';
 // components
@@ -19,12 +18,10 @@ import {
     FormProvider,
     RHFEditor,
     RHFTextField,
-    RHFSwitch
 } from '../../components/hook-form';
 import TitleSearch from '../title/TitleSearch';
 import ListDragAndDrop from './ListDragAndDrop';
 // utils
-import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../constants';
 import axiosInstance from '../../utils/axios';
 
 // ----------------------------------------------------------------------
@@ -48,7 +45,7 @@ export default function ListNewForm({ isEdit, currentList }) {
 
     const ListSchema = Yup.object().shape({
         name: Yup.string().required('Name is required'),
-        titles: Yup.array().min(2, 'Images is required'),
+        titles: Yup.array().min(0, 'Images is required'),
     });
 
     const defaultValues = useMemo(
@@ -139,19 +136,21 @@ export default function ListNewForm({ isEdit, currentList }) {
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Grid container spacing={2}>
                 <Grid item xs={12} md={6}>
-                    <Card>
+                    <Card sx={{ mb: 1 }}>
                         <CardHeader title="Thông tin bộ sưu tập" />
                         <CardContent>
                             <Stack spacing={1}>
                                 <RHFTextField name="name" label="Tên bộ sưu tập" />
                                 <div>
-                                    <LabelStyle>Description</LabelStyle>
+                                    <LabelStyle>Mô tả bộ sưu tập này</LabelStyle>
                                     <RHFEditor simple name="description" />
                                 </div>
                             </Stack>
                         </CardContent>
                     </Card>
+                    {isEdit && <Alert severity="info">Ngoài cách thêm thủ công này, bạn có thể thêm bằng cách vào trang riêng của một bộ bất kỳ.</Alert>}
                     <ListDragAndDrop titles={values.titles} handleDragEnd={handleDragEnd} handleRemoveButtonClick={handleRemoveButtonClick} />
+
                 </Grid>
                 <Grid item xs={12} md={6}>
                     <Card sx={{ mb: 2 }}>

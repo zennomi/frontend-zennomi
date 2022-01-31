@@ -1,9 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
-
-import { Container, Grid, Button, IconButton, Pagination, Box, Chip, ToggleButton, ToggleButtonGroup, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
+import { Alert, Container, Grid, Button, IconButton, Pagination, Box, Chip, ToggleButton, ToggleButtonGroup, Select, MenuItem, InputLabel, FormControl } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -163,6 +161,7 @@ export default function Titles() {
         <Box sx={{ display: 'flex', justifyContent: 'right' }}>
           <Pagination sx={{ my: 2 }} count={total} page={Number(searchParams.get("page"))} onChange={handlePageChange} />
         </Box>
+        <Alert severity="info">Thông tin từng bộ còn thiếu khá nhiều, bạn nào có nhã ý muốn đóng góp thì liên lạc với mình nhé!</Alert>
         {user.isStaff && <TitleDrawer title={title} onClose={handleClose} setTitle={setTitle} />}
         <FilterDrawer isOpen={isFilterOpen} onClose={handleFilterClose} setNewParams={setNewParams} />
       </Container>
