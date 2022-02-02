@@ -31,7 +31,7 @@ export default function ProfileFetish() {
             <Card>
                 <CardHeader title="Anime" />
                 <CardContent>
-                    Gần đây thì xem anime, tuy nhiên vài movie lãng mạn thì tất nhiên là coi rồi. Mình có xem phim Hàn nữa, sẽ bổ sung sau.
+                    Gần đây thì ít xem anime, tuy nhiên vài movie lãng mạn thì tất nhiên là coi rồi. Mình có xem phim Hàn nữa, sẽ bổ sung sau.
                 </CardContent>
             </Card>
         </Stack>

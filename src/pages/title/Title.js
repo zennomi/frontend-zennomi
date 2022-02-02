@@ -6,7 +6,7 @@ import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import { useTheme, styled } from '@mui/material/styles';
 import {
     Container, Grid, Typography, Card, Box, Skeleton, Stack, Divider, Rating,
-    Button, CardHeader, CardContent, MenuList, Menu, Alert,
+    Button, CardHeader, CardContent, MenuList, Menu, Alert, Link
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -29,17 +29,6 @@ import axios from '../../utils/axios';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
 import Iconify from '../../components/Iconify';
-
-const comments = [
-    {
-        message: 'Ngoonnnnn',
-        user: {
-            displayName: 'Chim to toi ron',
-            photoURL: 'https://res.cloudinary.com/minimal-ui/image/upload/v1614655910/upload_minimal/avatar/minimal_avatar.jpg'
-        },
-        createdAt: new Date()
-    }
-]
 
 // ----------------------------------------------------------------------
 
@@ -310,8 +299,16 @@ export default function Title() {
                         }
                         <Divider sx={{ my: 2 }} />
                         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
-                            {title?.genres.map(genre => <Label key={genre} color='primary' sx={{ m: 0.2 }}>{genre}</Label>)}
-                            {title?.tags.map(tag => <Label key={tag} color='primary' variant='outlined' sx={{ m: 0.2 }}>{tag}</Label>)}
+                            {title?.genres.map(genre =>
+                                <Label key={genre} color='primary' sx={{ m: 0.2 }} >
+                                    <Link component={RouterLink} to={`${PATH_WIBU.title.root}?genres=${genre}`}>{genre}</Link>
+                                </Label>)
+                            }
+                            {title?.tags.map(tag =>
+                                <Label key={tag} color='primary' variant='outlined' sx={{ m: 0.2 }} >
+                                    <Link component={RouterLink} to={`${PATH_WIBU.title.root}?tags=${tag}`}>{tag}</Link>
+                                </Label>)
+                            }
                         </Box>
                     </Grid>
                     <Grid item xs={12} md={6}>
@@ -321,8 +318,10 @@ export default function Title() {
                         <TitleLists lists={titleLists} />
                     </Grid>
                     <Grid item xs={12}>
-                    <Alert severity="info">Data crawl bằng bot nên khả năng bị sai nhiều, phiền bạn đăng nhập và bình luận vào chính bộ có thông tin sai nhé, bổ sung 
-                    thông tin chuẩn nữa thì càng tốt! Cảm ơn nhiềuuu ♥</Alert>
+                        <Alert severity="info">
+                            Data crawl bằng bot nên khả năng bị sai nhiều, phiền bạn đăng nhập và bình luận vào bộ có thông tin sai nhé, bổ sung
+                            thông tin chuẩn nữa thì càng tốt! Cảm ơn nhiềuuu ♥
+                        </Alert>
                     </Grid>
                     <Grid item xs={12}>
                         <CustomStyle>

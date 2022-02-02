@@ -36,7 +36,7 @@ export default function TitleLinks({ links = { vi: [], en: [], raw: [] } }) {
                             ))}
                         </TableBody>
                         <TableBody>
-                            {links.en.map((row) => (
+                            {links.en.reverse().map((row) => (
                                 <Row row={row} language='united-kingdom' />
                             ))}
                         </TableBody>

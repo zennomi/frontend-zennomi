@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink, useSearchParams } from 'react-router-dom';
 // @mui
-import { Container, Grid, Typography, Button, Card, Link, Pagination, Box, CardActionArea } from '@mui/material';
+import { Container, Grid, Typography, Button, Card, Link, Pagination, Box, CardActionArea, ToggleButtonGroup, ToggleButton } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -20,7 +20,7 @@ import Image from '../../components/Image';
 
 // ----------------------------------------------------------------------
 
-const TYPE_OPTION = ['manga', 'novel', 'anime']
+const PROVIDER_OPTION = ['blogtruyen', 'mangadex', 'novelupdate'];
 
 export default function TitleFeed() {
   const { themeStretch } = useSettings();
@@ -66,9 +66,9 @@ export default function TitleFeed() {
     return () => { setFeeds([]); }
   }, [getFeeds]);
 
-  const handleTypeClick = (_type) => {
-    if (_type === searchParams.get("type")) setNewParams({ type: null, page: 1 });
-    else setNewParams({ type: _type, page: 1 });
+  const handleProviderClick = (event, _provider) => {
+    if (_provider === searchParams.get("provider")) setNewParams({ provider: null, page: 1 });
+    else setNewParams({ provider: _provider, page: 1 });
   }
 
   return (
@@ -82,26 +82,31 @@ export default function TitleFeed() {
           ]}
         />
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          {
-            TYPE_OPTION.map(_type => (
-              <Grid item xs={4} key={_type}>
-                <Button
-                  fullWidth
-                  color='primary'
-                  variant={_type === searchParams.get("type") ? "contained" : "outlined"}
-                  onClick={() => { handleTypeClick(_type) }}
+          <ToggleButtonGroup
+            color="primary"
+            value={searchParams.get("provider")}
+            exclusive
+            onChange={handleProviderClick}
+            fullWidth
+            sx={{ mb: 3 }}
+          >
+            {
+              PROVIDER_OPTION.map(_provider => (
+                <ToggleButton
+                  value={_provider}
+                  key={_provider}
                 >
-                  {_type}
-                </Button>
-              </Grid>
-            ))
-          }
+                  {_provider.toUpperCase()}
+                </ToggleButton>
+              ))
+            }
+          </ToggleButtonGroup>
         </Grid>
         <Grid container spacing={2}>
           {
             feeds.map(
-              ({ title, timestamp, provider, link, description }) =>
-                <Grid item xs={12} md={6} key={title._id}>
+              ({ title, timestamp, provider, link, description, _id }) =>
+                <Grid item xs={12} md={6} key={_id}>
                   <Card sx={{ p: 1 }}>
                     <Grid container spacing={2}>
                       <Grid item xs={2}>
@@ -112,10 +117,10 @@ export default function TitleFeed() {
                         </Card>
                       </Grid>
                       <Grid item xs={10}>
-                        <Typography variant='h6' color="primary.main">{description || title.name}</Typography>
+                        <Typography component={Link} href={link} target="_blank" variant='h6' color="primary.main">{description || title.name}</Typography>
                         <Typography variant='body1'>{title.altTitle}</Typography>
                         <Typography variant='body2' sx={{ opacity: 0.72 }}>
-                          {`Cập nhật lần cuối vào ${formatDistance(new Date(timestamp), new Date(), { locale: vi, addSuffix: true })} tại `} 
+                          {`Cập nhật lần cuối vào ${formatDistance(new Date(timestamp), new Date(), { locale: vi, addSuffix: true })} tại `}
                           <Button component={Link} href={link} target="_blank">{provider}</Button>
                         </Typography>
                       </Grid>

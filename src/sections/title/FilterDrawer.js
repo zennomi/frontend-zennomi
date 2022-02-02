@@ -28,6 +28,7 @@ import {
     FormProvider,
     RHFSelect,
     RHFTextField,
+    RHFSwitch,
 } from '../../components/hook-form';
 // utils
 import paramsToObject from '../../utils/urlParamsHelper';
@@ -47,12 +48,16 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
     const currentFilter = paramsToObject(searchParams);
     if (currentFilter.genres) currentFilter.genres = currentFilter.genres.split(",");
     if (currentFilter.tags) currentFilter.tags = currentFilter.tags.split(",");
-
+    if (currentFilter.excludedGenres) currentFilter.excludedGenres = currentFilter.excludedGenres.split(",");
+    if (currentFilter.excludedTags) currentFilter.excludedTags = currentFilter.excludedTags.split(",");
+    
     const defaultValues = useMemo(
         () => ({
             query: currentFilter?.query || '',
-            genres: currentFilter?.genres || ['romance', 'comedy'],
+            genres: currentFilter?.genres || [],
             tags: currentFilter?.tags || [],
+            excludedGenres: currentFilter?.excludedGenres || [],
+            excludedTags: currentFilter?.excludedTags || [],
             isLisensed: currentFilter?.isLisensed || false,
             author: currentFilter?.author || [],
             artist: currentFilter?.artist || [],
@@ -87,6 +92,8 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
         if (filter.genres.length > 0) filter.genres = filter.genres.join(",");
         if (filter.tags.length > 0) filter.tags = filter.tags.join(",");
         if (!filter.isLisensed) delete filter.isLisensed;
+        if (filter.excludedGenres.length > 0) filter.excludedGenres = filter.excludedGenres.join(",");
+        if (filter.excludedTags.length > 0) filter.excludedTags = filter.excludedTags.join(",");
         setNewParams(filter);
         enqueueSnackbar('Áp dụng bộ lọc!');
         onClose();
@@ -106,7 +113,7 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                 )}
                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                     <Stack spacing={1}>
-                        <RHFTextField name="query" label="Tên" />
+                        <RHFTextField name="query" label="Tựa đề chứa cụm từ" />
 
                         <RHFSelect name="type" label="Hình thức">
                             {[...TYPE_OPTION, 'all'].map((status) => (
@@ -130,10 +137,10 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                     options={GENRE_OPTION.map((option) => option)}
                                     renderTags={(value, getTagProps) =>
                                         value.map((option, index) => (
-                                            <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                                            <Chip color="success" {...getTagProps({ index })} key={option} size="small" label={option} />
                                         ))
                                     }
-                                    renderInput={(params) => <TextField label="Thể loại" {...params} />}
+                                    renderInput={(params) => <TextField label="Có thể loại" {...params} />}
                                 />
                             )}
                         />
@@ -150,10 +157,50 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                     options={TAG_OPTION.map((option) => option)}
                                     renderTags={(value, getTagProps) =>
                                         value.map((option, index) => (
-                                            <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                                            <Chip color="success" {...getTagProps({ index })} key={option} size="small" label={option} />
                                         ))
                                     }
-                                    renderInput={(params) => <TextField label="Danh mục" {...params} />}
+                                    renderInput={(params) => <TextField label="Có tag" {...params} />}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="excludedGenres"
+                            control={control}
+                            render={({ field }) => (
+                                <Autocomplete
+                                    {...field}
+                                    multiple
+                                    freeSolo
+                                    options={[]}
+                                    onChange={(event, newValue) => field.onChange(newValue)}
+                                    options={GENRE_OPTION.map((option) => option)}
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip color="error" {...getTagProps({ index })} key={option} size="small" label={option} />
+                                        ))
+                                    }
+                                    renderInput={(params) => <TextField label="Loại trừ thể loại" {...params} />}
+                                />
+                            )}
+                        />
+                        <Controller
+                            name="excludedTags"
+                            control={control}
+                            render={({ field }) => (
+                                <Autocomplete
+                                    {...field}
+                                    multiple
+                                    freeSolo
+                                    options={[]}
+                                    onChange={(event, newValue) => field.onChange(newValue)}
+                                    options={TAG_OPTION.map((option) => option)}
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip color="error" {...getTagProps({ index })} key={option} size="small" label={option} />
+                                        ))
+                                    }
+                                    renderInput={(params) => <TextField label="Loại trừ tag" {...params} />}
                                 />
                             )}
                         />

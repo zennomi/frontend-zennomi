@@ -291,7 +291,6 @@ module.exports = [
     "double / multiple penetration",
     "isekai",
     "appearance changes",
-    "older female lead",
     "first kiss",
     "super powers",
     "mature child",
@@ -378,5 +377,7 @@ module.exports = [
     "depression",
     "limited lifespan",
     "zennomi",
-    "licensed"
+    "licensed",
+    "male protagonist",
+    "teasing protagonist"
 ]

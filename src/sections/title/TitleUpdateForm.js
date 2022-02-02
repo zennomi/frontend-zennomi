@@ -25,7 +25,7 @@ import { LoadingButton } from '@mui/lab';
 // utils
 import { updateTitle } from '../../utils/axios';
 // routes
-import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION } from '../../constants';
+import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../constants';
 
 export default function TitleUpdateForm({ title, onClose, setTitle }) {
     const { enqueueSnackbar } = useSnackbar();
@@ -136,7 +136,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
                             {...field}
                             multiple
                             freeSolo
-                            options={[]}
+                            options={TAG_OPTION}
                             onChange={(event, newValue) => field.onChange(newValue)}
                             renderTags={(value, getTagProps) =>
                                 value.map((option, index) => (

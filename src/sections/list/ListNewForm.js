@@ -105,7 +105,7 @@ export default function ListNewForm({ isEdit, currentList }) {
             navigate(`${PATH_WIBU.list.one}/${id}`);
         } catch (error) {
             console.error(error);
-            enqueueSnackbar(error.message);
+            enqueueSnackbar(error, { color: 'error' });
         }
     };
 

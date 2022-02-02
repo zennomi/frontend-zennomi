@@ -1,6 +1,7 @@
 import PropTypes from 'prop-types';
 import { noCase } from 'change-case';
 import { useState, useCallback, useEffect } from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
 import { vi } from 'date-fns/locale';
 // @mui
@@ -34,6 +35,8 @@ import MenuPopover from '../../../components/MenuPopover';
 import { IconButtonAnimate } from '../../../components/animate';
 import Image from '../../../components/Image';
 import TextMaxLine from '../../../components/TextMaxLine';
+// paths
+import { PATH_WIBU } from '../../../routes/paths'
 
 // ----------------------------------------------------------------------
 
@@ -48,7 +51,7 @@ export default function NotificationsPopover() {
 
   const getFeeds = useCallback(async () => {
     try {
-      if (!open) return ;
+      if (!open) return;
       const { data } = await axios.get('/v1/titles/feed', {
         params: { limit: 5, sortBy: 'timestamp:desc', populate: 'title' }
       });
@@ -100,7 +103,7 @@ export default function NotificationsPopover() {
           <Box sx={{ flexGrow: 1 }}>
             <Typography variant="subtitle1">Thông báo</Typography>
             <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-              Có {totalUnRead} thông báo
+              Cập nhật chương mới của các bộ romcom
             </Typography>
           </Box>
 
@@ -146,7 +149,7 @@ export default function NotificationsPopover() {
         <Divider sx={{ borderStyle: 'dashed' }} />
 
         <Box sx={{ p: 1 }}>
-          <Button fullWidth disableRipple>
+          <Button component={RouterLink} to={`${PATH_WIBU.title.feed}`} fullWidth disableRipple>
             Xem tất cả
           </Button>
         </Box>
