@@ -11,7 +11,7 @@ export default function Statistics() {
     const { themeStretch } = useSettings();
 
     return (
-        <Page title="Page Two">
+        <Page title="Thống kê">
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <HeaderBreadcrumbs
                     heading="Thống kê"

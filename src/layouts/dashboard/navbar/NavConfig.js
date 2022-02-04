@@ -21,6 +21,11 @@ const sidebarConfig = [
         path: '/profile',
         icon: <Iconify icon='ant-design:question-circle-twotone' />,
       },
+      {
+        title: 'Donate',
+        path: '/donate',
+        icon: <Iconify icon='ant-design:gift-twotone' />,
+      },
     ],
   },
   {
