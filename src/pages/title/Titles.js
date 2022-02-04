@@ -61,7 +61,7 @@ export default function Titles() {
     if (!params.page) params.page = 1;
     const newParams = paramsToObject(searchParams);
     Object.keys(params).forEach(key => {
-      if (params[key] === null || params[key] === 'all' || params[key] === '') delete newParams[key];
+      if (params[key] === null || params[key] === 'all' || params[key] === '' || !params[key]) delete newParams[key];
       else newParams[key] = params[key];
     });
     setSearchParams({

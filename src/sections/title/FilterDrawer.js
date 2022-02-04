@@ -19,6 +19,7 @@ import {
     Tooltip,
     Typography,
     Container,
+    Grid,
 } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 // hooks
@@ -35,9 +36,9 @@ import paramsToObject from '../../utils/urlParamsHelper';
 import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../constants';
 
 const SORT_OPTION = [
-    {name: 'Điểm xếp hạng', value: 'score:desc'},
-    {name: 'Ngày thêm', value: 'createdAt:desc'},
-    {name: 'Tựa đề', value: 'title.en:asc'},
+    { name: 'Điểm xếp hạng', value: 'score:desc' },
+    { name: 'Ngày thêm', value: 'createdAt:desc' },
+    { name: 'Tựa đề', value: 'title.en:asc' },
 ]
 
 export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
@@ -50,7 +51,7 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
     if (currentFilter.tags) currentFilter.tags = currentFilter.tags.split(",");
     if (currentFilter.excludedGenres) currentFilter.excludedGenres = currentFilter.excludedGenres.split(",");
     if (currentFilter.excludedTags) currentFilter.excludedTags = currentFilter.excludedTags.split(",");
-    
+
     const defaultValues = useMemo(
         () => ({
             query: currentFilter?.query || '',
@@ -59,6 +60,7 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
             excludedGenres: currentFilter?.excludedGenres || [],
             excludedTags: currentFilter?.excludedTags || [],
             isLisensed: currentFilter?.isLisensed || false,
+            hasViLink: currentFilter?.hasViLink || false,
             author: currentFilter?.author || [],
             artist: currentFilter?.artist || [],
             status: currentFilter?.status || 'all',
@@ -91,7 +93,6 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
     const onSubmit = async (filter) => {
         if (filter.genres.length > 0) filter.genres = filter.genres.join(",");
         if (filter.tags.length > 0) filter.tags = filter.tags.join(",");
-        if (!filter.isLisensed) delete filter.isLisensed;
         if (filter.excludedGenres.length > 0) filter.excludedGenres = filter.excludedGenres.join(",");
         if (filter.excludedTags.length > 0) filter.excludedTags = filter.excludedTags.join(",");
         setNewParams(filter);
@@ -114,17 +115,20 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                 <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
                     <Stack spacing={1}>
                         <RHFTextField name="query" label="Tựa đề chứa cụm từ" />
-
-                        <RHFSelect name="type" label="Hình thức">
-                            {[...TYPE_OPTION, 'all'].map((status) => (
-                                <option>{status}</option>
-                            ))}
-                        </RHFSelect>
-                        <RHFSelect name="status" label="Trạng thái">
-                            {[...STATUS_OPTION, 'all'].map((status) => (
-                                <option>{status}</option>
-                            ))}
-                        </RHFSelect>
+                        <div>
+                            <Grid container spacing={0.5}>
+                                <Grid item xs={6}><RHFSelect name="type" label="Hình thức">
+                                    {[...TYPE_OPTION, 'all'].map((status) => (
+                                        <option>{status}</option>
+                                    ))}
+                                </RHFSelect></Grid>
+                                <Grid item xs={6}><RHFSelect name="status" label="Trạng thái">
+                                    {[...STATUS_OPTION, 'all'].map((status) => (
+                                        <option>{status}</option>
+                                    ))}
+                                </RHFSelect></Grid>
+                            </Grid>
+                        </div>
                         <Controller
                             name="genres"
                             control={control}
@@ -205,10 +209,20 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                             )}
                         />
                         <RHFSelect name="sortBy" label="Xếp theo">
-                            {SORT_OPTION.map(({name, value}) => (
+                            {SORT_OPTION.map(({ name, value }) => (
                                 <option value={value}>{name}</option>
                             ))}
                         </RHFSelect>
+                        <div>
+                            <Grid container spacing={0.5}>
+                                <Grid item xs={6}>
+                                    <RHFSwitch name="isLisensed" label="Có bản quyền" />
+                                </Grid>
+                                <Grid item xs={6}>
+                                    <RHFSwitch name="hasViLink" label="Có link tiếng Việt" />
+                                </Grid>
+                            </Grid>
+                        </div>
                         <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>
                             {"Lọc & Sắp xếp"}
                         </LoadingButton>

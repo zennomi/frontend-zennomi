@@ -2,6 +2,7 @@ import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box, Link, Typography, Avatar, Button } from '@mui/material';
+import { Link as RouterLink } from 'react-router-dom';
 // hooks
 import useAuth from "../../../hooks/useAuth";
 // components
@@ -63,6 +64,6 @@ export default function NavbarAccount({ isCollapse }) {
           </Box>
         </RootStyle >
       </Link > :
-      <Button size="large" color="primary" variant="contained">Login</Button>
+      <Button size="large" color="primary" variant="contained" component={RouterLink} to="/auth/login">Đăng nhập</Button>
   );
 }

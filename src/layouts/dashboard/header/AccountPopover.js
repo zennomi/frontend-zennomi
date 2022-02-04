@@ -10,17 +10,17 @@ import MyAvatar from '../../../components/MyAvatar';
 
 const MENU_OPTIONS = [
   {
-    label: 'Home',
+    label: 'Trang chủ',
     linkTo: '/',
   },
-  {
-    label: 'Profile',
-    linkTo: '/',
-  },
-  {
-    label: 'Settings',
-    linkTo: '/',
-  },
+  // {
+  //   label: 'Profile',
+  //   linkTo: '/',
+  // },
+  // {
+  //   label: 'Settings',
+  //   linkTo: '/',
+  // },
 ];
 
 // ----------------------------------------------------------------------
@@ -94,7 +94,7 @@ export default function AccountPopover({ user, logout }) {
 
         <Divider sx={{ borderStyle: 'dashed' }} />
 
-        <MenuItem sx={{ m: 1 }} onClick={() => { logout() }}>Logout</MenuItem>
+        <MenuItem sx={{ m: 1 }} onClick={() => { logout() }}>Đăng xuất</MenuItem>
       </MenuPopover>
     </>
   );

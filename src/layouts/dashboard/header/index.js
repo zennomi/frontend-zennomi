@@ -89,7 +89,7 @@ export default function DashboardHeader({ onOpenSidebar, isCollapse = false, ver
           {isAuthenticated ? (
             <AccountPopover user={user} logout={logout} />
           ) : (
-            <Button component={Link} to="/auth/login">Login</Button>
+            <Button component={Link} to="/auth/login">Đăng nhập</Button>
           )}
         </Stack>
       </Toolbar>

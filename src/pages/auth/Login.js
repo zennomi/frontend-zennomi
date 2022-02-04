@@ -84,7 +84,7 @@ export default function Login() {
         {mdUp && (
           <SectionStyle>
             <Typography variant="h3" sx={{ px: 5, mt: 10, mb: 5 }}>
-              Hi, Welcome Back
+              Hi, đăng nhập để dùng nhiều chức năng cá nhân
             </Typography>
             <Image
               alt="login"
@@ -98,9 +98,9 @@ export default function Login() {
             <Stack direction="row" alignItems="center" sx={{ mb: 5 }}>
               <Box sx={{ flexGrow: 1 }}>
                 <Typography variant="h4" gutterBottom>
-                  Sign in to Minimal
+                  Đăng nhập vào Web Zennomi
                 </Typography>
-                <Typography sx={{ color: 'text.secondary' }}>Enter your details below.</Typography>
+                <Typography sx={{ color: 'text.secondary' }}>Nếu không có tài khoản vui lòng đăng nhập bằng 2 phương thức dưới.</Typography>
               </Box>
 
               <Tooltip title={capitalCase(method)} placement="right">
@@ -115,7 +115,7 @@ export default function Login() {
             </Stack>
 
             <Alert severity="info" sx={{ mb: 3 }}>
-              Đăng nhập để sử dụng các chức năng cá nhân như theo dõi, tạo thư viện.
+              Yêu cầu tài khoản facebook có email, hoặc đăng nhập bằng tài khoản google. 
             </Alert>
 
             <LoginForm />

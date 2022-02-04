@@ -9,6 +9,7 @@ import {
     FormProvider,
     RHFSelect,
     RHFTextField,
+    RHFSwitch,
 } from '../../components/hook-form';
 // @mui
 import {
@@ -33,6 +34,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
     const defaultValues = useMemo(
         () => ({
             _id: title?._id || '',
+            isLisensed: title?.isLisensed || false,
             title: {
                 en: title?.title.en || '',
                 vi: title?.title.vi || '',
@@ -201,7 +203,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
                     }}
                 />
                 <div>
-                    <RHFTextField name="zennomi.review" label="Zennomi review" multiline maxRows={8} />
+                    <RHFSwitch name="isLisensed" label="Có bản quyền"/>
                 </div>
                 <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>Cập nhật</LoadingButton>
                 <Button component={RouterLink} to={`/wibu/title/edit/${title?._id}`} variant="contained" size="large">

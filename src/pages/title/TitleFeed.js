@@ -118,7 +118,6 @@ export default function TitleFeed() {
                       </Grid>
                       <Grid item xs={10}>
                         <Typography component={Link} href={link} target="_blank" variant='h6' color="primary.main">{description || title.name}</Typography>
-                        <Typography variant='body1'>{title.altTitle}</Typography>
                         <Typography variant='body2' sx={{ opacity: 0.72 }}>
                           {`Cập nhật lần cuối vào ${formatDistance(new Date(timestamp), new Date(), { locale: vi, addSuffix: true })} tại `}
                           <Button component={Link} href={link} target="_blank">{provider}</Button>
