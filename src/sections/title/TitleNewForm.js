@@ -115,10 +115,10 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
     try {
       title.titles = [...Object.values(title.title), ...title.titles]
       console.log(title);
-      return;
       const linkFiles = title.coverArt.filter(link => isString(link));
       const base64Files = await Promise.all(title.coverArt.filter(link => !isString(link)).map(file => getBase64(file)));
       const imgurLinks = await imgur.upload(base64Files.map(file => ({ image: file.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), type: 'base64' })));
+      if (imgurLinks.includes(null)) throw "Imgur error";
       title.coverArt = [...imgurLinks.map(e => e.data.link), ...linkFiles];
       const { data } = await titleSubmit({ ...title });
       const { data: newTitle } = data;
@@ -126,7 +126,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
       navigate(`${PATH_WIBU.title.one}/${newTitle._id}`);
     } catch (error) {
       console.error(error);
-      enqueueSnackbar(error.message);
+      enqueueSnackbar(error, { color: 'error' });
     }
   };
 
@@ -134,7 +134,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
     async (acceptedFiles) => {
       setValue(
         'coverArt',
-        acceptedFiles.map(file =>
+        [...getValues('coverArt'), ...acceptedFiles].map(file =>
           isString(file) ? file : Object.assign(file, {
             preview: URL.createObjectURL(file),
           })

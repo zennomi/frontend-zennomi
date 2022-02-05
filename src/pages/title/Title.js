@@ -284,7 +284,7 @@ export default function Title() {
                             {title?.altTitle?.toUpperCase()}
                         </Typography>
                         {
-                            title && [...title.author, ...title.artist].map(a => <Label sx={{ m: 0.5 }} variant='filled'>{a}</Label>)
+                            title && title.staff.map(a => <Label sx={{ m: 0.5 }} variant='filled'>{a}</Label>)
                         }
                         {
                             title?.description &&

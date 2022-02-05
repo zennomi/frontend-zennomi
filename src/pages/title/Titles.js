@@ -41,7 +41,7 @@ export default function Titles() {
   const getTitles = useCallback(async () => {
     try {
       const { data } = await axios.get('/v1/titles', {
-        params: { ...paramsToObject(searchParams), limit: 12 }
+        params: { ...paramsToObject(searchParams), limit: 24 }
       });
       if (isMountedRef.current) {
         setTitles(data.results);
@@ -129,17 +129,17 @@ export default function Titles() {
             Lọc
           </Button>
         </Box>
-        <Grid container spacing={2}>
+        <Grid container spacing={3}>
           {
             titles.length === 0 ?
-              Array(12).fill(
-                <Grid item xs={4} md={3} xl={2}>
+              Array(24).fill(
+                <Grid item xs={4} md={2}>
                   <TitleCardSkeleton />
                 </Grid>
               ) :
               titles.map(
                 title =>
-                  <Grid item xs={4} md={3} xl={2} key={title._id}>
+                  <Grid item xs={4} md={2}key={title._id}>
                     < div style={{ position: 'relative' }}>
                       <TitleCard title={title} />
                       {
