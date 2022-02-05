@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
 import { useSnackbar } from 'notistack';
 // @mui
-import { Button, Card, CardActions, CardContent, Container, Typography } from '@mui/material';
+import { Button, Card, CardActions, CardContent, Container } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useIsMountedRef from '../../hooks/useIsMountedRef';

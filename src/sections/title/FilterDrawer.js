@@ -38,7 +38,7 @@ import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../cons
 const SORT_OPTION = [
     { name: 'Điểm xếp hạng', value: 'score:desc' },
     { name: 'Ngày thêm', value: 'createdAt:desc' },
-    { name: 'Tựa đề', value: 'title.en:asc' },
+    { name: 'Tựa đề', value: 'titles.0:asc' },
 ]
 
 export default function FilterDrawer({ isOpen, onClose, setNewParams }) {

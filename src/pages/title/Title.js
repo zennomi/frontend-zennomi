@@ -277,14 +277,11 @@ export default function Title() {
                             <StatusLabel status={title?.status} />
                         </Stack>
                         <Typography variant='h3'>
-                            {title?.title.en?.toUpperCase() || <Skeleton />}{"  "}
+                            {title?.name?.toUpperCase() || <Skeleton />}{"  "}
                             {title?.score && <Rating value={title.score / 100 * 5} precision={0.5} readOnly />}
                         </Typography>
                         <Typography variant='body2' sx={{ opacity: 0.72 }}>
-                            {title?.title.ja?.toUpperCase()}
-                        </Typography>
-                        <Typography variant='body2' sx={{ opacity: 0.72 }}>
-                            {title?.title.vi?.toUpperCase()}
+                            {title?.altTitle?.toUpperCase()}
                         </Typography>
                         {
                             title && [...title.author, ...title.artist].map(a => <Label sx={{ m: 0.5 }} variant='filled'>{a}</Label>)

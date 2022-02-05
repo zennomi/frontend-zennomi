@@ -1,7 +1,7 @@
 import PropTypes from 'prop-types';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Link, Typography, Avatar, Button } from '@mui/material';
+import { Box, Link, Typography, Button } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 // hooks
 import useAuth from "../../../hooks/useAuth";

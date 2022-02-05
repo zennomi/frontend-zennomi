@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types';
-import { noCase } from 'change-case';
+// import { noCase } from 'change-case';
 import { useState, useCallback, useEffect } from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import { formatDistance } from 'date-fns';
@@ -10,8 +10,8 @@ import {
   List,
   Badge,
   Button,
-  Avatar,
-  Tooltip,
+  // Avatar,
+  // Tooltip,
   Divider,
   Typography,
   ListItemText,
@@ -23,11 +23,11 @@ import {
 // hooks
 import useIsMountedRef from '../../../hooks/useIsMountedRef';
 // utils
-import { fToNow } from '../../../utils/formatTime';
+// import { fToNow } from '../../../utils/formatTime';
 import axios from '../../../utils/axios';
 
 // _mock_
-import { _notifications } from '../../../_mock';
+// import { _notifications } from '../../../_mock';
 // components
 import Iconify from '../../../components/Iconify';
 import Scrollbar from '../../../components/Scrollbar';
@@ -42,9 +42,9 @@ import { PATH_WIBU } from '../../../routes/paths'
 
 export default function NotificationsPopover() {
   const isMountedRef = useIsMountedRef();
-  const [notifications, setNotifications] = useState(_notifications);
+  // const [notifications, setNotifications] = useState(_notifications);
 
-  const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
+  // const totalUnRead = notifications.filter((item) => item.isUnRead === true).length;
 
   const [open, setOpen] = useState(null);
   const [feeds, setFeeds] = useState([]);
@@ -76,14 +76,14 @@ export default function NotificationsPopover() {
     setOpen(null);
   };
 
-  const handleMarkAllAsRead = () => {
-    setNotifications(
-      notifications.map((notification) => ({
-        ...notification,
-        isUnRead: false,
-      }))
-    );
-  };
+  // const handleMarkAllAsRead = () => {
+  //   setNotifications(
+  //     notifications.map((notification) => ({
+  //       ...notification,
+  //       isUnRead: false,
+  //     }))
+  //   );
+  // };
 
   return (
     <>
@@ -217,62 +217,62 @@ function NotificationItem({ feed }) {
 
 // ----------------------------------------------------------------------
 
-function renderContent(notification) {
-  const title = (
-    <Typography variant="subtitle2">
-      {notification.title}
-      <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
-        &nbsp; {noCase(notification.description)}
-      </Typography>
-    </Typography>
-  );
+// function renderContent(notification) {
+//   const title = (
+//     <Typography variant="subtitle2">
+//       {notification.title}
+//       <Typography component="span" variant="body2" sx={{ color: 'text.secondary' }}>
+//         &nbsp; {noCase(notification.description)}
+//       </Typography>
+//     </Typography>
+//   );
 
-  if (notification.type === 'order_placed') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_package.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'order_shipped') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_shipping.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'mail') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_mail.svg"
-        />
-      ),
-      title,
-    };
-  }
-  if (notification.type === 'chat_message') {
-    return {
-      avatar: (
-        <img
-          alt={notification.title}
-          src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_chat.svg"
-        />
-      ),
-      title,
-    };
-  }
-  return {
-    avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
-    title,
-  };
-}
+//   if (notification.type === 'order_placed') {
+//     return {
+//       avatar: (
+//         <img
+//           alt={notification.title}
+//           src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_package.svg"
+//         />
+//       ),
+//       title,
+//     };
+//   }
+//   if (notification.type === 'order_shipped') {
+//     return {
+//       avatar: (
+//         <img
+//           alt={notification.title}
+//           src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_shipping.svg"
+//         />
+//       ),
+//       title,
+//     };
+//   }
+//   if (notification.type === 'mail') {
+//     return {
+//       avatar: (
+//         <img
+//           alt={notification.title}
+//           src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_mail.svg"
+//         />
+//       ),
+//       title,
+//     };
+//   }
+//   if (notification.type === 'chat_message') {
+//     return {
+//       avatar: (
+//         <img
+//           alt={notification.title}
+//           src="https://minimal-assets-api.vercel.app/assets/icons/ic_notification_chat.svg"
+//         />
+//       ),
+//       title,
+//     };
+//   }
+//   return {
+//     avatar: notification.avatar ? <img alt={notification.title} src={notification.avatar} /> : null,
+//     title,
+//   };
+// }

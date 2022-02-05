@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Link as RouterLink, useNavigate } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled, alpha } from '@mui/material/styles';
 
@@ -13,11 +12,11 @@ import { PATH_WIBU } from '../../routes/paths';
 export default function TitleCard({ title }) {
     return (
         <Card>
-            <Image src={title.coverArt[0]} alt={title.title?.en} ratio='4/6' />
+            <Image src={title.coverArt[0]} alt={title?.name} ratio='4/6' />
             <OverlayStyle />
             <CaptionStyle component={RouterLink} to={`${PATH_WIBU.title.one}/${title._id}`}>
                 <TextMaxLine line={2}>
-                    <Typography width="100%" variant="subtitle1" component="span">{title.title?.en}</Typography>
+                    <Typography width="100%" variant="subtitle1" component="span">{title?.name}</Typography>
                     {
                         title?.altTitle &&
                         <Typography width="100%" variant="body2" sx={{ opacity: 0.72 }} component="span">

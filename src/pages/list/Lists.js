@@ -1,9 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Link as RouterLink, useSearchParams } from 'react-router-dom';
+import { Link as RouterLink } from 'react-router-dom';
 // @mui
-import { styled } from '@mui/material/styles';
-
-import { Container, Pagination, Box, Chip, Stack, Paper, Typography, Link, ToggleButton, ToggleButtonGroup } from '@mui/material';
+import { Container, Pagination, Box, Stack, Paper, Typography, Link, ToggleButton, ToggleButtonGroup } from '@mui/material';
 // hooks
 import { useSnackbar } from 'notistack';
 import useSettings from '../../hooks/useSettings';
@@ -13,7 +11,6 @@ import useAuth from '../../hooks/useAuth';
 // components
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
-import Iconify from '../../components/Iconify';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -47,7 +44,7 @@ export default function Lists() {
             console.error(err);
             enqueueSnackbar(err, { variant: 'error' });
         }
-    }, [isMountedRef, page, isMyLists]);
+    }, [isMountedRef, page, isMyLists, user]);
 
     const handlePageChange = (event, page) => {
         setPage(page);

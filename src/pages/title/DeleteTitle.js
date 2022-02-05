@@ -53,7 +53,7 @@ export default function EditTitle() {
             <Container maxWidth={themeStretch ? false : 'xl'}>
                 <Card>
                     <CardContent>
-                        {`Xoá bộ ${title?.title.en}`}
+                        {`Xoá bộ ${title?.name}`}
                     </CardContent>
                     <CardActions>
                         <Button color='error' onClick={handleClick}>Xác nhận</Button>

@@ -35,11 +35,6 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
         () => ({
             _id: title?._id || '',
             isLisensed: title?.isLisensed || false,
-            title: {
-                en: title?.title.en || '',
-                vi: title?.title.vi || '',
-                ja: title?.title.ja || ''
-            },
             genres: title?.genres || ['romance', 'comedy'],
             tags: title?.tags || [],
             author: title?.author || [],
@@ -94,7 +89,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
     return (
         <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
             <Stack spacing={2}>
-                <Typography variant='h5'>{title?.title.en}</Typography>
+                <Typography variant='h5'>{title?.name}</Typography>
                 <Grid container spacing={1}>
                     <Grid item xs={6}>
                         <RHFSelect name="type" label="Type">

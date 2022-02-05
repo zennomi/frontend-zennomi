@@ -22,6 +22,7 @@ import {
   RHFUploadMultiFile,
   RHFSwitch
 } from '../../components/hook-form';
+import Label from '../../components/Label';
 // utils
 import imgur from '../../utils/imgur';
 import { TYPE_OPTION, STATUS_OPTION, GENRE_OPTION, TAG_OPTION } from '../../constants';
@@ -56,10 +57,11 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
   const defaultValues = useMemo(
     () => ({
       title: {
-        en: currentTitle?.title.en || '',
-        vi: currentTitle?.title.vi || '',
-        ja: currentTitle?.title.ja || ''
+        en: currentTitle?.titles[0] || '',
+        vi: currentTitle?.titles[1] || '',
+        raw: currentTitle?.titles[2] || ''
       },
+      titles: currentTitle?.titles.slice(3) || [],
       description: currentTitle?.description || '',
       genres: currentTitle?.genres || ['romance', 'comedy'],
       coverArt: currentTitle?.coverArt.filter(c => Boolean(c)) || [],
@@ -70,8 +72,8 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
         en: currentTitle?.urls.en || [],
       },
       isLisensed: currentTitle?.isLisensed || false,
-      author: currentTitle?.author || [],
-      artist: currentTitle?.artist || [],
+      staff: currentTitle?.staff || [],
+      originalLanguage: currentTitle?.originalLanguage || [],
       status: currentTitle?.status || 'ongoing',
       type: currentTitle?.type || 'manga',
       zennomi: currentTitle?.zennomi || {
@@ -111,6 +113,9 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
 
   const onSubmit = async (title) => {
     try {
+      title.titles = [...Object.values(title.title), ...title.titles]
+      console.log(title);
+      return;
       const linkFiles = title.coverArt.filter(link => isString(link));
       const base64Files = await Promise.all(title.coverArt.filter(link => !isString(link)).map(file => getBase64(file)));
       const imgurLinks = await imgur.upload(base64Files.map(file => ({ image: file.replace(/^data:image\/(png|jpg|jpeg);base64,/, ""), type: 'base64' })));
@@ -155,10 +160,29 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
           <Card sx={{ p: 3 }}>
             <Stack spacing={1}>
               <RHFTextField name="title.en" label="Tựa đề phổ biến" />
-              <RHFTextField name="title.ja" label="Tựa gốc" />
               <RHFTextField name="title.vi" label="Tựa tiếng Việt" />
+              <RHFTextField name="title.raw" label="Tựa gốc" />
+              <Controller
+                name="titles"
+                control={control}
+                render={({ field }) => (
+                  <Autocomplete
+                    {...field}
+                    multiple
+                    freeSolo
+                    options={[]}
+                    onChange={(event, newValue) => field.onChange(newValue)}
+                    renderTags={(value, getTagProps) =>
+                      value.map((option, index) => (
+                        <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
+                      ))
+                    }
+                    renderInput={(params) => <TextField label="Các tựa khác" {...params} />}
+                  />
+                )}
+              />
               <div>
-                <LabelStyle>Description</LabelStyle>
+                <LabelStyle>Nội dung</LabelStyle>
                 <RHFEditor simple name="description" />
               </div>
               <div>
@@ -316,7 +340,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
 
             <Card sx={{ p: 3 }}>
               <Controller
-                name="author"
+                name="staff"
                 control={control}
                 render={({ field }) => (
                   <Autocomplete
@@ -335,21 +359,15 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                 )}
               />
               <Controller
-                name="artist"
+                name="originalLanguage"
                 control={control}
                 render={({ field }) => (
                   <Autocomplete
                     {...field}
-                    multiple
                     freeSolo
-                    options={[]}
+                    options={['ja', 'vi'].map((option) => option)}
                     onChange={(event, newValue) => field.onChange(newValue)}
-                    renderTags={(value, getTagProps) =>
-                      value.map((option, index) => (
-                        <Chip {...getTagProps({ index })} key={option} size="small" label={option} />
-                      ))
-                    }
-                    renderInput={(params) => <TextField label="Hoạ sĩ" {...params} />}
+                    renderInput={(params) => <TextField label="Ngôn ngữ gốc" {...params} />}
                   />
                 )}
               />

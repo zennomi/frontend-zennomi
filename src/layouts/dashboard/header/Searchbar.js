@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useSearchParams, useLocation } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
-import { Input, Slide, Button, InputAdornment, ClickAwayListener, FormControl } from '@mui/material';
+import { Input, Slide, Button, InputAdornment, ClickAwayListener } from '@mui/material';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // components
@@ -42,7 +42,7 @@ export default function Searchbar() {
   const [searchParams, setSearchParams] = useSearchParams();
   const isTitlesPage = location.pathname === (PATH_WIBU.title.root);
   const [isOpen, setOpen] = useState(false);
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState(searchParams.get("query"));
 
   const handleOpen = () => {
     setOpen((prev) => !prev);

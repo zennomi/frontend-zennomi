@@ -26,7 +26,6 @@ import MyAvatar from '../../components/MyAvatar';
 import EmojiPicker from '../../components/EmojiPicker';
 
 export default function TitleComment({ comments, handleCommentSubmit, handleCommentDelete }) {
-    console.log('render');
     const { user, isAuthenticated } = useAuth();
 
     const [message, setMessage] = useState('');

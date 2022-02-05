@@ -1,7 +1,7 @@
 // components
-import SvgIconStyle from '../../../components/SvgIconStyle';
+// import SvgIconStyle from '../../../components/SvgIconStyle';
 // paths
-import { PATH_LEARNING, PATH_WIBU } from '../../../routes/paths';
+import { PATH_WIBU } from '../../../routes/paths';
 import Iconify from '../../../components/Iconify';
 // ----------------------------------------------------------------------
 
