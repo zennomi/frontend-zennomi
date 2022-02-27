@@ -21,7 +21,7 @@ export default function EditTitle() {
 
     const getTitle = useCallback(async () => {
         try {
-            const { data } = await axios.get(`/v1/titles/${id}`);
+            const { data } = await axios.get(`/v1/titles/${id}?cache=false`);
             if (isMountedRef.current) {
                 setTitle(data);
             }

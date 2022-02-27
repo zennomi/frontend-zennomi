@@ -73,7 +73,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
       },
       isLisensed: currentTitle?.isLisensed || false,
       staff: currentTitle?.staff || [],
-      originalLanguage: currentTitle?.originalLanguage || [],
+      originalLanguage: currentTitle?.originalLanguage || 'ja',
       status: currentTitle?.status || 'ongoing',
       type: currentTitle?.type || 'manga',
       zennomi: currentTitle?.zennomi || {
