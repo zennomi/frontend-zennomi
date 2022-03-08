@@ -13,6 +13,8 @@ import Label from '../Label';
 import CustomStyle from '../CustomStyle';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
+// utils
+import resizeImage from '../../utils/resizeImage';
 
 export default function TitleCard({ title }) {
     return (
@@ -22,7 +24,7 @@ export default function TitleCard({ title }) {
         >
             <Card>
                 <CardActionArea component={RouterLink} to={`${PATH_WIBU.title.one}/${title._id}`}>
-                    <Image src={title.coverArt[0]} alt={title?.name} ratio='4/6' />
+                    <Image src={resizeImage(title.coverArt[0], 300)} alt={title?.name} ratio='4/6' />
                     <OverlayStyle />
                     <CaptionStyle>
                         <TextMaxLine line={2}>

@@ -3,6 +3,8 @@ import { Outlet } from 'react-router-dom';
 // @mui
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
+// components
+import Settings from '../../components/settings';
 // hooks
 import useSettings from '../../hooks/useSettings';
 import useResponsive from '../../hooks/useResponsive';
@@ -53,6 +55,7 @@ export default function DashboardLayout() {
   if (verticalLayout) {
     return (
       <>
+        <Settings />
         <DashboardHeader onOpenSidebar={() => setOpen(true)} verticalLayout={verticalLayout} />
 
         {
@@ -77,7 +80,7 @@ export default function DashboardLayout() {
             },
           }}
         >
-            <Outlet />
+          <Outlet />
         </Box>
       </>
     );
@@ -90,12 +93,13 @@ export default function DashboardLayout() {
         minHeight: { lg: 1 },
       }}
     >
+      <Settings />
       <DashboardHeader isCollapse={isCollapse} onOpenSidebar={() => setOpen(true)} />
 
       <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} />
 
       <MainStyle collapseClick={collapseClick}>
-          <Outlet />
+        <Outlet />
       </MainStyle>
     </Box>
   );

@@ -95,15 +95,15 @@ function SpinLogo() {
 // ----------------------------------------------------------------------
 
 LoadingScreen.propTypes = {
-  fullSreen: PropTypes.bool,
+  fullSrceen: PropTypes.bool,
 };
 
-export default function LoadingScreen({ fullSreen, ...other }) {
+export default function LoadingScreen({ fullSrceen, ...other }) {
   return (
     <>
       <ProgressBar />
 
-      {fullSreen ? (
+      {fullSrceen ? (
         <FullScreenStyle {...other}>
           <SpinLogo />
         </FullScreenStyle>

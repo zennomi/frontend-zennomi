@@ -53,6 +53,14 @@ export default function Router() {
       element: <LoadingScreen />
     },
     {
+      path: PATH_WIBU.read.root,
+      element: <ReadLayout />,
+      children: [
+        { path: PATH_WIBU.read.root, element: <ReadChapter /> },
+        { path: PATH_WIBU.read.chapter, element: <ReadChapter /> },
+      ]
+    },
+    {
       path: '/',
       element: <DashboardLayout />,
       children: [
@@ -142,6 +150,10 @@ const List = Loadable(lazy(() => import('../pages/list/List')));
 const NewList = Loadable(lazy(() => import('../pages/list/NewList')));
 const EditList = Loadable(lazy(() => import('../pages/list/EditList')));
 const DeleteList = Loadable(lazy(() => import('../pages/list/DeleteList')));
+// Read
+const ReadLayout = Loadable(lazy(() => import('../layouts/reading/ChapterLayout')));
+const Read = Loadable(lazy(() => import('../pages/read/index')));
+const ReadChapter = Loadable(lazy(() => import('../pages/read/Chapter')));
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));

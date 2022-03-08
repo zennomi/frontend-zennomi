@@ -1,6 +1,6 @@
 export const TAG_OPTION = require("./tags");
 
-export const TYPE_OPTION = ['novel', 'manga', 'anime'];
+export const TYPE_OPTION = ['novel', 'manga', 'anime', 'movie'];
 
 export const STATUS_OPTION = ['hiatus', 'ongoing', 'completed', 'cancelled'];
 

@@ -43,6 +43,12 @@ export const PATH_WIBU = {
     edit: path(ROOTS_WIBU, '/list/edit/:id'),
     delete: path(ROOTS_WIBU, '/list/delete/:id'),
     feed: path(ROOTS_WIBU, '/lists/feed'),
+  },
+  read: {
+    label: "Trang đọc truyện",
+    root: path(ROOTS_WIBU, '/read'),
+    series: path(ROOTS_WIBU, '/read/:provider/:id'),
+    chapter: path(ROOTS_WIBU, '/read/:provider/:titleId/:chapterNumber'),
   }
 }
 

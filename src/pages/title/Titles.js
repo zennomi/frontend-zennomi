@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
 // @mui
 import { Alert, Container, Grid, Button, IconButton, Pagination, Box, Chip, ToggleButton, ToggleButtonGroup } from '@mui/material';
@@ -21,10 +21,10 @@ import FilterDrawer from '../../sections/title/FilterDrawer';
 import axios from '../../utils/axios';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
+//
+import { TYPE_OPTION } from '../../constants';
 
 // ----------------------------------------------------------------------
-
-const TYPE_OPTION = ['manga', 'novel', 'anime']
 
 export default function Titles() {
   const { themeStretch } = useSettings();
@@ -38,6 +38,8 @@ export default function Titles() {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams({ page: 1, sortBy: 'score:desc' });
 
+  const toggleButtonRef = useRef(null);
+
   const getTitles = useCallback(async () => {
     try {
       const { data } = await axios.get('/v1/titles', {
@@ -50,6 +52,9 @@ export default function Titles() {
     } catch (err) {
       console.error(err);
       enqueueSnackbar(err, { variant: 'error' });
+    }
+    if (toggleButtonRef.current) {
+      toggleButtonRef.current.scrollIntoView({ behavior: "smooth", block: "end" });
     }
   }, [isMountedRef, searchParams]);
 
@@ -99,6 +104,7 @@ export default function Titles() {
           ]}
         />
         <ToggleButtonGroup
+          ref={toggleButtonRef}
           color="primary"
           value={searchParams.get("type")}
           exclusive

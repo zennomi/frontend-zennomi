@@ -379,5 +379,6 @@ module.exports = [
     "zennomi",
     "licensed",
     "male protagonist",
-    "teasing protagonist"
+    "teasing protagonist",
+    "white-haired female lead"
 ]
