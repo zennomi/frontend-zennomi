@@ -38,8 +38,13 @@ const sidebarConfig = [
         children: [
           { title: 'Top romcom', path: PATH_WIBU.title.root },
           { title: 'Thuốc mới', path: PATH_WIBU.title.feed },
-          { title: 'Thêm hàng mới', path: PATH_WIBU.title.new, icon: <Iconify icon='ant-design:plus-circle-twotone' /> }
+          { title: 'Thêm hàng mới', path: PATH_WIBU.title.new, icon: <Iconify icon='ant-design:file-image-twotone' /> }
         ]
+      },
+      {
+        title: PATH_WIBU.read.label,
+        path: PATH_WIBU.read.root,
+        icon: <Iconify icon='ant-design:file-image-twotone' />,
       },
       {
         title: PATH_WIBU.list.label,

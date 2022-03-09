@@ -53,6 +53,10 @@ export default function Router() {
       element: <LoadingScreen />
     },
     {
+      path: PATH_WIBU.read.root,
+      element: <Read />
+    },
+    {
       path: PATH_WIBU.read.title,
       element: <TitleContext />,
       children: [
@@ -154,6 +158,7 @@ const DeleteList = Loadable(lazy(() => import('../pages/list/DeleteList')));
 const TitleContext = Loadable(lazy(() => import('../layouts/reading/TitleContext')));
 const ChapterLayout = Loadable(lazy(() => import('../layouts/reading/ChapterLayout')));
 const ReadTitle = Loadable(lazy(() => import('../pages/read/Title')));
+const Read = Loadable(lazy(() => import('../pages/read')));
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));

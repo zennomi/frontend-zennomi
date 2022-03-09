@@ -45,26 +45,10 @@ export const PATH_WIBU = {
     feed: path(ROOTS_WIBU, '/lists/feed'),
   },
   read: {
-    label: "Trang đọc truyện",
+    label: "Đọc manga",
     root: path(ROOTS_WIBU, '/read'),
     title: path(ROOTS_WIBU, '/read/:provider/:titleId'),
     chapter: path(ROOTS_WIBU, '/read/:provider/:titleId/:chapterNumber'),
-  }
-}
-
-export const PATH_LEARNING = {
-  root: ROOTS_LEARNING,
-  question: {
-    root: path(ROOTS_LEARNING, '/cau-hoi'),
-    id: path(ROOTS_LEARNING, '/cau-hoi/:id')
-  },
-  test: {
-    root: path(ROOTS_LEARNING, '/de-thi'),
-    id: path(ROOTS_LEARNING, '/de-thi/:id')
-  },
-  course: {
-    root: '/khoa-hoc',
-    id: '/khoa-hoc/:id'
   }
 }
 

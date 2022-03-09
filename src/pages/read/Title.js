@@ -32,7 +32,7 @@ function chaptersToArray(title) {
             array.push({
                 volume: Number(chapter.volume),
                 chapterNumber: Number(chapterNumber),
-                title: chapter.title,
+                title: chapter.title || `Tập ${chapter.volume} - Chương ${chapterNumber}`,
                 id: `${chapter.volume}-${chapterNumber}-${groupNumber}`,
                 group: groups[groupNumber],
                 lastUpdated: chapter.last_updated,
@@ -59,7 +59,7 @@ export default function Title() {
                     heading={title?.series_name || <Skeleton variant='h3' />}
                     links={[
                         { name: PATH_WIBU.label, href: PATH_WIBU.root },
-                        { name: "Đọc truyện", href: PATH_WIBU.read.root },
+                        { name: "Đọc", href: PATH_WIBU.read.root },
                         { name: provider, href: PATH_WIBU.read.root },
                         { name: title?.series_name, href: `${PATH_WIBU.read.root}/${title?.slug}` },
                     ]}
