@@ -1,6 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
-import axios from 'axios';
+import { useState, } from 'react';
+import { useOutletContext } from 'react-router-dom';
 
 // @mui
 import { styled } from '@mui/material/styles';
@@ -9,14 +8,14 @@ import { Box } from '@mui/material';
 import useSettings from '../../hooks/useSettings';
 import useResponsive from '../../hooks/useResponsive';
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
-import useIsMountedRef from '../../hooks/useIsMountedRef';
 // config
-import { HEADER, NAVBAR } from '../../config';
+import { NAVBAR } from '../../config';
 //
 // import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
 import OpenSidebarButton from './OpenSidebarButton';
+import Chapter from '../../pages/read/Chapter';
 
 // ----------------------------------------------------------------------
 
@@ -38,7 +37,7 @@ const MainStyle = styled('main', {
 // ----------------------------------------------------------------------
 
 export default function ChapterLayout() {
-    const { collapseClick, isCollapse } = useCollapseDrawer();
+    const { collapseClick } = useCollapseDrawer();
 
     const { themeLayout } = useSettings();
 
@@ -48,33 +47,7 @@ export default function ChapterLayout() {
 
     const verticalLayout = themeLayout === 'vertical';
 
-    const [title, setTitle] = useState(null);
-
-    const { provider, titleId } = useParams();
-    const isMountedRef = useIsMountedRef();
-
-    const getTitle = useCallback(async () => {
-        const url = `https://cubari.moe/read/api/${provider}/series/${titleId}/`;
-        const noCorsUrl = `https://services.f-ck.me/v1/cors/${btoa(url).replace(/\+/g, "-").replace(/\//g, "_")}?source=proxy_cubari_moe`;
-
-        if (isMountedRef) {
-            const { data } = await axios({
-                url: noCorsUrl,
-                method: 'get',
-                headers: {
-                    'Referrer-Policy': 'same-origin',
-                    'Access-Control-Allow-Origin': '*',
-                    'Access-Control-Allow-Methods': 'GET,PUT,POST,DELETE,PATCH,OPTIONS',
-                }
-            });
-            setTitle(data);
-        }
-    }, [isMountedRef]);
-
-    useEffect(() => {
-        getTitle();
-        return () => setTitle(null);
-    }, []);
+    const { title } = useOutletContext();
 
     return (
         <Box
@@ -88,12 +61,9 @@ export default function ChapterLayout() {
                 <OpenSidebarButton onClick={() => setOpen(true)} />
             }
             <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} title={title} />
-            {
-                title &&
-                <MainStyle collapseClick={collapseClick}>
-                    <Outlet context={{ title }} />
-                </MainStyle>
-            }
+            <MainStyle collapseClick={collapseClick}>
+                <Chapter title={title} />
+            </MainStyle>
         </Box>
     );
 }

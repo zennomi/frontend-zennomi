@@ -47,7 +47,7 @@ export const PATH_WIBU = {
   read: {
     label: "Trang đọc truyện",
     root: path(ROOTS_WIBU, '/read'),
-    series: path(ROOTS_WIBU, '/read/:provider/:id'),
+    title: path(ROOTS_WIBU, '/read/:provider/:titleId'),
     chapter: path(ROOTS_WIBU, '/read/:provider/:titleId/:chapterNumber'),
   }
 }

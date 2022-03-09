@@ -2,6 +2,7 @@
 // ----------------------------------------------------------------------
 
 export const HOST_API = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:3000" : process.env.REACT_APP_HOST_API_KEY;
+export const CORS_HOST_API = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:5000" : process.env.REACT_APP_CORS_HOST_API;
 
 export const FIREBASE_API = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -51,7 +52,7 @@ export const ICON = {
 export const defaultSettings = {
   themeMode: 'dark',
   themeDirection: 'ltr',
-  themeColorPresets: 'default',
+  themeColorPresets: 'cyan',
   themeLayout: 'horizontal',
   themeStretch: false,
 };

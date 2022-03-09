@@ -53,11 +53,11 @@ export default function Router() {
       element: <LoadingScreen />
     },
     {
-      path: PATH_WIBU.read.root,
-      element: <ReadLayout />,
+      path: PATH_WIBU.read.title,
+      element: <TitleContext />,
       children: [
-        { path: PATH_WIBU.read.root, element: <ReadChapter /> },
-        { path: PATH_WIBU.read.chapter, element: <ReadChapter /> },
+        { path: PATH_WIBU.read.title, element: <ReadTitle /> },
+        { path: PATH_WIBU.read.chapter, element: <ChapterLayout /> },
       ]
     },
     {
@@ -151,9 +151,9 @@ const NewList = Loadable(lazy(() => import('../pages/list/NewList')));
 const EditList = Loadable(lazy(() => import('../pages/list/EditList')));
 const DeleteList = Loadable(lazy(() => import('../pages/list/DeleteList')));
 // Read
-const ReadLayout = Loadable(lazy(() => import('../layouts/reading/ChapterLayout')));
-const Read = Loadable(lazy(() => import('../pages/read/index')));
-const ReadChapter = Loadable(lazy(() => import('../pages/read/Chapter')));
+const TitleContext = Loadable(lazy(() => import('../layouts/reading/TitleContext')));
+const ChapterLayout = Loadable(lazy(() => import('../layouts/reading/ChapterLayout')));
+const ReadTitle = Loadable(lazy(() => import('../pages/read/Title')));
 // Dashboard
 const PageOne = Loadable(lazy(() => import('../pages/PageOne')));
 const PageTwo = Loadable(lazy(() => import('../pages/PageTwo')));

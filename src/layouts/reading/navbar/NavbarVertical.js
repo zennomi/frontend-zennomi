@@ -1,9 +1,9 @@
 import PropTypes from 'prop-types';
 import { useEffect } from 'react';
-import { useLocation, useParams, Link } from 'react-router-dom';
+import { useLocation, useParams, Link as RouterLink } from 'react-router-dom';
 // @mui
 import { styled, useTheme } from '@mui/material/styles';
-import { Box, Stack, Drawer, Typography, Button, IconButton } from '@mui/material';
+import { Box, Stack, Drawer, Typography, Button, IconButton, Link } from '@mui/material';
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 import useCollapseDrawer from '../../../hooks/useCollapseDrawer';
@@ -14,12 +14,11 @@ import { NAVBAR } from '../../../config';
 // components
 import Logo from '../../../components/Logo';
 import Scrollbar from '../../../components/Scrollbar';
-import { NavSectionVertical } from '../../../components/nav-section';
 import Iconify from '../../../components/Iconify';
 //
-import navConfig from './NavConfig';
 import NavbarDocs from './NavbarDocs';
 import CollapseButton from './CollapseButton';
+import { PATH_WIBU } from '../../../routes/paths';
 
 // ----------------------------------------------------------------------
 
@@ -44,7 +43,7 @@ const CollapsedButton = ({ isCollapse, text, icon, ...props }) => {
   return <Button variant="outlined" startIcon={<Iconify icon={icon} />} sx={{ m: 0.5, minWidth: 0 }}  {...props}>{text}</Button>
 }
 
-export default function NavbarVertical({ isOpenSidebar, onCloseSidebar, title, onToggleSidebar }) {
+export default function NavbarVertical({ isOpenSidebar, onCloseSidebar, title }) {
   const theme = useTheme();
 
   const { pathname } = useLocation();
@@ -90,8 +89,10 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar, title, o
       </Stack>
       {
         !isCollapse &&
-        <Typography variant="h6" component="h1" align="center">
-          {title?.series_name || "Tên chương"}
+        <Typography variant="h6" align="center">
+          <Link component={RouterLink} to={`${PATH_WIBU.read.root}/${title.provider}/${title.slug}`}>
+            {title?.series_name || "Tên chương"}
+          </Link>
         </Typography>
       }
       {
