@@ -13,7 +13,7 @@ import axios from '../../utils/corsAxios';
 
 // ----------------------------------------------------------------------
 
-export default function Chapter({title}) {
+export default function Chapter({ title }) {
     const { themeStretch } = useSettings();
     const params = useParams();
     const { provider, titleId, chapterNumber } = params;
@@ -23,7 +23,14 @@ export default function Chapter({title}) {
     const groupIndexes = Object.keys(title.groups);
     const [groupIndex, setGroupIndex] = useState(groupIndexes.find(index => Boolean(title.chapters[chapterNumber].groups[index])));
 
-    const [pages, setPages] = useState(isMangaDex ? [] : title.chapters[chapterNumber].groups[groupIndex]);
+    const initPages = (() => {
+        if (title.provider === "mangadex") return [];
+        if (title.provider === "imgur") return title.chapters[chapterNumber].groups[groupIndex].map(c => c.src);
+        return title.chapters[chapterNumber].groups[groupIndex];
+    })();
+
+
+    const [pages, setPages] = useState(initPages);
 
     const getMangaDexChapter = useCallback(async () => {
         if (!isMangaDex) return;

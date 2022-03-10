@@ -69,7 +69,8 @@ export default function Title() {
                         <Grid item xs={12} md={3}>
                             {
                                 title?.cover &&
-                                <Image src={title.cover} referrerPolicy="same-origin" />
+                                // <Image src={title.cover} referrerPolicy="same-origin" />
+                                <Image src={title.cover} />
                             }
                         </Grid>
                         <Grid item xs={12} md={9}>
