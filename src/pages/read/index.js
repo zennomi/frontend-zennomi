@@ -1,6 +1,6 @@
 // @mui
 import { styled } from '@mui/material/styles';
-import { Box, Button, Stack, Container, Typography, InputAdornment } from '@mui/material';
+import { Box, Button, Stack, Container, Typography, InputAdornment, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 // components
 import Page from '../../components/Page';
@@ -101,13 +101,19 @@ export default function Read() {
               helperText={helperText}
             />
 
-            <Stack alignItems="center">
+            <Stack alignItems="center" marginBottom={2}>
               <Stack direction="row" flexWrap="wrap" alignItems="center">
                 {
                   sources.map((source) => (< RoundedButton size="large" {...source} onClick={() => setValue(source.value)} />))
                 }
               </Stack>
             </Stack>
+            <Alert
+              severity='info'
+              variant='outlined'
+            >
+              ZenWebApp không hề sở hữu các ảnh mà chỉ hiển thị chúng từ nguồn người dùng nhập.
+            </Alert>
           </Box>
         </Container>
       </RootStyle>

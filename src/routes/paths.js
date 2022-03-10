@@ -47,8 +47,8 @@ export const PATH_WIBU = {
   read: {
     label: "Đọc manga",
     root: path(ROOTS_WIBU, '/read'),
-    title: path(ROOTS_WIBU, '/read/:provider/:titleId'),
-    chapter: path(ROOTS_WIBU, '/read/:provider/:titleId/:chapterNumber'),
+    title: path(ROOTS_WIBU, '/read/:source/:slug'),
+    chapter: path(ROOTS_WIBU, '/read/:source/:slug/:chapterNumber'),
   }
 }
 

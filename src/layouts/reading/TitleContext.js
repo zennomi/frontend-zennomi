@@ -1,28 +1,47 @@
 import { useState, useCallback, useEffect } from 'react';
-import { Outlet, useParams } from 'react-router-dom';
-import axios from '../../utils/corsAxios';
-import { uniq } from 'lodash'
+import { Outlet, useParams, useNavigate } from 'react-router-dom';
+import { uniq } from 'lodash';
+import { useSnackbar } from 'notistack';
+// hooks
 import useIsMountedRef from '../../hooks/useIsMountedRef';
-
+// components
+import LoadingText from '../../components/LoadingText';
+// paths
+import { PATH_WIBU } from '../../routes/paths';
+// utils
+import axios from '../../utils/corsAxios';
+import { fSource } from '../../utils/formatSource';
 // ----------------------------------------------------------------------
 
 export default function TitleContext() {
+    const { source, slug } = useParams();
+    const isMountedRef = useIsMountedRef();
+    const { enqueueSnackbar } = useSnackbar();
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState(null);
 
-    const { provider, titleId } = useParams();
-    const isMountedRef = useIsMountedRef();
-
     const getTitle = useCallback(async () => {
-        const url = `https://cubari.moe/read/api/${provider}/series/${titleId}/`;
-
-        if (isMountedRef) {
-            const { data } = await axios({
-                url: url,
-                method: 'get',
-            });
-            data.staff = uniq([data.author, data.artist]).filter(s => Boolean(s));
-            data.provider = provider;
-            setTitle(data);
+        const url = `https://cubari.moe/read/api/${source}/series/${slug}/`;
+        try {
+            if (isMountedRef) {
+                const { data } = await axios({
+                    url: url,
+                    method: 'get',
+                });
+                Object.assign(data, {
+                    staff: uniq([data.author, data.artist]).filter(s => Boolean(s)),
+                    source,
+                    chapterNumbers: Object.keys(data.chapters),
+                    groupNumbers: Object.keys(data.groups),
+                    path: `${PATH_WIBU.read.root}/${source}/${slug}`,
+                    sourceLink: fSource(source, slug)
+                })
+                setTitle(data);
+            }
+        } catch (error) {
+            enqueueSnackbar("Đã có xảy ra. Khả năng là link không hợp lệ.", { variant: "error" });
+            navigate(-1);
         }
     }, [isMountedRef]);
 
@@ -32,7 +51,8 @@ export default function TitleContext() {
     }, []);
 
     return (
-        title &&
-        <Outlet context={{ title }} />
+        title ?
+            <Outlet context={{ title }} /> :
+            <LoadingText fullscreen />
     );
 }

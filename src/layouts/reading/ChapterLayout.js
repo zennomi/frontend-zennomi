@@ -1,5 +1,5 @@
-import { useState, } from 'react';
-import { useOutletContext } from 'react-router-dom';
+import { useState, useCallback, useEffect } from 'react';
+import { useOutletContext, useParams, useSearchParams } from 'react-router-dom';
 
 // @mui
 import { styled } from '@mui/material/styles';
@@ -16,6 +16,8 @@ import NavbarVertical from './navbar/NavbarVertical';
 import NavbarHorizontal from './navbar/NavbarHorizontal';
 import OpenSidebarButton from './OpenSidebarButton';
 import Chapter from '../../pages/read/Chapter';
+// import 
+import axios from '../../utils/corsAxios';
 
 // ----------------------------------------------------------------------
 
@@ -38,16 +40,46 @@ const MainStyle = styled('main', {
 
 export default function ChapterLayout() {
     const { collapseClick } = useCollapseDrawer();
+    const { chapterNumber } = useParams();
 
-    const { themeLayout } = useSettings();
+    const { title } = useOutletContext();
+    const { chapterNumbers, groupNumbers } = title;
 
     const isDesktop = useResponsive('up', 'lg');
 
     const [open, setOpen] = useState(false);
 
-    const verticalLayout = themeLayout === 'vertical';
+    const [searchParams, setSearchParams] = useSearchParams({ groupNumber: groupNumbers.find(num => Boolean(title.chapters[chapterNumber]?.groups[num])) })
 
-    const { title } = useOutletContext();
+    const initPages = (() => {
+        if (title.source === "mangadex") return [];
+        if (title.source === "imgur") return title.chapters[chapterNumber]?.groups[searchParams.get("groupNumber")].map(c => c.src) || [];
+        return title.chapters[chapterNumber]?.groups[searchParams.get("groupNumber")] || [];
+    })();
+
+    const [pages, setPages] = useState(initPages);
+
+    const chapter = {
+        pages,
+        currentIndex: chapterNumbers.findIndex(key => key === chapterNumber),
+        number: chapterNumber,
+    }
+
+    const getMangaDexChapter = useCallback(async () => {
+        if (title.source !== "mangadex") return;
+        const url = `https://cubari.moe${title.chapters[chapterNumber]?.groups[searchParams.get("groupNumber")]}`;
+
+        const { data } = await axios({
+            url: url,
+            method: 'get',
+        });
+        setPages(data);
+    }, [title, chapterNumber, searchParams.get("groupNumber")]);
+
+    useEffect(() => {
+        getMangaDexChapter();
+        return () => setPages([]);
+    }, [getMangaDexChapter]);
 
     return (
         <Box
@@ -60,9 +92,9 @@ export default function ChapterLayout() {
                 !isDesktop && !open &&
                 <OpenSidebarButton onClick={() => setOpen(true)} />
             }
-            <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} title={title} />
+            <NavbarVertical isOpenSidebar={open} onCloseSidebar={() => setOpen(false)} title={title} chapter={chapter} />
             <MainStyle collapseClick={collapseClick}>
-                <Chapter title={title} />
+                <Chapter title={title} chapter={chapter} />
             </MainStyle>
         </Box>
     );

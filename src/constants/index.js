@@ -43,3 +43,5 @@ export const GENRE_OPTION = [
   'yuri',
   'oneshot'
 ]
+
+export { FACTS } from './facts';

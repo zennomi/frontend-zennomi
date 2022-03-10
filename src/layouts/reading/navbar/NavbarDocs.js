@@ -15,8 +15,9 @@ export default function NavbarDocs() {
           Yahallo~
         </Typography>
         <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-          Loser chúa nào đây?
-          <br /> Chính là mình, nữ sinh cao trung cute <em>*nháy mắt*</em>
+          Web đang lớn dần
+          <br /> Lag là chuyện bình thường <em>*nháy mắt*</em>
+          <br /> Sẽ không lag sớm thôi
         </Typography>
       </div>
 

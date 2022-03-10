@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams, useOutletContext } from 'react-router-dom';
+import { useParams, useOutletContext, Link } from 'react-router-dom';
 // @mui
-import { Box, Container, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography, Button } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // components
@@ -13,60 +13,59 @@ import axios from '../../utils/corsAxios';
 
 // ----------------------------------------------------------------------
 
-export default function Chapter({ title }) {
+export default function Chapter({ title, chapter }) {
     const { themeStretch } = useSettings();
     const params = useParams();
-    const { provider, titleId, chapterNumber } = params;
-
-    const isMangaDex = provider == "mangadex";
-
-    const groupIndexes = Object.keys(title.groups);
-    const [groupIndex, setGroupIndex] = useState(groupIndexes.find(index => Boolean(title.chapters[chapterNumber].groups[index])));
-
-    const initPages = (() => {
-        if (title.provider === "mangadex") return [];
-        if (title.provider === "imgur") return title.chapters[chapterNumber].groups[groupIndex].map(c => c.src);
-        return title.chapters[chapterNumber].groups[groupIndex];
-    })();
-
-
-    const [pages, setPages] = useState(initPages);
-
-    const getMangaDexChapter = useCallback(async () => {
-        if (!isMangaDex) return;
-
-        const url = `https://cubari.moe${title.chapters[chapterNumber]?.groups[groupIndex]}`;
-        const { data } = await axios({
-            url: url,
-            method: 'get',
-        });
-
-        setPages(data);
-    }, [isMangaDex, chapterNumber, groupIndex]);
-
-    useEffect(() => {
-        getMangaDexChapter();
-        return () => setPages([]);
-    }, [getMangaDexChapter]);
+    const { source, chapterNumber } = params;
+    const { currentIndex } = chapter;
 
     return (
-        <Page title={`${title.title} | Chương ${chapterNumber} | ${provider}`}>
-            <Container maxWidth={themeStretch ? false : 'md'} sx={{ p: 0 }}>
+        <Page title={`${title.title} | Chương ${chapterNumber} | ${source}`}>
+            <Box >
                 {
-                    title ?
-                        <Stack spacing={2}>
+                    currentIndex > 0 &&
+                    <Button
+                        size="large"
+                        variant="contained"
+                        icon="eva:arrow-left-fill"
+                        component={Link}
+                        fullWidth
+                        to={`${title.path}/${title.chapterNumbers[currentIndex - 1]}`}
+                        sx={{ borderRadius: 0 }}
+                    >
+                        Chương trước
+
+                    </Button>
+                }
+                {
+                    chapter.pages.length > 0 ?
+                        <Stack>
                             <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
                                 {
-                                    pages.map(page => (
+                                    chapter.pages.map(page => (
                                         <MangaImage src={page} referrerPolicy="same-origin" key={page} disabledEffect threshold={1000} />
                                     ))
                                 }
                             </Box>
+
                         </Stack>
                         :
-                        <LoadingScreen fullSrceen />
+                        <LoadingScreen />
                 }
-            </Container>
+                {
+                    currentIndex < title.chapterNumbers.length -1 &&
+                    <Button
+                        size="large"
+                        variant="contained"
+                        component={Link}
+                        to={`${title.path}/${title.chapterNumbers[currentIndex + 1]}`}
+                        fullWidth
+                        sx={{ borderRadius: 0 }}
+                    >
+                        Chương tiếp theo
+                    </Button>
+                }
+            </Box>
         </Page>
     );
 }

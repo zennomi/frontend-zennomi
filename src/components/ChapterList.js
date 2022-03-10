@@ -52,13 +52,13 @@ function stableSort(array, comparator) {
 }
 
 const headCells = [
-    {
-        id: 'volume',
-        numeric: true,
-        disablePadding: false,
-        label: 'Tập',
-        align: 'center',
-    },
+    // {
+    //     id: 'volume',
+    //     numeric: true,
+    //     disablePadding: false,
+    //     label: 'Tập',
+    //     align: 'center',
+    // },
     {
         id: 'chapterNumber',
         numeric: true,
@@ -71,7 +71,7 @@ const headCells = [
         numeric: false,
         disablePadding: true,
         label: 'Tên chương',
-        align: 'left',
+        align: 'center',
     },
     {
         id: 'group',
@@ -99,7 +99,7 @@ function EnhancedTableHead(props) {
     return (
         <TableHead>
             <TableRow>
-                <TableCell padding="checkbox">
+                {/* <TableCell padding="checkbox">
                     <Checkbox
                         color="primary"
                         indeterminate={numSelected > 0 && numSelected < rowCount}
@@ -109,11 +109,11 @@ function EnhancedTableHead(props) {
                             'aria-label': 'select all desserts',
                         }}
                     />
-                </TableCell>
+                </TableCell> */}
                 {headCells.map((headCell) => (
                     <TableCell
                         key={headCell.id}
-                        align={headCell.aligin || "center"}
+                        align={headCell.align || "center"}
                         padding={headCell.disablePadding ? 'none' : 'normal'}
                         sortDirection={orderBy === headCell.chapterNumber ? order : false}
                     >
@@ -255,7 +255,7 @@ export default function EnhancedTable({ rows }) {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                {/* <EnhancedTableToolbar numSelected={selected.length} /> */}
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
@@ -289,7 +289,7 @@ export default function EnhancedTable({ rows }) {
                                             key={row.id}
                                             selected={isItemSelected}
                                         >
-                                            <TableCell padding="checkbox">
+                                            {/* <TableCell padding="checkbox">
                                                 <Checkbox
                                                     color="primary"
                                                     checked={isItemSelected}
@@ -297,8 +297,8 @@ export default function EnhancedTable({ rows }) {
                                                         'aria-labelledby': labelId,
                                                     }}
                                                 />
-                                            </TableCell>
-                                            <TableCell align="center">{row.volume}</TableCell>
+                                            </TableCell> */}
+                                            {/* <TableCell align="center">{row.volume}</TableCell> */}
                                             <TableCell align="center">{row.chapterNumber}</TableCell>
                                             <TableCell
                                                 component="th"
