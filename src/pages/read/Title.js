@@ -1,5 +1,5 @@
 import parse from 'html-react-parser';
-import { useParams, useOutletContext, Link as RouterLink } from 'react-router-dom';
+import { useParams, useOutletContext, Link as RouterLink, useNavigate } from 'react-router-dom';
 // @mui
 import {
     Container, Grid, Typography, Skeleton, Stack, Divider, Paper, Button, Box
@@ -10,10 +10,13 @@ import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import Image from '../../components/Image';
 import CustomStyle from '../../components/CustomStyle';
 import Label from '../../components/Label';
+import useAuth from '../../hooks/useAuth';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
 import Iconify from '../../components/Iconify';
 import ChapterList from '../../components/ChapterList';
+// utils
+import axios from '../../utils/axios';
 
 // ----------------------------------------------------------------------
 
@@ -37,11 +40,22 @@ function chaptersToArray(title) {
 }
 
 export default function Title() {
+    const { user } = useAuth();
     const { source, slug } = useParams();
 
+    const navigate = useNavigate();
     const { title } = useOutletContext();
 
     const chapterRows = chaptersToArray(title, title.groups);
+
+    const handleCrawlButton = async (language) => {
+        try {
+            const { data } = await axios.get(`v1/titles/crawl/cubari/${source}/${slug}?language=${language}`);
+            navigate(`${PATH_WIBU.title.one}/${data.id}`)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <Page title={title.series_name || ""}>
@@ -113,6 +127,27 @@ export default function Title() {
                                 >
                                     Đọc chương mới nhất
                                 </Button>
+                                {
+                                    user.role === "admin" &&
+                                    <>
+                                        <Button
+                                            variant="outlined"
+                                            sx={{ m: 0.5 }}
+                                            onClick={() => handleCrawlButton('en')}
+                                        >
+                                            Crawl tiếng anh
+                                        </Button>
+                                        <Button
+                                            variant="outlined"
+                                            sx={{ m: 0.5 }}
+                                            onClick={() => handleCrawlButton('vi')}
+
+                                        >
+                                            Crawl tiếng việt
+                                        </Button>
+                                    </>
+
+                                }
                             </Box>
                         </Grid>
                         <Grid item xs={12}>
