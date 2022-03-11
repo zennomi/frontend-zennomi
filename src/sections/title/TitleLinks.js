@@ -16,9 +16,17 @@ import {
 import Iconify from '../../components/Iconify';
 import Scrollbar from '../../components/Scrollbar';
 
+const lanCodeToIcon = {
+    vi: "vietnam",
+    en: "united-kingdom",
+    ja: "japan",
+    zh: "china",
+    ko: "south-korea"
+};
+
 // ----------------------------------------------------------------------
 
-export default function TitleLinks({ links = { vi: [], en: [], raw: [] } }) {
+export default function TitleLinks({ links = [] }) {
     return (
         <Card>
             <Scrollbar sx={{ maxHeight: 200, my: 1 }}>
@@ -31,18 +39,8 @@ export default function TitleLinks({ links = { vi: [], en: [], raw: [] } }) {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {links.vi.map((row) => (
-                                <Row row={row} language='vietnam' />
-                            ))}
-                        </TableBody>
-                        <TableBody>
-                            {links.en.reverse().map((row) => (
-                                <Row row={row} language='united-kingdom' />
-                            ))}
-                        </TableBody>
-                        <TableBody>
-                            {links.raw.map((row) => (
-                                <Row row={row} language='japan' />
+                            {links.map((row) => (
+                                <Row row={row} />
                             ))}
                         </TableBody>
                     </Table>
@@ -62,7 +60,7 @@ function LinkIcon({ site }) {
     else return <Iconify icon='fa-solid:link' />
 }
 
-function Row({ row, language }) {
+function Row({ row }) {
     return (
         <TableRow key={row.link}>
             <TableCell>
@@ -77,7 +75,7 @@ function Row({ row, language }) {
                 </Box>
             </TableCell>
             <TableCell align='center' sx={{ minWidth: 50 }}>
-                <Iconify icon={`emojione-v1:flag-for-${language}`} sx={{ width: 32, height: 32 }} />
+                <Iconify icon={`emojione-v1:flag-for-${lanCodeToIcon[row.language] || "japan"}`} sx={{ width: 32, height: 32 }} />
             </TableCell>
         </TableRow>)
 }

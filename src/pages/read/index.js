@@ -71,7 +71,7 @@ export default function Read() {
   }
 
   return (
-    <Page title="Coming Soon" sx={{ height: 1 }}>
+    <Page title="Trang đọc manga" sx={{ height: 1 }}>
       <RootStyle>
         <Container>
           <Box sx={{ maxWidth: 480, margin: 'auto', textAlign: 'center' }}>

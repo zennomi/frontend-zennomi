@@ -323,7 +323,6 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                       {...field}
                       multiple
                       freeSolo
-                      options={[]}
                       onChange={(event, newValue) => field.onChange(newValue)}
                       options={TAG_OPTION.map((option) => option)}
                       renderTags={(value, getTagProps) =>
@@ -365,7 +364,7 @@ export default function TitleNewForm({ isEdit, currentTitle, titleSubmit }) {
                   <Autocomplete
                     {...field}
                     freeSolo
-                    options={['ja', 'vi'].map((option) => option)}
+                    options={['ja', 'vi', 'zh', 'ko'].map((option) => option)}
                     onChange={(event, newValue) => field.onChange(newValue)}
                     renderInput={(params) => <TextField label="Ngôn ngữ gốc" {...params} />}
                   />

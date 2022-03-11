@@ -24,6 +24,7 @@ import TitleLinks from '../../sections/title/TitleLinks';
 import TitleLists from '../../sections/title/TitleLists';
 import TitleComment from '../../sections/title/TitleComment';
 import ListSelect from '../../sections/title/ListSelect';
+import ReadButtons from '../../sections/title/ReadButtons';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -294,8 +295,7 @@ export default function Title() {
                                 </Typography>
                             </CustomStyle>
                         }
-                        <Divider sx={{ my: 2 }} />
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', mt: 2 }}>
                             {title?.genres.map(genre =>
                                 <Label key={genre} color='primary' sx={{ m: 0.2 }} >
                                     <Link component={RouterLink} to={`${PATH_WIBU.title.root}?genres=${genre}`}>{genre}</Link>
@@ -307,6 +307,10 @@ export default function Title() {
                                 </Label>)
                             }
                         </Box>
+                        <Divider sx={{ my: 2 }} />
+                    </Grid>
+                    <Grid item xs={12}>
+                        <ReadButtons links={title?.links} />
                     </Grid>
                     <Grid item xs={12} md={6}>
                         <TitleLinks links={title?.links} />

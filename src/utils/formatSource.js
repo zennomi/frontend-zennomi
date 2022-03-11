@@ -1,6 +1,7 @@
 const addPrefix = (url) => `https://${url}`;
 
 export function fSlug(string) {
+    string = string.trim();
     if (/^[0-9]{1,6}$/.test(string)) return `/nhentai/${string}`;
     string = string.replace(/https:\/\//g, "").replace(/http:\/\//g, "").replace(/www\./g, "");
     string = string.split("?")[0];
