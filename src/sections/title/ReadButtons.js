@@ -2,11 +2,9 @@ import { Link } from 'react-router-dom';
 // @mui
 import { Button, Box, Typography } from '@mui/material';
 import { alpha } from '@mui/material/styles';
-
-// icons
-import { MangadexLogo, NhentaiLogo, ImgurLogo, RedditLogo } from '../../assets/logos'
 // utils
 import { fSlug } from '../../utils/formatSource';
+import { sourceToIcon, sourceToColor } from '../../utils/sourceMapping';
 // paths
 import { PATH_WIBU } from '../../routes/paths';
 
@@ -16,20 +14,6 @@ const lanCodeToFullText = {
     ja: "nhật",
     zh: "trung",
     ko: "hàn"
-}
-
-const sourceToIcon = {
-    mangadex: MangadexLogo,
-    nhentai: NhentaiLogo,
-    imgur: ImgurLogo,
-    reddit: RedditLogo
-}
-
-const sourceToColor = {
-    mangadex: '#FF6740',
-    imgur: '#1bb76e',
-    nhentai: '#EC2854',
-    reddit: '#FF4500'
 }
 
 function ReadButton({ link }) {
@@ -62,7 +46,12 @@ export default function ReadButtons({ links = [] }) {
         const path = fSlug(link.link);
         if (path) {
             const [_, source, slug] = path.split("/");
-            readLinks.push({ source, slug, language: link.language });
+            console.log(path, source, slug);
+            if (source === 'mangadex' && link.language === 'vi') {
+                readLinks.push({ source: 'mangadex-vi', slug, language: link.language });
+            } else {
+                readLinks.push({ source, slug, language: link.language });
+            }
         }
     })
     return (

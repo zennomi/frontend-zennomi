@@ -380,5 +380,6 @@ module.exports = [
     "licensed",
     "male protagonist",
     "teasing protagonist",
-    "white-haired female lead"
+    "white-haired female lead",
+    "short chapter",
 ]

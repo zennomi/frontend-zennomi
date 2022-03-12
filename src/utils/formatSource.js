@@ -9,7 +9,7 @@ export function fSlug(string) {
     if (/^imgur\.com\/a\/\w{6,9}(\/|$)/.test(string)) return `/imgur/${string.split("/")[2]}`
     if (/^nhentai\.net\/g\/[0-9]{1,6}(\/|$)/.test(string)) return `/nhentai/${string.split("/")[2]}`
     if (/^reddit\.com\/r\/\w+\/comments\/\w{6}(\/|$)/.test(string)) return `/reddit/${string.split("/")[4]}`;
-    if (/^reddit\.com\/comments\/\w{6}(\/|$)/.test(string)) return `/reddit/${string.split("/")[4]}`;
+    if (/^reddit\.com\/comments\/\w{6}(\/|$)/.test(string)) return `/reddit/${string.split("/")[2]}`;
     return "";
 }
 
@@ -18,5 +18,6 @@ export function fSource(source, slug) {
     if (source === "imgur") return addPrefix(`imgur.com/a/${slug}`);
     if (source === "nhentai") return addPrefix(`nhentai.net/g/${slug}`)
     if (source === "reddit") return addPrefix(`reddit.com/comments/${slug}`);
+    if (source === "mangadex-vi") return addPrefix(`mangadex.org/title/${slug}`);
     return;
 }

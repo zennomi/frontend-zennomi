@@ -10,6 +10,7 @@ import { Box, Stack, Drawer, Typography, Button, IconButton, Link, Slider } from
 // hooks
 import useResponsive from '../../../hooks/useResponsive';
 import useCollapseDrawer from '../../../hooks/useCollapseDrawer';
+import useSettings from '../../../hooks/useSettings';
 // utils
 import cssStyles from '../../../utils/cssStyles';
 // config
@@ -82,6 +83,7 @@ function valuetext(value) { return value; }
 export default function NavbarVertical({ isOpenSidebar, onCloseSidebar, title, chapter }) {
   const theme = useTheme();
   const { pathname } = useLocation();
+  const { pageWidth, onSetPageWidth } = useSettings();
   const isDesktop = useResponsive('up', 'lg');
 
   const [downloadProcess, setDownloadProcess] = useState(null);
@@ -181,11 +183,18 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar, title, c
       </Stack>
       {
         !isCollapse &&
-        <Typography variant="h6" align="center">
-          <Link component={RouterLink} to={title.path}>
-            {title.series_name}
-          </Link>
-        </Typography>
+        <>
+          <Typography variant="h6" align="center">
+            <Link component={RouterLink} to={title.path}>
+              {title.series_name}
+            </Link>
+          </Typography>
+          <Typography variant="body2" align="center" opacity={0.72}>
+            <Link component={RouterLink} to={title.path}>
+              {chapter.title}
+            </Link>
+          </Typography>
+        </>
       }
       {
         typeof (downloadProcess) === 'number' &&
@@ -258,21 +267,23 @@ export default function NavbarVertical({ isOpenSidebar, onCloseSidebar, title, c
           />
         }
       </Box>
-      {/* <Box sx={{ p: 2, minHeight: isCollapse ? 300 : "auto" }}>
+      <Box sx={{ p: 2, minHeight: isCollapse ? 300 : "auto", display: 'flex', justifyContent: "space-evenly", flexDirection: 'column' }}>
         {
           !isCollapse &&
           <Typography variant="body2" align="center">Độ rộng trang</Typography>
         }
         <Slider
           aria-label="Page Width"
-          defaultValue={}
+          defaultValue={100}
           orientation={isCollapse ? "vertical" : "horizontal"}
-          value={downloadProcess}
-          step={1}
-          max={chapter.pages.length}
+          value={pageWidth}
+          onChange={onSetPageWidth}
+          step={10}
+          max={100}
           valueLabelDisplay="auto"
+          sx={{ mx: "auto" }}
         />
-      </Box> */}
+      </Box>
       <Box sx={{ flexGrow: 1 }} />
 
       {!isCollapse && <NavbarDocs />}

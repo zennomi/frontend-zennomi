@@ -56,4 +56,5 @@ export const defaultSettings = {
   themeColorPresets: 'cyan',
   themeLayout: 'horizontal',
   themeStretch: false,
+  pageWidth: 100,
 };

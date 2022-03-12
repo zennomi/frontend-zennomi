@@ -156,7 +156,6 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                     {...field}
                                     multiple
                                     freeSolo
-                                    options={[]}
                                     onChange={(event, newValue) => field.onChange(newValue)}
                                     options={TAG_OPTION.map((option) => option)}
                                     renderTags={(value, getTagProps) =>
@@ -176,7 +175,6 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                     {...field}
                                     multiple
                                     freeSolo
-                                    options={[]}
                                     onChange={(event, newValue) => field.onChange(newValue)}
                                     options={GENRE_OPTION.map((option) => option)}
                                     renderTags={(value, getTagProps) =>
@@ -196,7 +194,6 @@ export default function FilterDrawer({ isOpen, onClose, setNewParams }) {
                                     {...field}
                                     multiple
                                     freeSolo
-                                    options={[]}
                                     onChange={(event, newValue) => field.onChange(newValue)}
                                     options={TAG_OPTION.map((option) => option)}
                                     renderTags={(value, getTagProps) =>

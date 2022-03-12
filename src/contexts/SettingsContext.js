@@ -11,13 +11,14 @@ import { defaultSettings } from '../config';
 
 const initialState = {
   ...defaultSettings,
-  onChangeMode: () => {},
-  onToggleMode: () => {},
-  onChangeDirection: () => {},
-  onChangeColor: () => {},
-  onToggleStretch: () => {},
-  onChangeLayout: () => {},
-  onResetSetting: () => {},
+  onChangeMode: () => { },
+  onToggleMode: () => { },
+  onChangeDirection: () => { },
+  onChangeColor: () => { },
+  onToggleStretch: () => { },
+  onChangeLayout: () => { },
+  onResetSetting: () => { },
+  onSetPageWidth: () => { },
   setColor: defaultPreset,
   colorOption: [],
 };
@@ -37,6 +38,7 @@ function SettingsProvider({ children }) {
     themeColorPresets: initialState.themeColorPresets,
     themeStretch: initialState.themeStretch,
     themeLayout: initialState.themeLayout,
+    pageWidth: initialState.pageWidth,
   });
 
   const onChangeMode = (event) => {
@@ -81,6 +83,13 @@ function SettingsProvider({ children }) {
     });
   };
 
+  const onSetPageWidth = (event, newValue) => {
+    setSettings({
+      ...settings,
+      pageWidth: newValue,
+    });
+  }
+
   const onResetSetting = () => {
     setSettings({
       themeMode: initialState.themeMode,
@@ -111,6 +120,8 @@ function SettingsProvider({ children }) {
         onToggleStretch,
         // Navbar Horizontal
         onChangeLayout,
+        // Reading Page Width
+        onSetPageWidth,
         // Reset Setting
         onResetSetting,
       }}

@@ -1,7 +1,6 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useParams, useOutletContext, Link } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 // @mui
-import { Box, Container, Stack, Typography, Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 // hooks
 import useSettings from '../../hooks/useSettings';
 // components
@@ -9,12 +8,11 @@ import Page from '../../components/Page';
 import LoadingScreen from '../../components/LoadingScreen';
 import MangaImage from '../../components/MangaImage';
 // assets
-import axios from '../../utils/corsAxios';
 
 // ----------------------------------------------------------------------
 
 export default function Chapter({ title, chapter }) {
-    const { themeStretch } = useSettings();
+    const { pageWidth } = useSettings();
     const params = useParams();
     const { source, chapterNumber } = params;
     const { currentIndex } = chapter;
@@ -39,21 +37,18 @@ export default function Chapter({ title, chapter }) {
                 }
                 {
                     chapter.pages.length > 0 ?
-                        <Stack>
-                            <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column' }}>
-                                {
-                                    chapter.pages.map(page => (
-                                        <MangaImage src={page} referrerPolicy="same-origin" key={page} disabledEffect threshold={1000} />
-                                    ))
-                                }
-                            </Box>
-
-                        </Stack>
+                        <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', width: `${pageWidth}%`, mx: 'auto' }}>
+                            {
+                                chapter.pages.map(page => (
+                                    <MangaImage src={page} referrerPolicy="same-origin" key={page} disabledEffect threshold={1000} />
+                                ))
+                            }
+                        </Box>
                         :
                         <LoadingScreen />
                 }
                 {
-                    currentIndex < title.chapterNumbers.length -1 &&
+                    currentIndex < title.chapterNumbers.length - 1 &&
                     <Button
                         size="large"
                         variant="contained"

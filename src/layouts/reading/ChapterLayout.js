@@ -43,18 +43,19 @@ export default function ChapterLayout() {
     const { chapterNumber } = useParams();
 
     const { title } = useOutletContext();
+    const currentChapter = title.chapters[chapterNumber];
     const { chapterNumbers, groupNumbers } = title;
 
     const isDesktop = useResponsive('up', 'lg');
 
     const [open, setOpen] = useState(false);
 
-    const [searchParams, setSearchParams] = useSearchParams({ groupNumber: groupNumbers.find(num => Boolean(title.chapters[chapterNumber]?.groups[num])) })
+    const [searchParams, setSearchParams] = useSearchParams({ groupNumber: groupNumbers.find(num => Boolean(currentChapter.groups[num])) })
 
     const initPages = (() => {
-        if (title.source === "mangadex") return [];
-        if (title.source === "imgur") return title.chapters[chapterNumber]?.groups[searchParams.get("groupNumber")].map(c => c.src) || [];
-        return title.chapters[chapterNumber]?.groups[searchParams.get("groupNumber")] || [];
+        if (title.source === "mangadex" || title.source === "mangadex-vi") return [];
+        if (title.source === "imgur") return currentChapter?.groups[searchParams.get("groupNumber")].map(c => c.src) || [];
+        return currentChapter?.groups[searchParams.get("groupNumber")] || [];
     })();
 
     const [pages, setPages] = useState(initPages);
@@ -63,11 +64,13 @@ export default function ChapterLayout() {
         pages,
         currentIndex: chapterNumbers.findIndex(key => key === chapterNumber),
         number: chapterNumber,
+        title: currentChapter.title || `${currentChapter.volume} - ${chapterNumber}`
     }
 
     const getMangaDexChapter = useCallback(async () => {
-        if (title.source !== "mangadex") return;
-        const url = `https://cubari.moe${title.chapters[chapterNumber]?.groups[searchParams.get("groupNumber")]}`;
+        if (title.source !== "mangadex" && title.source !== "mangadex-vi") return;
+        console.log(groupNumbers.find(num => Boolean(currentChapter.groups[num])));
+        const url = `https://cubari.moe${currentChapter.groups[searchParams.get("groupNumber")]}`;
 
         const { data } = await axios({
             url: url,

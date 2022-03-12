@@ -11,6 +11,7 @@ import { PATH_WIBU } from '../../routes/paths';
 // utils
 import axios from '../../utils/corsAxios';
 import { fSource } from '../../utils/formatSource';
+import { getTitleApi } from '../../api/read';
 // ----------------------------------------------------------------------
 
 export default function TitleContext() {
@@ -25,23 +26,12 @@ export default function TitleContext() {
         const url = `https://cubari.moe/read/api/${source}/series/${slug}/`;
         try {
             if (isMountedRef) {
-                const { data } = await axios({
-                    url: url,
-                    method: 'get',
-                });
-                Object.assign(data, {
-                    staff: uniq([data.author, data.artist]).filter(s => Boolean(s)),
-                    source,
-                    chapterNumbers: Object.keys(data.chapters),
-                    groupNumbers: Object.keys(data.groups),
-                    path: `${PATH_WIBU.read.root}/${source}/${slug}`,
-                    sourceLink: fSource(source, slug)
-                })
+                const data = await getTitleApi(source, slug);
                 setTitle(data);
             }
         } catch (error) {
             enqueueSnackbar("Đã có xảy ra. Khả năng là link không hợp lệ.", { variant: "error" });
-            navigate(-1);
+            // navigate(-1);
         }
     }, [isMountedRef]);
 
