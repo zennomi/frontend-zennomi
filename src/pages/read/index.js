@@ -18,11 +18,8 @@ import { PATH_WIBU } from '../../routes/paths';
 // ----------------------------------------------------------------------
 
 const RootStyle = styled('div')(({ theme }) => ({
-  height: '100%',
   display: 'flex',
   alignItems: 'center',
-  paddingTop: theme.spacing(15),
-  paddingBottom: theme.spacing(10),
 }));
 
 // ----------------------------------------------------------------------

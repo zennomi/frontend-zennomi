@@ -7,7 +7,7 @@ import Image from '../Image';
 
 export default function TitleCardSkeleton() {
     return (
-        <Card>
+        <Card sx={{ borderRadius: { xs: 0.5, md: 1 } }}>
             <Image src={null} alt='PlaceHolder' ratio='4/6' />
             <OverlayStyle />
             <CaptionStyle>

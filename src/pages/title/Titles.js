@@ -145,7 +145,7 @@ export default function Titles() {
               ) :
               titles.map(
                 title =>
-                  <Grid item xs={4} md={2}key={title._id}>
+                  <Grid item xs={4} md={2} key={title._id}>
                     < div style={{ position: 'relative' }}>
                       <TitleCard title={title} />
                       {

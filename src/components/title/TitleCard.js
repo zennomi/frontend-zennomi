@@ -22,7 +22,7 @@ export default function TitleCard({ title }) {
             title={<TitleTooltip title={title} />}
             placement="right-start"
         >
-            <Card>
+            <Card sx={{ borderRadius: { xs: 0.5, md: 1 } }}>
                 <CardActionArea component={RouterLink} to={`${PATH_WIBU.title.one}/${title._id}`}>
                     <Image src={resizeImage(title.coverArt[0], 300)} alt={title?.name} ratio='4/6' />
                     <OverlayStyle />
@@ -37,7 +37,20 @@ export default function TitleCard({ title }) {
                             }
                         </TextMaxLine>
                     </CaptionStyle>
-                    <Chip label={title.type} color="primary" size="small" sx={theme => ({ position: 'absolute', top: theme.spacing(0.5), left: theme.spacing(0.5), opacity: 0.9 })} />
+                    <Chip
+                        label={title.type}
+                        color="primary"
+                        size="small"
+                        sx={theme => ({
+                            position: 'absolute',
+                            top: theme.spacing(0.5),
+                            left: theme.spacing(0.5),
+                            opacity: 0.9,
+                            [theme.breakpoints.down('md')]: {
+                                fontSize: 12,
+                                borderRadius: 1
+                            }
+                        })} />
                 </CardActionArea>
             </Card>
         </StyledTooltip>

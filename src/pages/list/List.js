@@ -1,10 +1,12 @@
 import { useState, useCallback, useEffect } from 'react';
 import parse from 'html-react-parser';
 import { Link as RouterLink, useParams, useNavigate } from 'react-router-dom';
+import { chunk } from 'lodash';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 // @mui
 import {
     Container, Grid, Typography, Card, Box, Skeleton,
-    Button, CardHeader, CardContent, Avatar, Alert, Stack
+    Button, CardHeader, CardContent, Avatar, Alert, Stack, Pagination
 } from '@mui/material';
 // hooks
 import useAuth from '../../hooks/useAuth';
@@ -15,6 +17,7 @@ import useIsMountedRef from '../../hooks/useIsMountedRef';
 import Page from '../../components/Page';
 import HeaderBreadcrumbs from '../../components/HeaderBreadcrumbs';
 import TitleCard from '../../components/title/TitleCard';
+import CopyClipboard from '../../components/CopyClipboard';
 // utils
 import axios from '../../utils/axios';
 // paths
@@ -31,6 +34,9 @@ export default function List() {
     const { user } = useAuth();
 
     const [list, setList] = useState();
+    const [page, setPage] = useState(1);
+
+    const listChunks = list ? chunk(list.titles, 24) : [];
 
     const getList = useCallback(async () => {
         try {
@@ -43,6 +49,11 @@ export default function List() {
             navigate(PATH_WIBU.root);
         }
     }, [isMountedRef]);
+
+    const handlePageChange = (event, page) => {
+        setPage(page);
+        window.scrollTo(0, 0);
+    }
 
     useEffect(() => {
         getList();
@@ -70,10 +81,6 @@ export default function List() {
                                     <Button color='error' size='small' component={RouterLink} to={`${PATH_WIBU.list.one}/delete/${id}`}>Xoá</Button>
                                 </CardContent>
                             </Card>
-                            {
-                                list?.titles?.length > 100 &&
-                                <Alert severity="error">Cho ít bộ thôi kẻo lag sml.</Alert>
-                            }
                         </>
                     }
                     <Card sx={{ mb: 2 }}>
@@ -83,14 +90,19 @@ export default function List() {
                                 <Typography variant='subtitle2'>{parse(list?.user.displayName || '')}</Typography>
                             </Box>
                             <Typography variant='body1'>{parse(list?.description || '')}</Typography>
-
+                        </CardContent>
+                    </Card>
+                    <Card sx={{ mb: 2 }}>
+                        <CardHeader title="Share link" />
+                        <CardContent>
+                            <CopyClipboard value={window.location.href} disabled />
                         </CardContent>
                     </Card>
                     <Grid container spacing={2} sx={{ mb: 2 }}>
                         {
-                            list?.titles.length > 0 ?
-                                list?.titles.map(title => (
-                                    <Grid item xs={4} md={3} xl={2}>
+                            listChunks.length > 0 ?
+                                listChunks[page - 1].map(title => (
+                                    <Grid item xs={4} md={2} >
                                         <TitleCard title={title} />
                                     </Grid>
                                 )) :
@@ -99,6 +111,7 @@ export default function List() {
                                 </Grid>
                         }
                     </Grid>
+                    <Pagination sx={{ my: 2 }} count={listChunks.length || 1} page={page} onChange={handlePageChange} />
                 </Stack>
             </Container>
         </Page >

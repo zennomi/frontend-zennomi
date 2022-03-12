@@ -38,10 +38,10 @@ const StyledCard = styled(Card)(({ theme }) => ({
 // ----------------------------------------------------------------------
 
 const donators = [
-    { name: 'A' },
-    { name: 'A' },
-    { name: 'A' },
-    { name: 'A' },
+    { name: 'Vuong Viet Hoang', message: 'romcom4life' },
+    { name: 'Nguyen Duc Hai', message: 'bruh team ủng hộ tiền duy trì web romcom' },
+    { name: 'Nguyen Minh Tuan', message: 'tuy chưa đăng ký nhưng chúc ad năm mới...' },
+    { name: 'Nguyen Tat Dat' },
 ]
 
 export default function Donate() {
@@ -101,6 +101,7 @@ export default function Donate() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell>Top donate</TableCell>
+                                        <TableCell>Lời nhắn</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -114,6 +115,9 @@ export default function Donate() {
                                                             <Typography variant="subtitle2"> {donator.name}</Typography>
                                                         </Box>
                                                     </Box>
+                                                </TableCell>
+                                                <TableCell>
+                                                    <Typography variant="subtitle2"> {donator.message}</Typography>
                                                 </TableCell>
                                             </TableRow>
                                         )
