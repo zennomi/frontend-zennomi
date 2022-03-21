@@ -163,7 +163,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
                         />
                     )}
                 />
-                <Button component={"a"} href={title?.links?.vi.find(l => l.site === "GOOGLE-SENSEI")?.link} target="_blank" variant="contained" size="large">
+                <Button component={"a"} href={title?.links?.find(l => l.site === "GOOGLE-SENSEI")?.link} target="_blank" variant="contained" >
                     Tra Google
                 </Button>
                 <Controller
@@ -198,7 +198,7 @@ export default function TitleUpdateForm({ title, onClose, setTitle }) {
                     }}
                 />
                 <div>
-                    <RHFSwitch name="isLisensed" label="Có bản quyền"/>
+                    <RHFSwitch name="isLisensed" label="Có bản quyền" />
                 </div>
                 <LoadingButton type="submit" variant="contained" size="large" loading={isSubmitting}>Cập nhật</LoadingButton>
                 <Button component={RouterLink} to={`/wibu/title/edit/${title?._id}`} variant="contained" size="large">

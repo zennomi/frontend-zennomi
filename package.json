@@ -1,8 +1,8 @@
 {
-  "name": "@minimal/minimal-kit-react",
-  "author": "minimals.cc",
-  "version": "3.0.0",
-  "description": "Simple React Scripts & Javascript",
+  "name": "@zennomi/zennomoe-frontend",
+  "author": "zennomi",
+  "version": "3.0.1",
+  "description": "Romcom Lib",
   "private": true,
   "homepage": "https://zennomi.github.io",
   "scripts": {

@@ -2,7 +2,6 @@
 // ----------------------------------------------------------------------
 
 export const HOST_API = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:3000" : process.env.REACT_APP_HOST_API_KEY;
-export const CORS_HOST_API = !process.env.NODE_ENV || process.env.NODE_ENV === 'development' ? "http://localhost:5000" : process.env.REACT_APP_CORS_HOST_API;
 export const IMAGE_PROXY_URL = process.env.REACT_APP_IMAGE_PROXY_URL
 
 export const FIREBASE_API = {
