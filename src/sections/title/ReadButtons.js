@@ -46,7 +46,7 @@ export default function ReadButtons({ links = [] }) {
         const path = fSlug(link.link);
         if (path) {
             const [_, source, slug] = path.split("/");
-            console.log(path, source, slug);
+
             if (source === 'mangadex' && link.language === 'vi') {
                 readLinks.push({ source: 'mangadex-vi', slug, language: link.language });
             } else {

@@ -9,7 +9,7 @@ import SocialsButton from '../../components/SocialsButton';
 import RoundedButton from '../../components/RoundedButton';
 // assets
 import { MotivationIllustration } from '../../assets';
-import { MangadexLogo, NhentaiLogo, ImgurLogo, RedditLogo } from '../../assets/logos'
+import { MangadexLogo, NhentaiLogo, ImgurLogo, RedditLogo, BlogtruyenLogo } from '../../assets/logos'
 import { useState } from 'react';
 // utils
 import { fSlug } from '../../utils/formatSource';
@@ -31,6 +31,13 @@ export default function Read() {
   const navigate = useNavigate();
 
   const sources = [
+    {
+      name: 'blogtruyen',
+      children: <img src={BlogtruyenLogo} width={50} height={50} />,
+      color: '#4176ed',
+      value: 'https://blogtruyen.vn/24632/cau-lac-bo-nhung-ke-mat-ngu'
+    }
+    ,
     {
       name: 'mangadex',
       children: <img src={MangadexLogo} width={50} height={50} />,

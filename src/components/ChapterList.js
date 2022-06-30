@@ -21,6 +21,9 @@ import Switch from '@mui/material/Switch';
 import { visuallyHidden } from '@mui/utils';
 import { Link as RouterLink } from 'react-router-dom';
 
+import { formatDistance } from 'date-fns';
+import { vi } from 'date-fns/locale'
+
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -315,7 +318,7 @@ export default function EnhancedTable({ rows }) {
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">{row.group}</TableCell>
-                                            <TableCell align="center">{row.lastUpdated}</TableCell>
+                                            <TableCell align="center">{formatDistance(new Date(row.lastUpdated), new Date(), { locale: vi, addSuffix: true })}</TableCell>
                                         </TableRow>
                                     );
                                 })}

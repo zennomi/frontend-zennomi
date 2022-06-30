@@ -5,7 +5,6 @@ import { useOutletContext, useParams, useSearchParams } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 // hooks
-import useSettings from '../../hooks/useSettings';
 import useResponsive from '../../hooks/useResponsive';
 import useCollapseDrawer from '../../hooks/useCollapseDrawer';
 // config
@@ -13,11 +12,11 @@ import { NAVBAR } from '../../config';
 //
 // import DashboardHeader from './header';
 import NavbarVertical from './navbar/NavbarVertical';
-import NavbarHorizontal from './navbar/NavbarHorizontal';
 import OpenSidebarButton from './OpenSidebarButton';
 import Chapter from '../../pages/read/Chapter';
 // import 
-import axios from '../../utils/corsAxios';
+import axios from 'src/utils/axios';
+import corsAxios from '../../utils/corsAxios';
 
 // ----------------------------------------------------------------------
 
@@ -53,7 +52,7 @@ export default function ChapterLayout() {
     const [searchParams, setSearchParams] = useSearchParams({ groupNumber: groupNumbers.find(num => Boolean(currentChapter.groups[num])) })
 
     const initPages = (() => {
-        if (title.source === "mangadex" || title.source === "mangadex-vi") return [];
+        if (["mangadex", "mangadex-vi", "blogtruyen"].includes(title.source)) return [];
         if (title.source === "imgur") return currentChapter?.groups[searchParams.get("groupNumber")].map(c => c.src) || [];
         return currentChapter?.groups[searchParams.get("groupNumber")] || [];
     })();
@@ -68,15 +67,24 @@ export default function ChapterLayout() {
     }
 
     const getMangaDexChapter = useCallback(async () => {
-        if (title.source !== "mangadex" && title.source !== "mangadex-vi") return;
-        console.log(groupNumbers.find(num => Boolean(currentChapter.groups[num])));
-        const url = `https://cubari.moe${currentChapter.groups[searchParams.get("groupNumber")]}`;
+        if (title.source === "mangadex" && title.source === "mangadex-vi") {
+            const url = `https://cubari.moe${currentChapter.groups[searchParams.get("groupNumber")]}`;
 
-        const { data } = await axios({
-            url: url,
-            method: 'get',
-        });
-        setPages(data);
+            const { data } = await corsAxios({
+                url: url,
+                method: 'get',
+            });
+            setPages(data);
+        }
+
+        if (title.source === "blogtruyen") {
+            const { data } = await axios({
+                url: `/v1/titles/blogtruyen/chapter/${currentChapter.groups[1]}`,
+                method: 'get'
+            })
+            setPages(data.map(url => `https://kyotomanga.live/api/proxy?url=https://m.blogtruyen.vn/&src=${url}`));
+        }
+
     }, [title, chapterNumber, searchParams.get("groupNumber")]);
 
     useEffect(() => {
