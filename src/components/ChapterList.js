@@ -318,7 +318,7 @@ export default function EnhancedTable({ rows }) {
                                                 </Link>
                                             </TableCell>
                                             <TableCell align="center">{row.group}</TableCell>
-                                            <TableCell align="center">{formatDistance(new Date(row.lastUpdated), new Date(), { locale: vi, addSuffix: true })}</TableCell>
+                                            <TableCell align="center">{row.lastUpdated && formatDistance(new Date(row.lastUpdated), new Date(), { locale: vi, addSuffix: true })}</TableCell>
                                         </TableRow>
                                     );
                                 })}
