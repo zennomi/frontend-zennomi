@@ -17,6 +17,7 @@ import Chapter from '../../pages/read/Chapter';
 // import 
 import axios from 'src/utils/axios';
 import corsAxios from '../../utils/corsAxios';
+import { proxyImage } from '../../utils/resizeImage';
 
 // ----------------------------------------------------------------------
 
@@ -82,7 +83,7 @@ export default function ChapterLayout() {
                 url: `/v1/titles/blogtruyen/chapter/${currentChapter.groups[1]}`,
                 method: 'get'
             })
-            setPages(data.map(url => `https://kyotomanga.live/api/proxy?url=https://m.blogtruyen.vn/&src=${url}`));
+            setPages(data.map(url => proxyImage(url, 'host=https://blogtruyen.vn')));
         }
 
     }, [title, chapterNumber, searchParams.get("groupNumber")]);

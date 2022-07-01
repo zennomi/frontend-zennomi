@@ -40,7 +40,7 @@ export default function Chapter({ title, chapter }) {
                         <Box sx={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', width: `${pageWidth}%`, mx: 'auto' }}>
                             {
                                 chapter.pages.map(page => (
-                                    <MangaImage src={page} referrerPolicy="same-origin" key={page} disabledEffect threshold={1000} />
+                                    <MangaImage src={page} referrerPolicy="same-origin" key={page} threshold={1000} />
                                 ))
                             }
                         </Box>

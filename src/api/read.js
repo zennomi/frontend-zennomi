@@ -4,7 +4,7 @@ import { parse } from 'date-fns';
 import corsAxios from '../utils/corsAxios';
 import axios from '../utils/axios';
 import { fSource } from '../utils/formatSource';
-
+import { proxyImage } from '../utils/resizeImage';
 import { PATH_WIBU } from '../routes/paths';
 
 const getTitleApi = async (source, slug) => {
@@ -69,7 +69,7 @@ const getTitleApi = async (source, slug) => {
         });
         returnData.title = data.title;
         returnData.series_name = returnData.title;
-        returnData.cover = `https://kyotomanga.live/api/proxy?url=https://m.blogtruyen.vn/&src=${data.cover}`;
+        returnData.cover = proxyImage(data.cover, 'host=https://blogtruyen.vn');
         returnData.chapters = {};
         Object.entries(data.chapters).forEach(([chapterNumber, chapter]) => {
 
